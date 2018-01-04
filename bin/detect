@@ -3,4 +3,8 @@
 
 BP=$(dirname $(dirname $0))
 
-echo "no" && exit 1
+if [ -f $1/nginx.conf ]; then
+  echo "nginx `cat $BP/VERSION`" && exit 0
+else
+  echo "no" && exit 1
+fi
