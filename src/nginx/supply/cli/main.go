@@ -33,7 +33,7 @@ func main() {
 		os.Exit(13)
 	}
 
-	supplier := supply.New(stager, logger)
+	supplier := supply.New(stager, manifest, logger)
 
 	if err := supplier.Run(); err != nil {
 		os.Exit(14)

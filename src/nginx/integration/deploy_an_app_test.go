@@ -25,8 +25,10 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		})
 
 		It("Logs nginx buildpack version", func() {
-			Expect(app.Push()).ToNot(Succeed())
-			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
+			PushAppAndConfirm(app)
+
+			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
+			Expect(app.Stdout.String()).To(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
 		})
 	})
 })
