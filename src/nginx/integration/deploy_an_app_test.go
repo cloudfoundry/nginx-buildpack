@@ -2,6 +2,7 @@ package integration_test
 
 import (
 	"path/filepath"
+	"time"
 
 	"github.com/cloudfoundry/libbuildpack/cutlass"
 	. "github.com/onsi/ginkgo"
@@ -28,7 +29,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			PushAppAndConfirm(app)
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
-			Expect(app.Stdout.String()).To(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
+			Eventually(app.Stdout.String, 5*time.Second).Should(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
 		})
 	})
 })
