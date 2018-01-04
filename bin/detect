@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# bin/detect <build-dir>
+
+BP=$(dirname $(dirname $0))
+
+echo "no" && exit 1

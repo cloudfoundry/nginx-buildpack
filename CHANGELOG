@@ -1,0 +1,18 @@
+v0.1.1 Nov 06, 2017
+====================
+
+* Replace Aptfile with apt.yml (see README.md for details)
+  - allow specification of custom repositories and repo keys
+  (https://www.pivotaltracker.com/story/show/152325879)
+
+v0.0.2 Oct 10, 2017
+====================
+
+* Make buildpack work when the git repo URL is specified
+  (https://www.pivotaltracker.com/story/show/151828720)
+
+v0.0.1 Oct 6, 2017
+====================
+
+* Initial support for apt packages
+  (https://www.pivotaltracker.com/story/show/142066675)
