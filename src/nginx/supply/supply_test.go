@@ -18,12 +18,13 @@ import (
 
 var _ = Describe("Supply", func() {
 	var (
-		depDir     string
-		supplier   *supply.Supplier
-		logger     *libbuildpack.Logger
-		mockCtrl   *gomock.Controller
-		mockStager *MockStager
-		buffer     *bytes.Buffer
+		depDir       string
+		supplier     *supply.Supplier
+		logger       *libbuildpack.Logger
+		mockCtrl     *gomock.Controller
+		mockStager   *MockStager
+		mockManifest *MockManifest
+		buffer       *bytes.Buffer
 	)
 
 	BeforeEach(func() {
@@ -33,10 +34,11 @@ var _ = Describe("Supply", func() {
 
 		mockCtrl = gomock.NewController(GinkgoT())
 		mockStager = NewMockStager(mockCtrl)
+		mockManifest = NewMockManifest(mockCtrl)
 		depDir, err = ioutil.TempDir("", "nginx.depdir")
 		Expect(err).ToNot(HaveOccurred())
 		mockStager.EXPECT().DepDir().AnyTimes().Return(depDir)
-		supplier = supply.New(mockStager, logger)
+		supplier = supply.New(mockStager, mockManifest, logger)
 	})
 
 	AfterEach(func() {
