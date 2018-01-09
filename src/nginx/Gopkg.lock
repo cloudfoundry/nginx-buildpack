@@ -22,7 +22,7 @@
     "cutlass",
     "packager"
   ]
-  revision = "54d83db6f3cf144a2e29ee811280b7b2cc204f36"
+  revision = "736f9443c3adc8f46126a348b402de0eef99527c"
 
 [[projects]]
   name = "github.com/elazarl/goproxy"
@@ -106,7 +106,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "1792d66dc88e503d3cb2400578221cdf1f7fe26f"
+  revision = "d38bf781f16e180a1b2ad82697d2f81d7b7ecfac"
 
 [[projects]]
   branch = "master"
@@ -136,7 +136,7 @@
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "1244d3ce02e3e1c16820ada0bae506b6c479f106"
+  revision = "d670f9405373e636a5a2765eea47fac0c9bc91a4"
 
 [solve-meta]
   analyzer-name = "dep"
