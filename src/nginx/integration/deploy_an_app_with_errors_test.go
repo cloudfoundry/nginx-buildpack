@@ -26,7 +26,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 
 		It("Logs nginx an error", func() {
 			Expect(app.Push()).ToNot(Succeed())
-			// Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
+			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
 
 			Expect(app.Stdout.String()).To(ContainSubstring("nginx.conf file must be present at the app root"))
 		})
