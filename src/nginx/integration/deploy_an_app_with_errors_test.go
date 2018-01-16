@@ -28,7 +28,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			Expect(app.Push()).ToNot(Succeed())
 			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
 
-			Expect(app.Stdout.String()).To(ContainSubstring("nginx.conf file must be present at the app root"))
+			Eventually(app.Stdout.String).Should(ContainSubstring("nginx.conf file must be present at the app root"))
 		})
 	})
 
@@ -41,7 +41,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			Expect(app.Push()).ToNot(Succeed())
 			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
 
-			Expect(app.Stdout.String()).To(ContainSubstring("nginx.conf file must be configured to respect the value of `{{.Port}}`"))
+			Eventually(app.Stdout.String).Should(ContainSubstring("nginx.conf file must be configured to respect the value of `{{.Port}}`"))
 		})
 	})
 })
