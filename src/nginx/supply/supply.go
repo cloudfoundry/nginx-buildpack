@@ -8,6 +8,7 @@ import (
 
 type Manifest interface {
 	InstallOnlyVersion(string, string) error
+	RootDir() string
 }
 type Stager interface {
 	AddBinDependencyLink(string, string) error
@@ -29,6 +30,32 @@ func New(stager Stager, manifest Manifest, logger *libbuildpack.Logger) *Supplie
 }
 
 func (s *Supplier) Run() error {
+	s.Log.BeginStep("Supplying nginx")
+
+	if err := s.InstallVarify(); err != nil {
+		s.Log.Error("Failed to copy verify: %s", err)
+		return err
+	}
+
+	if err := s.InstallNginx(); err != nil {
+		s.Log.Error("Could not install nginx: %s", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *Supplier) InstallVarify() error {
+	if exists, err := libbuildpack.FileExists(filepath.Join(s.Stager.DepDir(), "bin", "varify")); err != nil {
+		return err
+	} else if exists {
+		return nil
+	}
+
+	return libbuildpack.CopyFile(filepath.Join(s.Manifest.RootDir(), "bin", "varify"), filepath.Join(s.Stager.DepDir(), "bin", "varify"))
+}
+
+func (s *Supplier) InstallNginx() error {
 	if err := s.Manifest.InstallOnlyVersion("nginx", filepath.Join(s.Stager.DepDir(), "nginx")); err != nil {
 		return err
 	}

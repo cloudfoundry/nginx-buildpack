@@ -24,4 +24,5 @@ include_files:
 - bin/supply
 - bin/finalize
 - bin/release
+- bin/varify
 - manifest.yml

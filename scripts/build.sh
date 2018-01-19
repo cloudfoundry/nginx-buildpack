@@ -7,5 +7,7 @@ BINDIR=$ROOTDIR/bin
 export GOPATH=$ROOTDIR
 export GOOS=linux
 
+go build -ldflags="-s -w" -o $BINDIR/varify nginx/varify
+
 go build -ldflags="-s -w" -o $BINDIR/supply nginx/supply/cli
 go build -ldflags="-s -w" -o $BINDIR/finalize nginx/finalize/cli

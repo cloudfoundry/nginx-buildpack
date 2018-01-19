@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # bin/release <build-dir>
 
-echo -e "---\ndefault_process_types:\n  web: sed -i \"s/{{.Port}}/\$PORT/g\" ./nginx.conf && nginx -p \$PWD -c ./nginx.conf"
+echo -e "---\ndefault_process_types:\n  web: varify ./nginx.conf && nginx -p \$PWD -c ./nginx.conf"
