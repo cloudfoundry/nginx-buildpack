@@ -214,6 +214,7 @@ func (m *Manifest) DefaultVersion(depName string) (Dependency, error) {
 
 	if err != nil {
 		m.log.Error(defaultVersionsError)
+		m.log.Error("MyErr: %s", err)
 		return Dependency{}, err
 	}
 
@@ -222,6 +223,7 @@ func (m *Manifest) DefaultVersion(depName string) (Dependency, error) {
 
 	if err != nil {
 		m.log.Error(defaultVersionsError)
+		m.log.Error("MyErr: %s", err)
 		return Dependency{}, err
 	}
 
