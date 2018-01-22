@@ -22,7 +22,7 @@
     "cutlass",
     "packager"
   ]
-  revision = "8f1cc8d07bdd6e86931c71ebb5f431f5cb882bf7"
+  revision = "e915de2390c8dcc4f3a05dd747c7635454335e26"
 
 [[projects]]
   name = "github.com/elazarl/goproxy"
@@ -58,13 +58,15 @@
     "reporters/stenographer/support/go-isatty",
     "types"
   ]
-  revision = "6c46eb8334b30dc55b42f1a1c725d5ce97375390"
+  revision = "747514b53ddd06d5d37d096c1cb313cfe620d7d4"
 
 [[projects]]
   name = "github.com/onsi/gomega"
   packages = [
     ".",
     "format",
+    "gbytes",
+    "gexec",
     "internal/assertion",
     "internal/asyncassertion",
     "internal/oraclematcher",
@@ -106,7 +108,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "fff93fa7cd278d84afc205751523809c464168ab"
+  revision = "af50095a40f9041b3b38960738837185c26e9419"
 
 [[projects]]
   branch = "master"
@@ -141,6 +143,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a4243a46f048da30006bf1d1897d16f3a1721b268a90dea288311952ce93809c"
+  inputs-digest = "7dc4140eef723aa0dd6db802916947ed459b632901e579b76f22a00712dda2ca"
   solver-name = "gps-cdcl"
   solver-version = 1
