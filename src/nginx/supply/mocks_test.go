@@ -32,6 +32,18 @@ func (_m *MockManifest) EXPECT() *MockManifestMockRecorder {
 	return _m.recorder
 }
 
+// InstallOnlyVersion mocks base method
+func (_m *MockManifest) InstallOnlyVersion(_param0 string, _param1 string) error {
+	ret := _m.ctrl.Call(_m, "InstallOnlyVersion", _param0, _param1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// InstallOnlyVersion indicates an expected call of InstallOnlyVersion
+func (_mr *MockManifestMockRecorder) InstallOnlyVersion(arg0, arg1 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "InstallOnlyVersion", reflect.TypeOf((*MockManifest)(nil).InstallOnlyVersion), arg0, arg1)
+}
+
 // DefaultVersion mocks base method
 func (_m *MockManifest) DefaultVersion(depName string) (libbuildpack.Dependency, error) {
 	ret := _m.ctrl.Call(_m, "DefaultVersion", depName)
@@ -79,18 +91,6 @@ func (_m *MockManifest) RootDir() string {
 // RootDir indicates an expected call of RootDir
 func (_mr *MockManifestMockRecorder) RootDir() *gomock.Call {
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "RootDir", reflect.TypeOf((*MockManifest)(nil).RootDir))
-}
-
-// RootDir mocks base method
-func (m *MockManifest) RootDir() string {
-	ret := m.ctrl.Call(m, "RootDir")
-	ret0, _ := ret[0].(string)
-	return ret0
-}
-
-// RootDir indicates an expected call of RootDir
-func (mr *MockManifestMockRecorder) RootDir() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RootDir", reflect.TypeOf((*MockManifest)(nil).RootDir))
 }
 
 // MockStager is a mock of Stager interface
