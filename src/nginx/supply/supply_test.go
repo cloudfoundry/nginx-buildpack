@@ -111,5 +111,43 @@ var _ = Describe("Supply", func() {
 				Expect(buffer).To(ContainSubstring(`Requested nginx version: 1.12.2 => 1.12.2`))
 			})
 		})
+
+		Describe("warns if 'stable' line is chosen", func() {
+			const warning = `Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`
+
+			BeforeEach(func() {
+				mockManifest.EXPECT().InstallDependency(gomock.Any(), gomock.Any())
+			})
+
+			It("stable emits warning", func() {
+				supplier.Config.Version = "stable"
+				Expect(supplier.InstallNginx()).To(Succeed())
+				Expect(buffer).To(ContainSubstring(warning))
+			})
+
+			It("mainline does not warn", func() {
+				supplier.Config.Version = "mainline"
+				Expect(supplier.InstallNginx()).To(Succeed())
+				Expect(buffer).ToNot(ContainSubstring(warning))
+			})
+
+			It("1.13.x does not warn", func() {
+				supplier.Config.Version = "1.13.x"
+				Expect(supplier.InstallNginx()).To(Succeed())
+				Expect(buffer).ToNot(ContainSubstring(warning))
+			})
+
+			It("1.12.x emits warning", func() {
+				supplier.Config.Version = "stable"
+				Expect(supplier.InstallNginx()).To(Succeed())
+				Expect(buffer).To(ContainSubstring(warning))
+			})
+
+			It("1.12.2 emits warning", func() {
+				supplier.Config.Version = "stable"
+				Expect(supplier.InstallNginx()).To(Succeed())
+				Expect(buffer).To(ContainSubstring(warning))
+			})
+		})
 	})
 })

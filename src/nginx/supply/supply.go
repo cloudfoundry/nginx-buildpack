@@ -123,6 +123,12 @@ func (s *Supplier) findMatchingVersion(depName string, version string) (libbuild
 	return libbuildpack.Dependency{Name: depName, Version: version}, nil
 }
 
+func (s *Supplier) isStableLine(version string) bool {
+	stableLine := s.VersionLines["stable"]
+	_, err := libbuildpack.FindMatchingVersion(stableLine, []string{version})
+	return err == nil
+}
+
 func (s *Supplier) InstallNginx() error {
 	dep, err := s.findMatchingVersion("nginx", s.Config.Version)
 	if err != nil {
@@ -136,6 +142,11 @@ func (s *Supplier) InstallNginx() error {
 	}
 
 	dir := filepath.Join(s.Stager.DepDir(), "nginx")
+
+	if s.isStableLine(dep.Version) {
+		s.Log.Warning(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`)
+	}
+
 	if err := s.Manifest.InstallDependency(dep, dir); err != nil {
 		return err
 	}
