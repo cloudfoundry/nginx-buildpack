@@ -1,3 +1,20 @@
+v0.0.3 Feb 08, 2018
+====================
+
+* Enable manifest apply override
+  (https://www.pivotaltracker.com/story/show/153614649)
+
+* Emit a warning if a stable line version is selected
+  (https://www.pivotaltracker.com/story/show/152785169)
+
+* Include multiple versions of nginx
+    - Two versions of each supported line 1.12.x and 1.13.x
+    - Allow version specified as "mainline" and "stable" in nginx.yml
+  (https://www.pivotaltracker.com/story/show/152785099)
+
+* Create executable to run nginx.conf through templating
+  (https://www.pivotaltracker.com/story/show/152685309)
+
 v0.0.2 Jan 17, 2018
 ====================
 
