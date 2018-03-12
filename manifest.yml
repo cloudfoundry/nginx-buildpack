@@ -29,8 +29,8 @@ dependencies:
   - cflinuxfs2
 - name: nginx
   version: 1.13.9
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-v1.13.9-9e9da6e6.tgz
-  sha256: 9e9da6e640867acfb94fc38859041103e022181fa5929b01483bb83a48e0f980
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.13.9-linux-x64-c89bc610.tgz
+  sha256: c89bc610fe69cb6a4090fdd78269975cc6308226949bac66f71b34442b5d469d
   cf_stacks:
   - cflinuxfs2
 pre_package: scripts/build.sh
