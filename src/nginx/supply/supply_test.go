@@ -24,6 +24,7 @@ var _ = Describe("Supply", func() {
 		mockCtrl     *gomock.Controller
 		mockStager   *MockStager
 		mockManifest *MockManifest
+		mockCommand  *MockCommand
 		buffer       *bytes.Buffer
 	)
 
@@ -35,10 +36,11 @@ var _ = Describe("Supply", func() {
 		mockCtrl = gomock.NewController(GinkgoT())
 		mockStager = NewMockStager(mockCtrl)
 		mockManifest = NewMockManifest(mockCtrl)
+		mockCommand = NewMockCommand(mockCtrl)
 		depDir, err = ioutil.TempDir("", "nginx.depdir")
 		Expect(err).ToNot(HaveOccurred())
 		mockStager.EXPECT().DepDir().AnyTimes().Return(depDir)
-		supplier = supply.New(mockStager, mockManifest, logger)
+		supplier = supply.New(mockStager, mockManifest, logger, mockCommand)
 	})
 
 	AfterEach(func() {

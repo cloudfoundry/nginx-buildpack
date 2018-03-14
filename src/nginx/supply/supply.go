@@ -1,13 +1,25 @@
 package supply
 
 import (
+	"errors"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
+	"os/exec"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
 	"github.com/cloudfoundry/libbuildpack"
 )
+
+type Command interface {
+	Execute(string, io.Writer, io.Writer, string, ...string) error
+	Output(string, string, ...string) (string, error)
+	Run(cmd *exec.Cmd) error
+}
 
 type Manifest interface {
 	InstallOnlyVersion(string, string) error
@@ -31,14 +43,16 @@ type Supplier struct {
 	Manifest     Manifest
 	Log          *libbuildpack.Logger
 	Config       Config
+	Command      Command
 	VersionLines map[string]string
 }
 
-func New(stager Stager, manifest Manifest, logger *libbuildpack.Logger) *Supplier {
+func New(stager Stager, manifest Manifest, logger *libbuildpack.Logger, command Command) *Supplier {
 	return &Supplier{
 		Stager:   stager,
 		Manifest: manifest,
 		Log:      logger,
+		Command:  command,
 	}
 }
 
@@ -46,16 +60,21 @@ func (s *Supplier) Run() error {
 	s.Log.BeginStep("Supplying nginx")
 
 	if err := s.InstallVarify(); err != nil {
-		s.Log.Error("Failed to copy verify: %s", err)
+		s.Log.Error("Failed to copy verify: %s", err.Error())
 		return err
 	}
 	if err := s.Setup(); err != nil {
-		s.Log.Error("Could not setup: %s", err)
+		s.Log.Error("Could not setup: %s", err.Error())
 		return err
 	}
 
 	if err := s.InstallNginx(); err != nil {
-		s.Log.Error("Could not install nginx: %s", err)
+		s.Log.Error("Could not install nginx: %s", err.Error())
+		return err
+	}
+
+	if err := s.validateNginxConf(); err != nil {
+		s.Log.Error("Could not validate nginx.conf: %s", err.Error())
 		return err
 	}
 
@@ -90,6 +109,69 @@ func (s *Supplier) Setup() error {
 	}
 	s.VersionLines = m.VersionLines
 
+	return nil
+}
+
+func (s *Supplier) validateNginxConf() error {
+	if err := s.validateNginxConfExists(); err != nil {
+		return err
+	}
+	if err := s.validateNginxConfHasPort(); err != nil {
+		return err
+	}
+	return s.validateNginxConfSyntax()
+}
+
+func (s *Supplier) validateNginxConfExists() error {
+	if exists, err := libbuildpack.FileExists(filepath.Join(s.Stager.BuildDir(), "nginx.conf")); err != nil {
+		return err
+	} else if !exists {
+		s.Log.Error("nginx.conf file must be present at the app root")
+		return errors.New("no nginx")
+	}
+	return nil
+}
+
+func (s *Supplier) validateNginxConfHasPort() error {
+	conf, err := ioutil.ReadFile(filepath.Join(s.Stager.BuildDir(), "nginx.conf"))
+	if err != nil {
+		return err
+	}
+	if portFound, err := regexp.Match("{{.Port}}", conf); err != nil {
+		return err
+	} else if !portFound {
+		s.Log.Error("nginx.conf file must be configured to respect the value of `{{.Port}}`")
+		return errors.New("no .Port")
+	}
+	return nil
+}
+
+func (s *Supplier) validateNginxConfSyntax() error {
+
+	tmpConfDir, err := ioutil.TempDir("/tmp", "conf")
+	if err != nil {
+		return fmt.Errorf("Error creating temp nginx conf dir: %s", err.Error())
+	}
+	defer os.RemoveAll(tmpConfDir)
+
+	if err := libbuildpack.CopyDirectory(s.Stager.BuildDir(), tmpConfDir); err != nil {
+		return fmt.Errorf("Error copying nginx.conf: %s", err.Error())
+	}
+
+	nginxConfPath := filepath.Join(tmpConfDir, "nginx.conf")
+	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), nginxConfPath)
+	cmd.Dir = tmpConfDir
+	cmd.Stdout = ioutil.Discard
+	cmd.Stderr = ioutil.Discard
+	cmd.Env = append(os.Environ(), "PORT=8080")
+	if err := s.Command.Run(cmd); err != nil {
+		return err
+	}
+
+	nginxExecDir := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "sbin")
+	if err := s.Command.Execute(tmpConfDir, os.Stdout, os.Stderr, filepath.Join(nginxExecDir, "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir); err != nil {
+		return fmt.Errorf("nginx.conf contains syntax errors: %s", err.Error())
+	}
 	return nil
 }
 

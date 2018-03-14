@@ -24,11 +24,25 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			app.Buildpacks = []string{"nginx_buildpack"}
 		})
 
-		It("Logs nginx an error", func() {
+		It("Logs an error", func() {
 			Expect(app.Push()).ToNot(Succeed())
 			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
 
 			Eventually(app.Stdout.String).Should(ContainSubstring("nginx.conf file must be present at the app root"))
+		})
+	})
+
+	Context("an app with an invalid nginx.conf", func() {
+		BeforeEach(func() {
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "invalid_conf"))
+			app.Buildpacks = []string{"nginx_buildpack"}
+		})
+
+		It("Logs an error", func() {
+			Expect(app.Push()).ToNot(Succeed())
+			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
+
+			Eventually(app.Stdout.String).Should(ContainSubstring("nginx.conf contains syntax errors"))
 		})
 	})
 
@@ -37,7 +51,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			app = cutlass.New(filepath.Join(bpDir, "fixtures", "missing_template_port"))
 		})
 
-		It("Logs nginx an error", func() {
+		It("Logs an error", func() {
 			Expect(app.Push()).ToNot(Succeed())
 			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
 
