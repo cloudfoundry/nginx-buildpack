@@ -7,6 +7,7 @@ import (
 	libbuildpack "github.com/cloudfoundry/libbuildpack"
 	gomock "github.com/golang/mock/gomock"
 	io "io"
+	exec "os/exec"
 	reflect "reflect"
 )
 
@@ -66,6 +67,18 @@ func (_m *MockCommand) Output(_param0 string, _param1 string, _param2 ...string)
 func (_mr *MockCommandMockRecorder) Output(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
 	_s := append([]interface{}{arg0, arg1}, arg2...)
 	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Output", reflect.TypeOf((*MockCommand)(nil).Output), _s...)
+}
+
+// Run mocks base method
+func (_m *MockCommand) Run(cmd *exec.Cmd) error {
+	ret := _m.ctrl.Call(_m, "Run", cmd)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Run indicates an expected call of Run
+func (_mr *MockCommandMockRecorder) Run(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCallWithMethodType(_mr.mock, "Run", reflect.TypeOf((*MockCommand)(nil).Run), arg0)
 }
 
 // MockManifest is a mock of Manifest interface
