@@ -213,6 +213,30 @@ func (mr *MockStagerMockRecorder) DepDir() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DepDir", reflect.TypeOf((*MockStager)(nil).DepDir))
 }
 
+// DepsIdx mocks base method
+func (m *MockStager) DepsIdx() string {
+	ret := m.ctrl.Call(m, "DepsIdx")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// DepsIdx indicates an expected call of DepsIdx
+func (mr *MockStagerMockRecorder) DepsIdx() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DepsIdx", reflect.TypeOf((*MockStager)(nil).DepsIdx))
+}
+
+// DepsDir mocks base method
+func (m *MockStager) DepsDir() string {
+	ret := m.ctrl.Call(m, "DepsDir")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// DepsDir indicates an expected call of DepsDir
+func (mr *MockStagerMockRecorder) DepsDir() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DepsDir", reflect.TypeOf((*MockStager)(nil).DepsDir))
+}
+
 // BuildDir mocks base method
 func (m *MockStager) BuildDir() string {
 	ret := m.ctrl.Call(m, "BuildDir")
@@ -223,4 +247,16 @@ func (m *MockStager) BuildDir() string {
 // BuildDir indicates an expected call of BuildDir
 func (mr *MockStagerMockRecorder) BuildDir() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BuildDir", reflect.TypeOf((*MockStager)(nil).BuildDir))
+}
+
+// WriteProfileD mocks base method
+func (m *MockStager) WriteProfileD(arg0, arg1 string) error {
+	ret := m.ctrl.Call(m, "WriteProfileD", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// WriteProfileD indicates an expected call of WriteProfileD
+func (mr *MockStagerMockRecorder) WriteProfileD(arg0, arg1 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WriteProfileD", reflect.TypeOf((*MockStager)(nil).WriteProfileD), arg0, arg1)
 }

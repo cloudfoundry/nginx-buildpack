@@ -28,5 +28,10 @@ var _ = Describe("varify", func() {
 			body := runCli(tmpDir, "Hi the port is {{.Port}}.", []string{"PORT=8080"})
 			Expect(body).To(Equal("Hi the port is 8080."))
 		})
+
+		It("replaces {{.NginxModulesDir}} in file", func() {
+			body := runCli(tmpDir, "Hi the nginx modules directory is {{.NginxModulesDir}}.", []string{"NGINX_MODULES=/some/directory"})
+			Expect(body).To(Equal("Hi the nginx modules directory is /some/directory."))
+		})
 	})
 })

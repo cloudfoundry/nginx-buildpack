@@ -92,4 +92,14 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			Eventually(app.Stdout.String).Should(ContainSubstring(`Available versions: mainline, stable, 1.12.x, 1.13.x`))
 		})
 	})
+
+	Context("with an nginx app that uses the stream module", func() {
+		BeforeEach(func() {
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "with_stream_module"))
+		})
+
+		It("Pushes the app successfully", func() {
+			PushAppAndConfirm(app)
+		})
+	})
 })

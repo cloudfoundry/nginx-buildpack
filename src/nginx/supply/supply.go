@@ -31,7 +31,10 @@ type Manifest interface {
 type Stager interface {
 	AddBinDependencyLink(string, string) error
 	DepDir() string
+	DepsIdx() string
+	DepsDir() string
 	BuildDir() string
+	WriteProfileD(string, string) error
 }
 
 type Config struct {
@@ -78,7 +81,16 @@ func (s *Supplier) Run() error {
 		return err
 	}
 
+	if err := s.WriteProfileD(); err != nil {
+		s.Log.Error("Could not write profile.d: %s", err.Error())
+		return err
+	}
+
 	return nil
+}
+
+func (s *Supplier) WriteProfileD() error {
+	return s.Stager.WriteProfileD("nginx", fmt.Sprintf("export NGINX_MODULES=%s", filepath.Join("$DEPS_DIR", s.Stager.DepsIdx(), "nginx", "nginx", "modules")))
 }
 
 func (s *Supplier) InstallVarify() error {
@@ -163,7 +175,7 @@ func (s *Supplier) validateNginxConfSyntax() error {
 	cmd.Dir = tmpConfDir
 	cmd.Stdout = ioutil.Discard
 	cmd.Stderr = ioutil.Discard
-	cmd.Env = append(os.Environ(), "PORT=8080")
+	cmd.Env = append(os.Environ(), "PORT=8080", fmt.Sprintf("NGINX_MODULES=%s", filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "modules")))
 	if err := s.Command.Run(cmd); err != nil {
 		return err
 	}

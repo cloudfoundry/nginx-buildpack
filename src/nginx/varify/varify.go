@@ -21,7 +21,10 @@ func main() {
 	}
 	defer fileHandle.Close()
 
-	hash := map[string]string{"Port": os.Getenv("PORT")}
+	hash := map[string]string{
+		"Port":            os.Getenv("PORT"),
+		"NginxModulesDir": os.Getenv("NGINX_MODULES"),
+	}
 
 	t, err := template.New("conf").Parse(string(body))
 	if err != nil {
