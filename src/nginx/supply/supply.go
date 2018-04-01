@@ -181,7 +181,7 @@ func (s *Supplier) validateNginxConfSyntax() error {
 	}
 
 	nginxExecDir := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "sbin")
-	if err := s.Command.Execute(tmpConfDir, ioutil.Discard, ioutil.Discard, filepath.Join(nginxExecDir, "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir); err != nil {
+	if err := s.Command.Execute(tmpConfDir, os.Stdout, os.Stderr, filepath.Join(nginxExecDir, "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir); err != nil {
 		return fmt.Errorf("nginx.conf contains syntax errors: %s", err.Error())
 	}
 	return nil
