@@ -1,6 +1,7 @@
 package supply
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -181,7 +182,10 @@ func (s *Supplier) validateNginxConfSyntax() error {
 	}
 
 	nginxExecDir := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "sbin")
-	if err := s.Command.Execute(tmpConfDir, ioutil.Discard, ioutil.Discard, filepath.Join(nginxExecDir, "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir); err != nil {
+	nginxOut := bytes.Buffer{}
+	nginxErr := bytes.Buffer{}
+	if err := s.Command.Execute(tmpConfDir, &nginxOut, &nginxErr, filepath.Join(nginxExecDir, "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir); err != nil {
+		fmt.Fprint(os.Stderr, nginxErr.String())
 		return fmt.Errorf("nginx.conf contains syntax errors: %s", err.Error())
 	}
 	return nil
