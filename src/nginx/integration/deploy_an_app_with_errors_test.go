@@ -49,6 +49,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 	Context("an app with nginx.conf without {{.Port}}", func() {
 		BeforeEach(func() {
 			app = cutlass.New(filepath.Join(bpDir, "fixtures", "missing_template_port"))
+			app.Buildpacks = []string{"nginx_buildpack"}
 		})
 
 		It("Logs an error", func() {
