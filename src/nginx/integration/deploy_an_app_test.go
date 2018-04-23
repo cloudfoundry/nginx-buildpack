@@ -26,7 +26,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		It("Uses latest mainline nginx", func() {
 			PushAppAndConfirm(app)
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`No nginx version specified - using mainline => 1.14.`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`No nginx version specified - using mainline => 1.13.`))
 			Eventually(app.Stdout.String).ShouldNot(ContainSubstring(`Requested nginx version:`))
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
@@ -42,7 +42,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		It("Logs nginx buildpack version", func() {
 			PushAppAndConfirm(app)
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: mainline => 1.14.`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: mainline => 1.13.`))
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
 			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
@@ -57,7 +57,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		It("Logs nginx buildpack version", func() {
 			PushAppAndConfirm(app)
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: stable => 1.13.`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: stable => 1.14.`))
 			Eventually(app.Stdout.String).Should(ContainSubstring(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`))
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
@@ -65,15 +65,15 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		})
 	})
 
-	Context("with an nginx app specifying 1.13.x", func() {
+	Context("with an nginx app specifying 1.14.x", func() {
 		BeforeEach(func() {
-			app = cutlass.New(filepath.Join(bpDir, "fixtures", "1_13_x"))
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "1_14_x"))
 		})
 
 		It("Logs nginx buildpack version", func() {
 			PushAppAndConfirm(app)
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: 1.13.x => 1.13.`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: 1.14.x => 1.14.`))
 			Eventually(app.Stdout.String).Should(ContainSubstring(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`))
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
