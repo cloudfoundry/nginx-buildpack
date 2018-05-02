@@ -17,8 +17,8 @@ dependencies:
   - cflinuxfs2
 - name: nginx
   version: 1.13.12
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.13.12-linux-x64-0bceea5a.tgz
-  sha256: 0bceea5a65704c5494f6f1cef8e15dbb8d19b00d2273d689d958323d34883f59
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.13.12-linux-x64-16a62abe.tgz
+  sha256: 16a62abeb8f04efdd2d7c4b3799665437f3261cd9bd6fb8c25ea3125a8df4dba
   cf_stacks:
   - cflinuxfs2
 - name: nginx
