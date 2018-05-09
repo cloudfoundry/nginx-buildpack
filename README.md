@@ -7,10 +7,7 @@ A Cloud Foundry [buildpack](http://docs.cloudfoundry.org/buildpacks/) for apps r
 
 ### Buildpack User Documentation
 
-To use this buildpack, you will need to include an `nginx.conf` file in your
-app. You can see sample apps in the fixtures directory,
-[mainline](https://github.com/cloudfoundry/nginx-buildpack/tree/master/fixtures/mainline),
-including a sample `nginx.conf` file.
+Official buildpack documentation can be found at [Nginx buildpackdocs](https://docs.cloudfoundry.org/buildpacks/nginx/index.html)
 
 ### Building the Buildpack
 
