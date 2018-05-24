@@ -23,12 +23,16 @@ type Command interface {
 }
 
 type Manifest interface {
-	InstallOnlyVersion(string, string) error
 	DefaultVersion(depName string) (libbuildpack.Dependency, error)
 	AllDependencyVersions(string) []string
-	InstallDependency(dep libbuildpack.Dependency, outputDir string) error
 	RootDir() string
 }
+
+type Installer interface {
+	InstallDependency(dep libbuildpack.Dependency, outputDir string) error
+	InstallOnlyVersion(string, string) error
+}
+
 type Stager interface {
 	AddBinDependencyLink(string, string) error
 	DepDir() string
@@ -45,18 +49,20 @@ type Config struct {
 type Supplier struct {
 	Stager       Stager
 	Manifest     Manifest
+	Installer    Installer
 	Log          *libbuildpack.Logger
 	Config       Config
 	Command      Command
 	VersionLines map[string]string
 }
 
-func New(stager Stager, manifest Manifest, logger *libbuildpack.Logger, command Command) *Supplier {
+func New(stager Stager, manifest Manifest, installer Installer, logger *libbuildpack.Logger, command Command) *Supplier {
 	return &Supplier{
-		Stager:   stager,
-		Manifest: manifest,
-		Log:      logger,
-		Command:  command,
+		Stager:    stager,
+		Manifest:  manifest,
+		Installer: installer,
+		Log:       logger,
+		Command:   command,
 	}
 }
 
@@ -244,7 +250,7 @@ func (s *Supplier) InstallNginx() error {
 		s.Log.Warning(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`)
 	}
 
-	if err := s.Manifest.InstallDependency(dep, dir); err != nil {
+	if err := s.Installer.InstallDependency(dep, dir); err != nil {
 		return err
 	}
 

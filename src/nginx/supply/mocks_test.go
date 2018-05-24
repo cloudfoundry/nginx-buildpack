@@ -105,18 +105,6 @@ func (m *MockManifest) EXPECT() *MockManifestMockRecorder {
 	return m.recorder
 }
 
-// InstallOnlyVersion mocks base method
-func (m *MockManifest) InstallOnlyVersion(arg0, arg1 string) error {
-	ret := m.ctrl.Call(m, "InstallOnlyVersion", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// InstallOnlyVersion indicates an expected call of InstallOnlyVersion
-func (mr *MockManifestMockRecorder) InstallOnlyVersion(arg0, arg1 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InstallOnlyVersion", reflect.TypeOf((*MockManifest)(nil).InstallOnlyVersion), arg0, arg1)
-}
-
 // DefaultVersion mocks base method
 func (m *MockManifest) DefaultVersion(depName string) (libbuildpack.Dependency, error) {
 	ret := m.ctrl.Call(m, "DefaultVersion", depName)
@@ -142,18 +130,6 @@ func (mr *MockManifestMockRecorder) AllDependencyVersions(arg0 interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AllDependencyVersions", reflect.TypeOf((*MockManifest)(nil).AllDependencyVersions), arg0)
 }
 
-// InstallDependency mocks base method
-func (m *MockManifest) InstallDependency(dep libbuildpack.Dependency, outputDir string) error {
-	ret := m.ctrl.Call(m, "InstallDependency", dep, outputDir)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// InstallDependency indicates an expected call of InstallDependency
-func (mr *MockManifestMockRecorder) InstallDependency(dep, outputDir interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InstallDependency", reflect.TypeOf((*MockManifest)(nil).InstallDependency), dep, outputDir)
-}
-
 // RootDir mocks base method
 func (m *MockManifest) RootDir() string {
 	ret := m.ctrl.Call(m, "RootDir")
@@ -164,6 +140,53 @@ func (m *MockManifest) RootDir() string {
 // RootDir indicates an expected call of RootDir
 func (mr *MockManifestMockRecorder) RootDir() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RootDir", reflect.TypeOf((*MockManifest)(nil).RootDir))
+}
+
+// MockInstaller is a mock of Installer interface
+type MockInstaller struct {
+	ctrl     *gomock.Controller
+	recorder *MockInstallerMockRecorder
+}
+
+// MockInstallerMockRecorder is the mock recorder for MockInstaller
+type MockInstallerMockRecorder struct {
+	mock *MockInstaller
+}
+
+// NewMockInstaller creates a new mock instance
+func NewMockInstaller(ctrl *gomock.Controller) *MockInstaller {
+	mock := &MockInstaller{ctrl: ctrl}
+	mock.recorder = &MockInstallerMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockInstaller) EXPECT() *MockInstallerMockRecorder {
+	return m.recorder
+}
+
+// InstallDependency mocks base method
+func (m *MockInstaller) InstallDependency(dep libbuildpack.Dependency, outputDir string) error {
+	ret := m.ctrl.Call(m, "InstallDependency", dep, outputDir)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// InstallDependency indicates an expected call of InstallDependency
+func (mr *MockInstallerMockRecorder) InstallDependency(dep, outputDir interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InstallDependency", reflect.TypeOf((*MockInstaller)(nil).InstallDependency), dep, outputDir)
+}
+
+// InstallOnlyVersion mocks base method
+func (m *MockInstaller) InstallOnlyVersion(arg0, arg1 string) error {
+	ret := m.ctrl.Call(m, "InstallOnlyVersion", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// InstallOnlyVersion indicates an expected call of InstallOnlyVersion
+func (mr *MockInstallerMockRecorder) InstallOnlyVersion(arg0, arg1 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InstallOnlyVersion", reflect.TypeOf((*MockInstaller)(nil).InstallOnlyVersion), arg0, arg1)
 }
 
 // MockStager is a mock of Stager interface

@@ -18,14 +18,15 @@ import (
 
 var _ = Describe("Supply", func() {
 	var (
-		depDir       string
-		supplier     *supply.Supplier
-		logger       *libbuildpack.Logger
-		mockCtrl     *gomock.Controller
-		mockStager   *MockStager
-		mockManifest *MockManifest
-		mockCommand  *MockCommand
-		buffer       *bytes.Buffer
+		depDir        string
+		supplier      *supply.Supplier
+		logger        *libbuildpack.Logger
+		mockCtrl      *gomock.Controller
+		mockStager    *MockStager
+		mockManifest  *MockManifest
+		mockInstaller *MockInstaller
+		mockCommand   *MockCommand
+		buffer        *bytes.Buffer
 	)
 
 	BeforeEach(func() {
@@ -36,11 +37,12 @@ var _ = Describe("Supply", func() {
 		mockCtrl = gomock.NewController(GinkgoT())
 		mockStager = NewMockStager(mockCtrl)
 		mockManifest = NewMockManifest(mockCtrl)
+		mockInstaller = NewMockInstaller(mockCtrl)
 		mockCommand = NewMockCommand(mockCtrl)
 		depDir, err = ioutil.TempDir("", "nginx.depdir")
 		Expect(err).ToNot(HaveOccurred())
 		mockStager.EXPECT().DepDir().AnyTimes().Return(depDir)
-		supplier = supply.New(mockStager, mockManifest, logger, mockCommand)
+		supplier = supply.New(mockStager, mockManifest, mockInstaller, logger, mockCommand)
 	})
 
 	AfterEach(func() {
@@ -68,7 +70,7 @@ var _ = Describe("Supply", func() {
 				supplier.Config.Version = "mainline"
 			})
 			It("Logs the mainline version", func() {
-				mockManifest.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.13.8"}, gomock.Any())
+				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.13.8"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(`Requested nginx version: mainline => 1.13.8`))
 			})
@@ -78,7 +80,7 @@ var _ = Describe("Supply", func() {
 				supplier.Config.Version = "stable"
 			})
 			It("Logs the stable version", func() {
-				mockManifest.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.3"}, gomock.Any())
+				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.3"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(`Requested nginx version: stable => 1.12.3`))
 			})
@@ -88,7 +90,7 @@ var _ = Describe("Supply", func() {
 				supplier.Config.Version = ""
 			})
 			It("Logs the mainline version", func() {
-				mockManifest.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.13.8"}, gomock.Any())
+				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.13.8"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring("No nginx version specified - using mainline => 1.13.8"))
 			})
@@ -98,7 +100,7 @@ var _ = Describe("Supply", func() {
 				supplier.Config.Version = "1.12.x"
 			})
 			It("Logs the semver request and the matching version", func() {
-				mockManifest.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.3"}, gomock.Any())
+				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.3"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(`Requested nginx version: 1.12.x => 1.12.3`))
 			})
@@ -108,7 +110,7 @@ var _ = Describe("Supply", func() {
 				supplier.Config.Version = "1.12.2"
 			})
 			It("Logs the specific version", func() {
-				mockManifest.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.2"}, gomock.Any())
+				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.2"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(`Requested nginx version: 1.12.2 => 1.12.2`))
 			})
@@ -118,7 +120,7 @@ var _ = Describe("Supply", func() {
 			const warning = `Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`
 
 			BeforeEach(func() {
-				mockManifest.EXPECT().InstallDependency(gomock.Any(), gomock.Any())
+				mockInstaller.EXPECT().InstallDependency(gomock.Any(), gomock.Any())
 			})
 
 			It("stable emits warning", func() {

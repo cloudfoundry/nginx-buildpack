@@ -25,7 +25,8 @@ func main() {
 
 	stager := libbuildpack.NewStager(os.Args[1:], logger, manifest)
 
-	if err = manifest.SetAppCacheDir(stager.CacheDir()); err != nil {
+	installer := libbuildpack.NewInstaller(manifest)
+	if err = installer.SetAppCacheDir(stager.CacheDir()); err != nil {
 		logger.Error("Unable to setup appcache: %s", err)
 		os.Exit(18)
 	}
@@ -43,7 +44,7 @@ func main() {
 		os.Exit(13)
 	}
 
-	supplier := supply.New(stager, manifest, logger, &libbuildpack.Command{})
+	supplier := supply.New(stager, manifest, installer, logger, &libbuildpack.Command{})
 
 	if err := supplier.Run(); err != nil {
 		os.Exit(14)
@@ -53,7 +54,7 @@ func main() {
 		logger.Error("Error writing config.yml: %s", err.Error())
 		os.Exit(15)
 	}
-	if err = manifest.CleanupAppCache(); err != nil {
+	if err = installer.CleanupAppCache(); err != nil {
 		logger.Error("Unable to apply override.yml files: %s", err)
 		os.Exit(19)
 	}
