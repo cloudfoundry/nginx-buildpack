@@ -31,12 +31,12 @@ var _ = Describe("pushing an app a second time", func() {
 
 	It("uses the cache for manifest dependencies", func() {
 		PushAppAndConfirm(app)
-		Expect(app.Stdout.String()).To(MatchRegexp(DownloadRegexp))
+		Eventually(app.Stdout.String).Should(MatchRegexp(DownloadRegexp))
 		Expect(app.Stdout.String()).ToNot(MatchRegexp(CopyRegexp))
 
 		app.Stdout.Reset()
 		PushAppAndConfirm(app)
-		Expect(app.Stdout.String()).To(MatchRegexp(CopyRegexp))
+		Eventually(app.Stdout.String).Should(MatchRegexp(CopyRegexp))
 		Expect(app.Stdout.String()).ToNot(MatchRegexp(DownloadRegexp))
 	})
 })
