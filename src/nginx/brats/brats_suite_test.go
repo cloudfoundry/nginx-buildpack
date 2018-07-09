@@ -52,7 +52,7 @@ func CopyBrats(version string) *cutlass.App {
 	dir, err := cutlass.CopyFixture(filepath.Join(bratshelper.Data.BpDir, "fixtures", "brats"))
 	Expect(err).ToNot(HaveOccurred())
 
-	Expect(libbuildpack.NewYAML().Write(filepath.Join(dir, "nginx.yml"), map[string]string{"version": version})).To(Succeed())
+	Expect(libbuildpack.NewYAML().Write(filepath.Join(dir, "buildpack.yml"), map[string]map[string]string{"nginx": {"version": version}})).To(Succeed())
 
 	return cutlass.New(dir)
 }

@@ -58,7 +58,7 @@ var _ = Describe("Supply", func() {
 		})
 		Context("request unavailable version", func() {
 			BeforeEach(func() {
-				supplier.Config.Version = "1.1.1"
+				supplier.Config.Nginx.Version = "1.1.1"
 			})
 			It("Logs available versions and returns an error", func() {
 				Expect(supplier.InstallNginx()).ToNot(Succeed())
@@ -67,7 +67,7 @@ var _ = Describe("Supply", func() {
 		})
 		Context("request mainline version", func() {
 			BeforeEach(func() {
-				supplier.Config.Version = "mainline"
+				supplier.Config.Nginx.Version = "mainline"
 			})
 			It("Logs the mainline version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.13.8"}, gomock.Any())
@@ -77,7 +77,7 @@ var _ = Describe("Supply", func() {
 		})
 		Context("request stable version", func() {
 			BeforeEach(func() {
-				supplier.Config.Version = "stable"
+				supplier.Config.Nginx.Version = "stable"
 			})
 			It("Logs the stable version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.3"}, gomock.Any())
@@ -87,7 +87,7 @@ var _ = Describe("Supply", func() {
 		})
 		Context("request unspecified version", func() {
 			BeforeEach(func() {
-				supplier.Config.Version = ""
+				supplier.Config.Nginx.Version = ""
 			})
 			It("Logs the mainline version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.13.8"}, gomock.Any())
@@ -97,7 +97,7 @@ var _ = Describe("Supply", func() {
 		})
 		Context("request semver version", func() {
 			BeforeEach(func() {
-				supplier.Config.Version = "1.12.x"
+				supplier.Config.Nginx.Version = "1.12.x"
 			})
 			It("Logs the semver request and the matching version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.3"}, gomock.Any())
@@ -107,7 +107,7 @@ var _ = Describe("Supply", func() {
 		})
 		Context("request specific version", func() {
 			BeforeEach(func() {
-				supplier.Config.Version = "1.12.2"
+				supplier.Config.Nginx.Version = "1.12.2"
 			})
 			It("Logs the specific version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.2"}, gomock.Any())
@@ -124,31 +124,31 @@ var _ = Describe("Supply", func() {
 			})
 
 			It("stable emits warning", func() {
-				supplier.Config.Version = "stable"
+				supplier.Config.Nginx.Version = "stable"
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(warning))
 			})
 
 			It("mainline does not warn", func() {
-				supplier.Config.Version = "mainline"
+				supplier.Config.Nginx.Version = "mainline"
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).ToNot(ContainSubstring(warning))
 			})
 
 			It("1.13.x does not warn", func() {
-				supplier.Config.Version = "1.13.x"
+				supplier.Config.Nginx.Version = "1.13.x"
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).ToNot(ContainSubstring(warning))
 			})
 
 			It("1.12.x emits warning", func() {
-				supplier.Config.Version = "stable"
+				supplier.Config.Nginx.Version = "stable"
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(warning))
 			})
 
 			It("1.12.2 emits warning", func() {
-				supplier.Config.Version = "stable"
+				supplier.Config.Nginx.Version = "stable"
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(warning))
 			})

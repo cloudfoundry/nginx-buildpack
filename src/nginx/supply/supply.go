@@ -43,6 +43,10 @@ type Stager interface {
 }
 
 type Config struct {
+	Nginx NginxConfig `yaml:"nginx"`
+}
+
+type NginxConfig struct {
 	Version string `yaml:"version"`
 }
 
@@ -111,7 +115,7 @@ func (s *Supplier) InstallVarify() error {
 }
 
 func (s *Supplier) Setup() error {
-	configPath := filepath.Join(s.Stager.BuildDir(), "nginx.yml")
+	configPath := filepath.Join(s.Stager.BuildDir(), "buildpack.yml")
 	if exists, err := libbuildpack.FileExists(configPath); err != nil {
 		return err
 	} else if exists {
@@ -233,15 +237,15 @@ func (s *Supplier) isStableLine(version string) bool {
 }
 
 func (s *Supplier) InstallNginx() error {
-	dep, err := s.findMatchingVersion("nginx", s.Config.Version)
+	dep, err := s.findMatchingVersion("nginx", s.Config.Nginx.Version)
 	if err != nil {
 		s.Log.Info(`Available versions: ` + strings.Join(s.availableVersions(), ", "))
 		return fmt.Errorf("Could not determine version: %s", err)
 	}
-	if s.Config.Version == "" {
+	if s.Config.Nginx.Version == "" {
 		s.Log.BeginStep("No nginx version specified - using mainline => %s", dep.Version)
 	} else {
-		s.Log.BeginStep("Requested nginx version: %s => %s", s.Config.Version, dep.Version)
+		s.Log.BeginStep("Requested nginx version: %s => %s", s.Config.Nginx.Version, dep.Version)
 	}
 
 	dir := filepath.Join(s.Stager.DepDir(), "nginx")

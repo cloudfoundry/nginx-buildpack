@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-export ROOT=`dirname $(readlink -f ${BASH_SOURCE%/*})`
-$ROOT/scripts/install_tools.sh
+cd "$( dirname "${BASH_SOURCE[0]}" )/.."
+source .envrc
+./scripts/install_tools.sh
 
-cd $ROOT/src/nginx/
+cd src/nginx
 ginkgo -r -skipPackage=brats,integration
