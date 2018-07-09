@@ -160,11 +160,11 @@ func (s *Supplier) validateNginxConfHasPort() error {
 	if err != nil {
 		return err
 	}
-	if portFound, err := regexp.Match("{{.Port}}", conf); err != nil {
+	if portFound, err := regexp.Match("{{port}}", conf); err != nil {
 		return err
 	} else if !portFound {
-		s.Log.Error("nginx.conf file must be configured to respect the value of `{{.Port}}`")
-		return errors.New("no .Port")
+		s.Log.Error("nginx.conf file must be configured to respect the value of `{{port}}`")
+		return errors.New("no {{port}} in nginx.conf")
 	}
 	return nil
 }

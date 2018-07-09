@@ -24,14 +24,14 @@ var _ = Describe("varify", func() {
 	})
 
 	Describe("Run", func() {
-		It("replaces {{.Port}} in file", func() {
-			body := runCli(tmpDir, "Hi the port is {{.Port}}.", []string{"PORT=8080"})
+		It("templates current port using the 'port' func", func() {
+			body := runCli(tmpDir, "Hi the port is {{port}}.", []string{"PORT=8080"})
 			Expect(body).To(Equal("Hi the port is 8080."))
 		})
 
-		It("replaces {{.NginxModulesDir}} in file", func() {
-			body := runCli(tmpDir, "Hi the nginx modules directory is {{.NginxModulesDir}}.", []string{"NGINX_MODULES=/some/directory"})
-			Expect(body).To(Equal("Hi the nginx modules directory is /some/directory."))
+		It("templates a load_module directive using the 'module' func", func() {
+			body := runCli(tmpDir, `{{module "foo"}}`, []string{"NGINX_MODULES=/some/directory"})
+			Expect(body).To(Equal("load_module /some/directory/foo.so;"))
 		})
 
 		It("templates environment variables using the 'env' func", func() {

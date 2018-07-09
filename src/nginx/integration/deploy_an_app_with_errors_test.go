@@ -46,7 +46,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		})
 	})
 
-	Context("an app with nginx.conf without {{.Port}}", func() {
+	Context("an app with nginx.conf without {{port}}", func() {
 		BeforeEach(func() {
 			app = cutlass.New(filepath.Join(bpDir, "fixtures", "missing_template_port"))
 			app.Buildpacks = []string{"nginx_buildpack"}
@@ -56,7 +56,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			Expect(app.Push()).ToNot(Succeed())
 			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
 
-			Eventually(app.Stdout.String).Should(ContainSubstring("nginx.conf file must be configured to respect the value of `{{.Port}}`"))
+			Eventually(app.Stdout.String).Should(ContainSubstring("nginx.conf file must be configured to respect the value of `{{port}}`"))
 		})
 	})
 })

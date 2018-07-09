@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"fmt"
+	"path/filepath"
 )
 
 func main() {
@@ -21,13 +23,14 @@ func main() {
 	}
 	defer fileHandle.Close()
 
-	hash := map[string]string{
-		"Port":            os.Getenv("PORT"),
-		"NginxModulesDir": os.Getenv("NGINX_MODULES"),
-	}
-
 	funcMap := template.FuncMap{
 		"env": os.Getenv,
+		"port": func() string {
+			return os.Getenv("PORT")
+		},
+		"module": func(name string) string {
+			return fmt.Sprintf("load_module %s.so;", filepath.Join(os.Getenv("NGINX_MODULES"), name))
+		},
 	}
 
 	t, err := template.New("conf").Funcs(funcMap).Parse(string(body))
@@ -35,7 +38,7 @@ func main() {
 		log.Fatalf("Could not parse config file: %s", err)
 	}
 
-	if err := t.Execute(fileHandle, hash); err != nil {
+	if err := t.Execute(fileHandle, nil); err != nil {
 		log.Fatalf("Could not write config file: %s", err)
 	}
 }
