@@ -26,7 +26,11 @@ func main() {
 		"NginxModulesDir": os.Getenv("NGINX_MODULES"),
 	}
 
-	t, err := template.New("conf").Parse(string(body))
+	funcMap := template.FuncMap{
+		"env": os.Getenv,
+	}
+
+	t, err := template.New("conf").Funcs(funcMap).Parse(string(body))
 	if err != nil {
 		log.Fatalf("Could not parse config file: %s", err)
 	}

@@ -33,5 +33,10 @@ var _ = Describe("varify", func() {
 			body := runCli(tmpDir, "Hi the nginx modules directory is {{.NginxModulesDir}}.", []string{"NGINX_MODULES=/some/directory"})
 			Expect(body).To(Equal("Hi the nginx modules directory is /some/directory."))
 		})
+
+		It("templates environment variables using the 'env' func", func() {
+			body := runCli(tmpDir, `The env var FOO is {{env "FOO"}}`, []string{"FOO=BAR"})
+			Expect(body).To(Equal("The env var FOO is BAR"))
+		})
 	})
 })

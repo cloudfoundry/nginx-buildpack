@@ -56,59 +56,71 @@ var _ = Describe("Supply", func() {
 			mockManifest.EXPECT().AllDependencyVersions("nginx").Return([]string{"1.12.2", "1.12.3", "1.13.8"}).AnyTimes()
 			mockStager.EXPECT().AddBinDependencyLink(gomock.Any(), gomock.Any()).AnyTimes()
 		})
+
 		Context("request unavailable version", func() {
 			BeforeEach(func() {
 				supplier.Config.Nginx.Version = "1.1.1"
 			})
+
 			It("Logs available versions and returns an error", func() {
 				Expect(supplier.InstallNginx()).ToNot(Succeed())
 				Expect(buffer.String()).To(ContainSubstring(`Available versions: mainline, stable, 1.12.x, 1.13.x, 1.12.2, 1.12.3, 1.13.8`))
 			})
 		})
+
 		Context("request mainline version", func() {
 			BeforeEach(func() {
 				supplier.Config.Nginx.Version = "mainline"
 			})
+
 			It("Logs the mainline version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.13.8"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(`Requested nginx version: mainline => 1.13.8`))
 			})
 		})
+
 		Context("request stable version", func() {
 			BeforeEach(func() {
 				supplier.Config.Nginx.Version = "stable"
 			})
+
 			It("Logs the stable version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.3"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(`Requested nginx version: stable => 1.12.3`))
 			})
 		})
+
 		Context("request unspecified version", func() {
 			BeforeEach(func() {
 				supplier.Config.Nginx.Version = ""
 			})
+
 			It("Logs the mainline version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.13.8"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring("No nginx version specified - using mainline => 1.13.8"))
 			})
 		})
+
 		Context("request semver version", func() {
 			BeforeEach(func() {
 				supplier.Config.Nginx.Version = "1.12.x"
 			})
+
 			It("Logs the semver request and the matching version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.3"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())
 				Expect(buffer).To(ContainSubstring(`Requested nginx version: 1.12.x => 1.12.3`))
 			})
 		})
+
 		Context("request specific version", func() {
 			BeforeEach(func() {
 				supplier.Config.Nginx.Version = "1.12.2"
 			})
+
 			It("Logs the specific version", func() {
 				mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "nginx", Version: "1.12.2"}, gomock.Any())
 				Expect(supplier.InstallNginx()).To(Succeed())

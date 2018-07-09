@@ -170,7 +170,6 @@ func (s *Supplier) validateNginxConfHasPort() error {
 }
 
 func (s *Supplier) validateNginxConfSyntax() error {
-
 	tmpConfDir, err := ioutil.TempDir("/tmp", "conf")
 	if err != nil {
 		return fmt.Errorf("Error creating temp nginx conf dir: %s", err.Error())
