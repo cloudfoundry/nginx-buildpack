@@ -215,7 +215,13 @@ func (s *Supplier) availableVersions() []string {
 }
 
 func (s *Supplier) findMatchingVersion(depName string, version string) (libbuildpack.Dependency, error) {
-	if val, ok := s.VersionLines[version]; ok {
+	if version == "" {
+		if val, ok := s.VersionLines["mainline"]; ok {
+			version = val
+		} else {
+			return libbuildpack.Dependency{}, fmt.Errorf("Could not find mainline version line in buildpack manifest to default to")
+		}
+	} else if val, ok := s.VersionLines[version]; ok {
 		version = val
 	}
 
