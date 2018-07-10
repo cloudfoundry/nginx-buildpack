@@ -18,6 +18,32 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		app = nil
 	})
 
+	Context("with no specified pid", func() {
+		BeforeEach(func() {
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "without_pid"))
+		})
+
+		It("Deploys successfully", func() {
+			PushAppAndConfirm(app)
+
+			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
+		})
+	})
+
+	Context("with a specified pid", func() {
+		BeforeEach(func() {
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "with_pid"))
+		})
+
+		It("Deploys successfully", func() {
+			PushAppAndConfirm(app)
+
+			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
+		})
+	})
+
 	Context("with no specified version", func() {
 		BeforeEach(func() {
 			app = cutlass.New(filepath.Join(bpDir, "fixtures", "unspecified_version"))

@@ -101,7 +101,7 @@ func (s *Supplier) Run() error {
 }
 
 func (s *Supplier) WriteProfileD() error {
-	return s.Stager.WriteProfileD("nginx", fmt.Sprintf("export NGINX_MODULES=%s", filepath.Join("$DEPS_DIR", s.Stager.DepsIdx(), "nginx", "nginx", "modules")))
+	return s.Stager.WriteProfileD("nginx", fmt.Sprintf("export NGINX_MODULES=%s\nmkdir logs", filepath.Join("$DEPS_DIR", s.Stager.DepsIdx(), "nginx", "nginx", "modules")))
 }
 
 func (s *Supplier) InstallVarify() error {
@@ -131,6 +131,11 @@ func (s *Supplier) Setup() error {
 		return err
 	}
 	s.VersionLines = m.VersionLines
+
+	logsDirPath := filepath.Join(s.Stager.BuildDir(), "logs")
+	if err := os.Mkdir(logsDirPath, os.ModePerm); err != nil {
+		return fmt.Errorf("Could not create 'logs' directory: %v", err)
+	}
 
 	return nil
 }
