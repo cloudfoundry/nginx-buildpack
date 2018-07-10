@@ -2,12 +2,18 @@
 language: nginx
 default_versions:
 - name: nginx
-  version: 1.15.x
+  version: 
 version_lines:
   mainline: 1.15.x
   stable: 1.14.x
 dependency_deprecation_dates: []
 dependencies:
+- name: nginx
+  version: 
+  uri: 
+  sha256: 
+  cf_stacks:
+  - cflinuxfs2
 - name: nginx
   version: 1.13.11
   uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.13.11-linux-x64-185f2aec.tgz
