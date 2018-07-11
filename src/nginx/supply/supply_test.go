@@ -173,7 +173,7 @@ var _ = Describe("Supply", func() {
 		})
 
 		It("writes nginx script", func() {
-			mockStager.EXPECT().WriteProfileD("nginx", "export NGINX_MODULES=$DEPS_DIR/0/nginx/nginx/modules")
+			mockStager.EXPECT().WriteProfileD("nginx", "export NGINX_MODULES=$DEPS_DIR/0/nginx/nginx/modules\nmkdir logs")
 
 			supplier.WriteProfileD()
 		})
