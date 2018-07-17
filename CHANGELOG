@@ -1,28 +1,3 @@
-v1.0.0 Jul 16, 2018
-====================
-
-This is the first official release.
-
-**Breaking Changes** to filename (nginx.yml -> buildpack.yml) and nginx.conf syntax.
-
-* Update templating functions for nginx.conf
-  - Change `{{.Port}}` to `{{ port }}` (breaking change)
-  - Change `load_module {{.NginxModulesDir}}/<name>.so;` to `{{ module <name> }}` (breaking change)
-  - Add {{ env "SOME_VAR" }} to allow templating of env vars
-  (https://www.pivotaltracker.com/story/show/156618438)
-  (https://www.pivotaltracker.com/story/show/155953917)
-
-* Specify nginx version via buildpack.yml
-  (https://www.pivotaltracker.com/story/show/158268170)
-
-* Make default nginx pid work.
-  Apps no longer need to set `pid` to `/tmp/nginx.pid` because the default just works.
-  (https://www.pivotaltracker.com/story/show/158095548)
-
-* Add nginx 1.15.1, 1.14.0; remove nginx 1.12.1, 1.12.2, 1.13.9, 1.13.11
-  (https://www.pivotaltracker.com/story/show/158800200)
-  (https://www.pivotaltracker.com/story/show/156851318)
-
 v0.0.5 Apr 09, 2018
 ====================
 
