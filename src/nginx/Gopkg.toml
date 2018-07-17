@@ -19,10 +19,6 @@ required = ["github.com/google/subcommands"]
   name = "github.com/onsi/gomega"
   branch = "master"
 
-[[constraint]]
-  branch = "v1"
-  name = "gopkg.in/jarcoal/httpmock.v1"
-
 [[override]]
   name = "github.com/elazarl/goproxy"
   revision = "aacba83f36a55ac31cbb71c06547a328c0cd1604"
