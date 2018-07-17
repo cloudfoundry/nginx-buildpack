@@ -1,6 +1,10 @@
 v1.0.0 Jul 16, 2018
 ====================
 
+This is the first official release.
+
+**Breaking Changes** to filename (nginx.yml -> buildpack.yml) and nginx.conf syntax.
+
 * Update templating functions for nginx.conf
   - Change `{{.Port}}` to `{{ port }}` (breaking change)
   - Change `load_module {{.NginxModulesDir}}/<name>.so;` to `{{ module <name> }}` (breaking change)
