@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-export ROOT=$(dirname $(readlink -f ${BASH_SOURCE%/*}))
+export ROOT="$( dirname "${BASH_SOURCE[0]}" )/.."
 $ROOT/scripts/install_tools.sh
 
 GINKGO_NODES=${GINKGO_NODES:-3}
