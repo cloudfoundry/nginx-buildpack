@@ -10,14 +10,14 @@ dependency_deprecation_dates: []
 dependencies:
 - name: nginx
   version: 1.14.0
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.14.0-linux-x64-cflinuxfs2-64aea244.tgz
-  sha256: 64aea244f5adf94c155feb87399bc96853e374aaab791feee0d94a99d302c887
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.14.0-linux-x64-cflinuxfs2-80e35366.tgz
+  sha256: 80e35366eef924d2520b5eb9930dc2072a22fc133fbb799603f8630477b2f151
   cf_stacks:
   - cflinuxfs2
 - name: nginx
   version: 1.14.0
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.14.0-linux-x64-cflinuxfs3-4413cbbf.tgz
-  sha256: 4413cbbf92d74d010bf859d660313a499b7daa7c753d790b8c221ee6740b142d
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.14.0-linux-x64-cflinuxfs3-a3f56f43.tgz
+  sha256: a3f56f437cc8beb878f839af38044395a5952884fc694c3d599e5d4e259bf7cc
   cf_stacks:
   - cflinuxfs3
 - name: nginx
