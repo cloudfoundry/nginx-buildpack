@@ -22,14 +22,14 @@ dependencies:
   - cflinuxfs3
 - name: nginx
   version: 1.15.2
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.15.2-linux-x64-cflinuxfs2-74587560.tgz
-  sha256: 745875603d150cdd2cf1d44112c5ccef49807cf56afa87b93282cda2d149e9cb
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.15.2-linux-x64-cflinuxfs2-75a71d67.tgz
+  sha256: 75a71d6775b8a37bc05219486bbf6c407dad9180558e5bb13af8736af5e37be4
   cf_stacks:
   - cflinuxfs2
 - name: nginx
   version: 1.15.2
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.15.2-linux-x64-cflinuxfs3-98953840.tgz
-  sha256: 9895384014c1bca5092dcc9b7c22e5643af623290f50ad85ed3effe29bc0d5ae
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.15.2-linux-x64-cflinuxfs3-107ee739.tgz
+  sha256: 107ee73950553ba12f1dcc0c4fd27a52644a2fe6e19eaf64460fc8a63eab5bd5
   cf_stacks:
   - cflinuxfs3
 pre_package: scripts/build.sh
