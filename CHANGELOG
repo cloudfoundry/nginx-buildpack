@@ -1,3 +1,13 @@
+v1.0.1 Aug 09, 2018
+====================
+
+* Rebuild nginx 1.14.0
+  for stacks cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/159249164)
+
+* Add nginx 1.15.2, remove nginx 1.15.1
+  (https://www.pivotaltracker.com/story/show/159272826)
+
 v1.0.0 Jul 16, 2018
 ====================
 
