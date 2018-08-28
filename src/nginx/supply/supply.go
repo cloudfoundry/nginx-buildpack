@@ -195,6 +195,13 @@ func (s *Supplier) validateNginxConfSyntax() error {
 		return err
 	}
 
+	srcModPath := filepath.Join(s.Stager.BuildDir(), "modules")
+	destModPath := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "modules")
+
+	if err := libbuildpack.CopyDirectory(srcModPath, destModPath); err != nil {
+		return fmt.Errorf("Error copying modules from sourceDir %s to destinationDir %s with error: %s", srcModPath, destModPath, err.Error())
+	}
+
 	nginxExecDir := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "sbin")
 	nginxErr := bytes.Buffer{}
 	if err := s.Command.Execute(tmpConfDir, os.Stdout, &nginxErr, filepath.Join(nginxExecDir, "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir); err != nil {
