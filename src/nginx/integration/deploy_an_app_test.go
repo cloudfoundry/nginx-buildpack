@@ -128,4 +128,14 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			PushAppAndConfirm(app)
 		})
 	})
+
+	Context("with an nginx app that uses a user-defined dynamic module", func() {
+		BeforeEach(func() {
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "with_dynamic_module"))
+		})
+
+		It("Pushes the app successfully", func() {
+			PushAppAndConfirm(app)
+		})
+	})
 })
