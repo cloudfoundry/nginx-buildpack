@@ -129,13 +129,25 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		})
 	})
 
-	Context("with an nginx app that uses a user-defined dynamic module", func() {
-		BeforeEach(func() {
-			app = cutlass.New(filepath.Join(bpDir, "fixtures", "with_dynamic_module"))
+	Context("with an nginx app that uses a user-provided module", func() {
+		Context("with native nginx syntax", func() {
+			BeforeEach(func() {
+				app = cutlass.New(filepath.Join(bpDir, "fixtures", "with_user_provided_module"))
+			})
+
+			It("Pushes the app successfully", func() {
+				PushAppAndConfirm(app)
+			})
 		})
 
-		It("Pushes the app successfully", func() {
-			PushAppAndConfirm(app)
+		Context("with templated syntax", func() {
+			BeforeEach(func() {
+				app = cutlass.New(filepath.Join(bpDir, "fixtures", "with_user_provided_module_templated"))
+			})
+
+			It("Pushes the app successfully", func() {
+				PushAppAndConfirm(app)
+			})
 		})
 	})
 })

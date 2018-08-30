@@ -1,16 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
-	"fmt"
 	"path/filepath"
+
+	"github.com/cloudfoundry/libbuildpack"
 )
 
 func main() {
 	filename := os.Args[1]
+	localModulePath := os.Args[2]
+	globalModulePath := os.Args[3]
 
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -29,7 +33,15 @@ func main() {
 			return os.Getenv("PORT")
 		},
 		"module": func(name string) string {
-			return fmt.Sprintf("load_module %s.so;", filepath.Join(os.Getenv("NGINX_MODULES"), name))
+			pathToModules := globalModulePath
+			foundLocally, err := libbuildpack.FileExists(filepath.Join(localModulePath, name+".so"))
+			if err != nil {
+				log.Fatalf("Error looking for module in user provided modules directory: %s", err)
+			}
+			if foundLocally {
+				pathToModules = localModulePath
+			}
+			return fmt.Sprintf("load_module %s.so;", filepath.Join(pathToModules, name))
 		},
 	}
 

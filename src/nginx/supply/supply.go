@@ -101,7 +101,7 @@ func (s *Supplier) Run() error {
 }
 
 func (s *Supplier) WriteProfileD() error {
-	return s.Stager.WriteProfileD("nginx", fmt.Sprintf("export NGINX_MODULES=%s\nmkdir logs", filepath.Join("$DEPS_DIR", s.Stager.DepsIdx(), "nginx", "nginx", "modules")))
+	return s.Stager.WriteProfileD("nginx", "mkdir logs")
 }
 
 func (s *Supplier) InstallVarify() error {
@@ -186,11 +186,14 @@ func (s *Supplier) validateNginxConfSyntax() error {
 	}
 
 	nginxConfPath := filepath.Join(tmpConfDir, "nginx.conf")
-	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), nginxConfPath)
+	localModulePath := filepath.Join(s.Stager.BuildDir(), "modules")
+	globalModulePath := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "modules")
+
+	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), nginxConfPath, localModulePath, globalModulePath)
 	cmd.Dir = tmpConfDir
 	cmd.Stdout = ioutil.Discard
 	cmd.Stderr = ioutil.Discard
-	cmd.Env = append(os.Environ(), "PORT=8080", fmt.Sprintf("NGINX_MODULES=%s", filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "modules")))
+	cmd.Env = append(os.Environ(), "PORT=8080")
 	if err := s.Command.Run(cmd); err != nil {
 		return err
 	}
