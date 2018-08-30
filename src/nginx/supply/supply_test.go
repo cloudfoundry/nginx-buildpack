@@ -168,8 +168,12 @@ var _ = Describe("Supply", func() {
 	})
 
 	Describe("WriteProfileD", func() {
+		BeforeEach(func() {
+			mockStager.EXPECT().DepsIdx().Return("0")
+		})
+
 		It("writes nginx script", func() {
-			mockStager.EXPECT().WriteProfileD("nginx", "mkdir logs")
+			mockStager.EXPECT().WriteProfileD("nginx", "export DEP_DIR=$DEPS_DIR/0\nmkdir logs")
 
 			supplier.WriteProfileD()
 		})

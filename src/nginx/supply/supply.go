@@ -101,7 +101,7 @@ func (s *Supplier) Run() error {
 }
 
 func (s *Supplier) WriteProfileD() error {
-	return s.Stager.WriteProfileD("nginx", "mkdir logs")
+	return s.Stager.WriteProfileD("nginx", fmt.Sprintf("export DEP_DIR=$DEPS_DIR/%s\nmkdir logs", s.Stager.DepsIdx()))
 }
 
 func (s *Supplier) InstallVarify() error {
