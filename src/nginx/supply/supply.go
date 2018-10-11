@@ -219,6 +219,7 @@ func (s *Supplier) availableVersions() []string {
 	}
 	sort.Strings(allNames)
 	sort.Strings(allSemver)
+
 	return append(append(allNames, allSemver...), allVersions...)
 }
 
