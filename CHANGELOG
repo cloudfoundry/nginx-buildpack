@@ -1,3 +1,13 @@
+v1.0.2 Oct 12, 2018
+====================
+
+* Add nginx 1.15.5, remove nginx 1.15.2
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/160928055)
+
+* Allow template syntax for loading user provided modules
+  (https://www.pivotaltracker.com/story/show/159321437)
+
 v1.0.1 Aug 09, 2018
 ====================
 
