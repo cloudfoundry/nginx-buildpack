@@ -20,10 +20,11 @@ var _ = Describe("pushing an app a second time", func() {
 
 	BeforeEach(func() {
 		if cutlass.Cached {
-			Skip("but running cached tests")
+			Skip("running uncached tests")
 		}
 
 		app = cutlass.New(filepath.Join(bpDir, "fixtures", "mainline"))
+		app.Buildpacks = []string{"nginx_buildpack"}
 	})
 
 	Regexp := `\[.*/nginx\-[\d\.]+\-linux\-x64\-(cflinuxfs.*-)?[\da-f]+\.tgz\]`
