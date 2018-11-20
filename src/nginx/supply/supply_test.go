@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"nginx/supply"
 	"os"
+	"path/filepath"
 
 	"bytes"
 
@@ -176,6 +177,23 @@ var _ = Describe("Supply", func() {
 			mockStager.EXPECT().WriteProfileD("nginx", "export DEP_DIR=$DEPS_DIR/0\nmkdir logs")
 
 			supplier.WriteProfileD()
+		})
+	})
+
+	Describe("nginx.conf validation", func() {
+		It("parses the port and ignores white spaces", func() {
+			buildDir, err := ioutil.TempDir("", "")
+			Expect(err).NotTo(HaveOccurred())
+			defer os.RemoveAll(buildDir)
+
+			ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("{{    port   }}"), 0666)
+
+			mockStager.EXPECT().BuildDir().Return(buildDir).AnyTimes()
+
+			mockCommand.EXPECT().Run(gomock.Any()).AnyTimes()
+			mockCommand.EXPECT().Execute(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
+
+			Expect(supplier.ValidateNginxConf()).To(Succeed())
 		})
 	})
 })

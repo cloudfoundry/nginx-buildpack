@@ -77,6 +77,7 @@ func (s *Supplier) Run() error {
 		s.Log.Error("Failed to copy verify: %s", err.Error())
 		return err
 	}
+
 	if err := s.Setup(); err != nil {
 		s.Log.Error("Could not setup: %s", err.Error())
 		return err
@@ -87,7 +88,7 @@ func (s *Supplier) Run() error {
 		return err
 	}
 
-	if err := s.validateNginxConf(); err != nil {
+	if err := s.ValidateNginxConf(); err != nil {
 		s.Log.Error("Could not validate nginx.conf: %s", err.Error())
 		return err
 	}
@@ -140,13 +141,15 @@ func (s *Supplier) Setup() error {
 	return nil
 }
 
-func (s *Supplier) validateNginxConf() error {
+func (s *Supplier) ValidateNginxConf() error {
 	if err := s.validateNginxConfExists(); err != nil {
 		return err
 	}
+
 	if err := s.validateNginxConfHasPort(); err != nil {
 		return err
 	}
+
 	return s.validateNginxConfSyntax()
 }
 
@@ -165,12 +168,14 @@ func (s *Supplier) validateNginxConfHasPort() error {
 	if err != nil {
 		return err
 	}
-	if portFound, err := regexp.Match("{{port}}", conf); err != nil {
+
+	if portFound, err := regexp.Match(`{{\s+port\s+}}`, conf); err != nil {
 		return err
 	} else if !portFound {
 		s.Log.Error("nginx.conf file must be configured to respect the value of `{{port}}`")
 		return errors.New("no {{port}} in nginx.conf")
 	}
+
 	return nil
 }
 
