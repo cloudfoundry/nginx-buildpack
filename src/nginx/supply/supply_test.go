@@ -181,18 +181,32 @@ var _ = Describe("Supply", func() {
 	})
 
 	Describe("nginx.conf validation", func() {
-		It("parses the port and ignores white spaces", func() {
-			buildDir, err := ioutil.TempDir("", "")
-			Expect(err).NotTo(HaveOccurred())
-			defer os.RemoveAll(buildDir)
+		var (
+			buildDir string
+			err      error
+		)
 
-			ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("{{    port   }}"), 0666)
+		BeforeEach(func() {
+			buildDir, err = ioutil.TempDir("", "")
+			Expect(err).NotTo(HaveOccurred())
 
 			mockStager.EXPECT().BuildDir().Return(buildDir).AnyTimes()
 
 			mockCommand.EXPECT().Run(gomock.Any()).AnyTimes()
 			mockCommand.EXPECT().Execute(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
+		})
 
+		AfterEach(func() {
+			os.RemoveAll(buildDir)
+		})
+
+		It("parses the port", func() {
+			ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("{{port}}"), 0666)
+			Expect(supplier.ValidateNginxConf()).To(Succeed())
+		})
+
+		It("parses the port and ignores white spaces", func() {
+			ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("{{  port  }}"), 0666)
 			Expect(supplier.ValidateNginxConf()).To(Succeed())
 		})
 	})
