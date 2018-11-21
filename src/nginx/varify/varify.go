@@ -45,7 +45,7 @@ func main() {
 		},
 	}
 
-	t, err := template.New("conf").Funcs(funcMap).Parse(string(body))
+	t, err := template.New("conf").Option("missingkey=zero").Funcs(funcMap).Parse(string(body))
 	if err != nil {
 		log.Fatalf("Could not parse config file: %s", err)
 	}

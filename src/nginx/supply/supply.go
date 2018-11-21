@@ -6,14 +6,16 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/cloudfoundry/libbuildpack"
+	"html/template"
 )
 
 type Command interface {
@@ -169,14 +171,66 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		return err
 	}
 
-	if portFound, err := regexp.Match(`{{\s*port\s*}}`, conf); err != nil {
-		return err
-	} else if !portFound {
+	tmpDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		s.Log.Error("Error creating temp dir: %v", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	checkConfFile := filepath.Join(tmpDir, "conf")
+	fileHandle, err := os.Create(checkConfFile)
+	if err != nil {
+		s.Log.Error("Could not open tmp config file for writing: %s", err)
+	}
+	defer fileHandle.Close()
+
+	randString := randomString(16)
+
+	funcMap := template.FuncMap{
+		"env": func() string {
+			return ""
+		},
+		"port": func() string {
+			return randString
+		},
+		"module": func(name string) string {
+			return ""
+		},
+	}
+
+	t, err := template.New("conf").Option("missingkey=zero").Funcs(funcMap).Parse(string(conf))
+	if err != nil {
+		s.Log.Error("Could not parse tmp config file: %s", err)
+	}
+
+	if err := t.Execute(fileHandle, nil); err != nil {
+		s.Log.Error("Could not write tmp config file: %s", err)
+	}
+
+	contents, err := ioutil.ReadFile(checkConfFile)
+	if err != nil {
+		s.Log.Error("Could not read temp config file: %v", err)
+	}
+
+	if !strings.Contains(string(contents), randString) {
 		s.Log.Error("nginx.conf file must be configured to respect the value of `{{port}}`")
 		return errors.New("no {{port}} in nginx.conf")
 	}
-
 	return nil
+}
+
+func randomString(strLength int) (string) {
+	rand.Seed(time.Now().UnixNano())
+
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	const numCharsPossible = len(letters)
+	randString := ""
+
+	for i := 0; i < strLength; i++ {
+		randString += string(letters[rand.Intn(numCharsPossible)])
+	}
+
+	return randString
 }
 
 func (s *Supplier) validateNginxConfSyntax() error {
