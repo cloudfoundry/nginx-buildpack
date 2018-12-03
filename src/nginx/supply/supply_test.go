@@ -1,14 +1,13 @@
 package supply_test
 
 import (
+	"bytes"
 	"io/ioutil"
-	"nginx/supply"
 	"os"
 	"path/filepath"
 
-	"bytes"
-
 	"github.com/cloudfoundry/libbuildpack"
+	"github.com/cloudfoundry/nginx-buildpack/src/nginx/supply"
 	"github.com/golang/mock/gomock"
 
 	. "github.com/onsi/ginkgo"

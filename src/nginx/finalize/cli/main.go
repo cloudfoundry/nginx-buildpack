@@ -1,11 +1,11 @@
 package main
 
 import (
-	"nginx/finalize"
 	"os"
 	"time"
 
 	"github.com/cloudfoundry/libbuildpack"
+	"github.com/cloudfoundry/nginx-buildpack/src/nginx/finalize"
 )
 
 func main() {

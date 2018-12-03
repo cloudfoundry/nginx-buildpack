@@ -19,7 +19,7 @@ func TestVarify(t *testing.T) {
 var pathToCli string
 var _ = BeforeSuite(func() {
 	var err error
-	pathToCli, err = gexec.Build("nginx/varify")
+	pathToCli, err = gexec.Build("github.com/cloudfoundry/nginx-buildpack/src/nginx/varify")
 	Expect(err).ToNot(HaveOccurred())
 })
 

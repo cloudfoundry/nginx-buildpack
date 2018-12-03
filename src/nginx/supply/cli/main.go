@@ -1,11 +1,11 @@
 package main
 
 import (
-	"nginx/supply"
 	"os"
 	"time"
 
 	"github.com/cloudfoundry/libbuildpack"
+	"github.com/cloudfoundry/nginx-buildpack/src/nginx/supply"
 )
 
 func main() {
