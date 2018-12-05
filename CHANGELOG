@@ -1,3 +1,13 @@
+v1.0.4 Dec 05, 2018
+====================
+
+* Add nginx 1.14.2, remove nginx 1.14.1
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/162417438)
+
+* Ignore whitespaces for nginx.conf port validation
+  (https://www.pivotaltracker.com/story/show/162082773)
+
 v1.0.3 Nov 14, 2018
 ====================
 
