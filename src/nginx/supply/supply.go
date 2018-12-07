@@ -202,6 +202,12 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		s.Log.Error("nginx.conf file must be configured to respect the value of `{{port}}`")
 		return errors.New("no {{port}} in nginx.conf")
 	}
+
+	//check for access logs
+	if !strings.Contains(string(contents), "access_log") {
+		s.Log.Warning(`Warning: access logging is turned off in your ngnix.conf file, this may make your app difficult to debug.`)
+	}
+
 	return nil
 }
 

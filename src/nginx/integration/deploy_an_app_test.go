@@ -128,4 +128,21 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			PushAppAndConfirm(app)
 		})
 	})
+
+	Context("an app without access logging", func() {
+		const warning = `Warning: access logging is turned off in your ngnix.conf file, this may make your app difficult to debug.`
+		BeforeEach(func() {
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "no_logging"))
+			app.Buildpacks = []string{"nginx_buildpack"}
+		})
+		AfterEach(func() {
+			app.Destroy()
+		})
+
+		It("Logs a warning", func() {
+			Expect(app.Push()).To(Succeed())
+
+			Eventually(app.Stdout.String).Should(ContainSubstring(warning))
+		})
+	})
 })
