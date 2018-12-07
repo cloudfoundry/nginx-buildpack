@@ -144,25 +144,11 @@ func (s *Supplier) Setup() error {
 }
 
 func (s *Supplier) ValidateNginxConf() error {
-	if err := s.validateNginxConfExists(); err != nil {
-		return err
-	}
-
 	if err := s.validateNginxConfHasPort(); err != nil {
 		return err
 	}
 
 	return s.validateNginxConfSyntax()
-}
-
-func (s *Supplier) validateNginxConfExists() error {
-	if exists, err := libbuildpack.FileExists(filepath.Join(s.Stager.BuildDir(), "nginx.conf")); err != nil {
-		return err
-	} else if !exists {
-		s.Log.Error("nginx.conf file must be present at the app root")
-		return errors.New("no nginx")
-	}
-	return nil
 }
 
 func (s *Supplier) validateNginxConfHasPort() error {
