@@ -14,8 +14,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudfoundry/libbuildpack"
 	"html/template"
+
+	"github.com/cloudfoundry/libbuildpack"
 )
 
 type Command interface {
@@ -144,11 +145,29 @@ func (s *Supplier) Setup() error {
 }
 
 func (s *Supplier) ValidateNginxConf() error {
+
 	if err := s.validateNginxConfHasPort(); err != nil {
 		return err
 	}
 
-	return s.validateNginxConfSyntax()
+	if err := s.validateNginxConfSyntax(); err != nil {
+		return err
+	}
+
+	return s.CheckAccessLogging()
+}
+
+func (s *Supplier) CheckAccessLogging() error {
+	contents, err := ioutil.ReadFile(filepath.Join(s.Stager.BuildDir(), "nginx.conf"))
+	if err != nil {
+		return err
+	}
+
+	if !strings.Contains(string(contents), "access_log") || strings.Contains(string(contents), "access_log off") {
+		s.Log.Warning("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug.")
+	}
+
+	return nil
 }
 
 func (s *Supplier) validateNginxConfHasPort() error {
@@ -203,15 +222,10 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		return errors.New("no {{port}} in nginx.conf")
 	}
 
-	//check for access logs
-	if !strings.Contains(string(contents), "access_log") {
-		s.Log.Warning(`Warning: access logging is turned off in your ngnix.conf file, this may make your app difficult to debug.`)
-	}
-
 	return nil
 }
 
-func randomString(strLength int) (string) {
+func randomString(strLength int) string {
 	rand.Seed(time.Now().UnixNano())
 
 	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

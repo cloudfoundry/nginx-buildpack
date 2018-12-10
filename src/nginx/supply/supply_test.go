@@ -179,7 +179,7 @@ var _ = Describe("Supply", func() {
 		})
 	})
 
-	Describe("nginx.conf validation", func() {
+	Describe("ValidateNginxConf", func() {
 		var (
 			buildDir string
 			err      error
@@ -208,5 +208,26 @@ var _ = Describe("Supply", func() {
 			ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("{{  port  }}"), 0666)
 			Expect(supplier.ValidateNginxConf()).To(Succeed())
 		})
+
+		Context("CheckAccessLogging", func() {
+			It("logs a warning when access logging is not set", func() {
+				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("some content"), 0666)
+				Expect(supplier.CheckAccessLogging()).To(Succeed())
+				Expect(buffer.String()).To(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
+			})
+
+			It("logs a warning when access logging is set to off", func() {
+				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log off"), 0666)
+				Expect(supplier.CheckAccessLogging()).To(Succeed())
+				Expect(buffer.String()).To(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
+			})
+
+			It("logs a warning when access logging is set to a path", func() {
+				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log /some/path"), 0666)
+				Expect(supplier.CheckAccessLogging()).To(Succeed())
+				Expect(buffer.String()).ToNot(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
+			})
+		})
+
 	})
 })
