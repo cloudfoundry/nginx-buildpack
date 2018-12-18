@@ -164,7 +164,7 @@ func (s *Supplier) CheckAccessLogging() error {
 		return err
 	}
 
-	isSetToOff, err := regexp.MatchString(`access_log\s+off`, string(contents))
+	isSetToOff, err := regexp.MatchString(`(?i)access_log\s+off`, string(contents))
 	if err != nil {
 		return err
 	}
