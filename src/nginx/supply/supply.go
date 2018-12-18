@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -163,7 +164,12 @@ func (s *Supplier) CheckAccessLogging() error {
 		return err
 	}
 
-	if !strings.Contains(string(contents), "access_log") || strings.Contains(string(contents), "access_log off") {
+	isSetToOff, err := regexp.MatchString(`access_log\s+off`, string(contents))
+	if err != nil {
+		return err
+	}
+
+	if !strings.Contains(string(contents), "access_log") || isSetToOff {
 		s.Log.Warning("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug.")
 	}
 

@@ -222,6 +222,12 @@ var _ = Describe("Supply", func() {
 				Expect(buffer.String()).To(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
 			})
 
+			It("logs a warning when access logging is set to off with extra spaces", func() {
+				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log    off"), 0666)
+				Expect(supplier.CheckAccessLogging()).To(Succeed())
+				Expect(buffer.String()).To(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
+			})
+
 			It("logs a warning when access logging is set to a path", func() {
 				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log /some/path"), 0666)
 				Expect(supplier.CheckAccessLogging()).To(Succeed())
