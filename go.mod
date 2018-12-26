@@ -9,6 +9,7 @@ require (
 	github.com/golang/mock v1.2.0
 	github.com/golang/protobuf v1.2.0
 	github.com/google/subcommands v0.0.0-20181012225330-46f0354f6315
+	github.com/hpcloud/tail v1.0.0
 	github.com/inconshreveable/go-vhost v0.0.0-20160627193104-06d84117953b
 	github.com/onsi/ginkgo v1.7.0
 	github.com/onsi/gomega v1.4.3
@@ -22,6 +23,8 @@ require (
 	golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35
 	golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2
 	golang.org/x/tools v0.0.0-20181203201058-99b2a93e1f84
+	gopkg.in/fsnotify.v1 v1.4.7
 	gopkg.in/jarcoal/httpmock.v1 v1.0.0-20181117152235-275e9df93516
+	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7
 	gopkg.in/yaml.v2 v2.2.2
 )
