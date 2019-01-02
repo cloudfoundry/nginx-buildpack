@@ -87,7 +87,7 @@ func (s *Supplier) Run() error {
 		return err
 	}
 
-	if err := s.InstallNginx(); err != nil {
+	if err := s.InstallNGINX(); err != nil {
 		s.Log.Error("Could not install nginx: %s", err.Error())
 		return err
 	}
@@ -146,12 +146,11 @@ func (s *Supplier) Setup() error {
 }
 
 func (s *Supplier) ValidateNginxConf() error {
-
 	if err := s.validateNginxConfHasPort(); err != nil {
 		return err
 	}
 
-	if err := s.validateNginxConfSyntax(); err != nil {
+	if err := s.validateNGINXConfSyntax(); err != nil {
 		return err
 	}
 
@@ -185,6 +184,7 @@ func (s *Supplier) validateNginxConfHasPort() error {
 	tmpDir, err := ioutil.TempDir("", "")
 	if err != nil {
 		s.Log.Error("Error creating temp dir: %v", err)
+		return err
 	}
 	defer os.RemoveAll(tmpDir)
 
@@ -192,19 +192,20 @@ func (s *Supplier) validateNginxConfHasPort() error {
 	fileHandle, err := os.Create(checkConfFile)
 	if err != nil {
 		s.Log.Error("Could not open tmp config file for writing: %s", err)
+		return err
 	}
 	defer fileHandle.Close()
 
 	randString := randomString(16)
 
 	funcMap := template.FuncMap{
-		"env": func() string {
+		"env": func(arg string) string {
 			return ""
 		},
 		"port": func() string {
 			return randString
 		},
-		"module": func(name string) string {
+		"module": func(arg string) string {
 			return ""
 		},
 	}
@@ -212,15 +213,18 @@ func (s *Supplier) validateNginxConfHasPort() error {
 	t, err := template.New("conf").Option("missingkey=zero").Funcs(funcMap).Parse(string(conf))
 	if err != nil {
 		s.Log.Error("Could not parse tmp config file: %s", err)
+		return err
 	}
 
 	if err := t.Execute(fileHandle, nil); err != nil {
 		s.Log.Error("Could not write tmp config file: %s", err)
+		return err
 	}
 
 	contents, err := ioutil.ReadFile(checkConfFile)
 	if err != nil {
 		s.Log.Error("Could not read temp config file: %v", err)
+		return err
 	}
 
 	if !strings.Contains(string(contents), randString) {
@@ -245,7 +249,7 @@ func randomString(strLength int) string {
 	return randString
 }
 
-func (s *Supplier) validateNginxConfSyntax() error {
+func (s *Supplier) validateNGINXConfSyntax() error {
 	tmpConfDir, err := ioutil.TempDir("/tmp", "conf")
 	if err != nil {
 		return fmt.Errorf("Error creating temp nginx conf dir: %s", err.Error())
@@ -321,7 +325,7 @@ func (s *Supplier) isStableLine(version string) bool {
 	return err == nil
 }
 
-func (s *Supplier) InstallNginx() error {
+func (s *Supplier) InstallNGINX() error {
 	dep, err := s.findMatchingVersion("nginx", s.Config.Nginx.Version)
 	if err != nil {
 		s.Log.Info(`Available versions: ` + strings.Join(s.availableVersions(), ", "))

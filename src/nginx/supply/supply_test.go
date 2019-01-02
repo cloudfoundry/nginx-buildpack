@@ -50,7 +50,7 @@ var _ = Describe("Supply", func() {
 		os.RemoveAll(depDir)
 	})
 
-	Describe("InstallNginx", func() {
+	Describe("InstallNGINX", func() {
 		BeforeEach(func() {
 			supplier.VersionLines = map[string]string{"": "1.13.x", "mainline": "1.13.x", "stable": "1.12.x"}
 			mockManifest.EXPECT().AllDependencyVersions("nginx").Return([]string{"1.12.2", "1.12.3", "1.13.8"}).AnyTimes()
