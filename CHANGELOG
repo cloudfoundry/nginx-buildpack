@@ -1,3 +1,16 @@
+v1.0.5 Jan 07, 2019
+====================
+
+* Fix bug in nginx.conf port-parsing
+  (https://www.pivotaltracker.com/story/show/162916825)
+
+* Print a warning when access logging is disabled
+  (https://www.pivotaltracker.com/story/show/155832563)
+
+* Add nginx 1.15.8, remove nginx 1.15.7
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/162839812)
+
 v1.0.4 Dec 07, 2018
 ====================
 
