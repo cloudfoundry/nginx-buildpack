@@ -167,14 +167,29 @@ var _ = Describe("Supply", func() {
 		})
 	})
 
+	Describe("InstallOpenResty", func() {
+		It("installs the available version of openresty", func() {
+			mockManifest.EXPECT().AllDependencyVersions("openresty").Return([]string{"1.13.6.2"}).AnyTimes()
+			mockStager.EXPECT().AddBinDependencyLink(gomock.Any(), gomock.Any()).AnyTimes()
+			mockInstaller.EXPECT().InstallDependency(libbuildpack.Dependency{Name: "openresty", Version: "1.13.6.2"}, gomock.Any())
+			Expect(supplier.InstallOpenResty()).To(Succeed())
+		})
+	})
+
 	Describe("WriteProfileD", func() {
-		BeforeEach(func() {
+		It("writes nginx script", func() {
 			mockStager.EXPECT().DepsIdx().Return("0")
+			mockStager.EXPECT().WriteProfileD("nginx", "export DEP_DIR=$DEPS_DIR/0\nmkdir -p logs")
+
+			supplier.WriteProfileD()
 		})
 
-		It("writes nginx script", func() {
-			mockStager.EXPECT().WriteProfileD("nginx", "export DEP_DIR=$DEPS_DIR/0\nmkdir logs")
+		It("writes openresty script", func() {
+			mockStager.EXPECT().DepsIdx().Return("0").Times(2)
+			mockStager.EXPECT().WriteProfileD("openresty", "export LD_LIBRARY_PATH=$DEPS_DIR/0/nginx/luajit/lib\n")
+			mockStager.EXPECT().WriteProfileD("nginx", "export DEP_DIR=$DEPS_DIR/0\nmkdir -p logs")
 
+			supplier.Config.Dist = "openresty"
 			supplier.WriteProfileD()
 		})
 	})

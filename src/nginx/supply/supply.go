@@ -48,6 +48,7 @@ type Stager interface {
 
 type Config struct {
 	Nginx NginxConfig `yaml:"nginx"`
+	Dist  string      `yaml:"dist"`
 }
 
 type NginxConfig struct {
@@ -87,9 +88,16 @@ func (s *Supplier) Run() error {
 		return err
 	}
 
-	if err := s.InstallNGINX(); err != nil {
-		s.Log.Error("Could not install nginx: %s", err.Error())
-		return err
+	if s.Config.Dist == "openresty" {
+		if err := s.InstallOpenResty(); err != nil {
+			s.Log.Error("Could not install openresty: %s", err.Error())
+			return err
+		}
+	} else {
+		if err := s.InstallNGINX(); err != nil {
+			s.Log.Error("Could not install nginx: %s", err.Error())
+			return err
+		}
 	}
 
 	if err := s.ValidateNginxConf(); err != nil {
@@ -106,7 +114,14 @@ func (s *Supplier) Run() error {
 }
 
 func (s *Supplier) WriteProfileD() error {
-	return s.Stager.WriteProfileD("nginx", fmt.Sprintf("export DEP_DIR=$DEPS_DIR/%s\nmkdir logs", s.Stager.DepsIdx()))
+	if s.Config.Dist == "openresty" {
+		err := s.Stager.WriteProfileD("openresty", fmt.Sprintf("export LD_LIBRARY_PATH=$DEPS_DIR/%s/nginx/luajit/lib\n", s.Stager.DepsIdx()))
+		if err != nil {
+			return err
+		}
+	}
+
+	return s.Stager.WriteProfileD("nginx", fmt.Sprintf("export DEP_DIR=$DEPS_DIR/%s\nmkdir -p logs", s.Stager.DepsIdx()))
 }
 
 func (s *Supplier) InstallVarify() error {
@@ -173,6 +188,46 @@ func (s *Supplier) CheckAccessLogging() error {
 	}
 
 	return nil
+}
+
+func (s *Supplier) InstallNGINX() error {
+	dep, err := s.findMatchingVersion("nginx", s.Config.Nginx.Version)
+	if err != nil {
+		s.Log.Info(`Available versions: ` + strings.Join(s.availableVersions(), ", "))
+		return fmt.Errorf("Could not determine version: %s", err)
+	}
+	if s.Config.Nginx.Version == "" {
+		s.Log.BeginStep("No nginx version specified - using mainline => %s", dep.Version)
+	} else {
+		s.Log.BeginStep("Requested nginx version: %s => %s", s.Config.Nginx.Version, dep.Version)
+	}
+
+	dir := filepath.Join(s.Stager.DepDir(), "nginx")
+
+	if s.isStableLine(dep.Version) {
+		s.Log.Warning(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`)
+	}
+
+	if err := s.Installer.InstallDependency(dep, dir); err != nil {
+		return err
+	}
+
+	return s.Stager.AddBinDependencyLink(filepath.Join(dir, "nginx", "sbin", "nginx"), "nginx")
+}
+
+func (s *Supplier) InstallOpenResty() error {
+	versions := s.Manifest.AllDependencyVersions("openresty")
+	if len(versions) < 1 {
+		return fmt.Errorf("unable to find a version of openresty to install")
+	}
+
+	dep := libbuildpack.Dependency{Name: "openresty", Version: versions[len(versions)-1]}
+	dir := filepath.Join(s.Stager.DepDir(), "nginx")
+	if err := s.Installer.InstallDependency(dep, dir); err != nil {
+		return err
+	}
+
+	return s.Stager.AddBinDependencyLink(filepath.Join(dir, "nginx", "sbin", "nginx"), "nginx")
 }
 
 func (s *Supplier) validateNginxConfHasPort() error {
@@ -273,12 +328,20 @@ func (s *Supplier) validateNGINXConfSyntax() error {
 		return err
 	}
 
-	nginxExecDir := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "sbin")
-	nginxErr := bytes.Buffer{}
-	if err := s.Command.Execute(tmpConfDir, os.Stdout, &nginxErr, filepath.Join(nginxExecDir, "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir); err != nil {
-		fmt.Fprint(os.Stderr, nginxErr.String())
+	nginxErr := &bytes.Buffer{}
+
+	cmd = exec.Command(filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "sbin", "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir)
+	cmd.Dir = tmpConfDir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = nginxErr
+	if s.Config.Dist == "openresty" {
+		cmd.Env = append(os.Environ(), fmt.Sprintf("LD_LIBRARY_PATH=%s", filepath.Join(s.Stager.DepDir(), "nginx", "luajit", "lib")))
+	}
+	if err := s.Command.Run(cmd); err != nil {
+		_, _ = fmt.Fprint(os.Stderr, nginxErr.String())
 		return fmt.Errorf("nginx.conf contains syntax errors: %s", err.Error())
 	}
+
 	return nil
 }
 
@@ -323,29 +386,4 @@ func (s *Supplier) isStableLine(version string) bool {
 	stableLine := s.VersionLines["stable"]
 	_, err := libbuildpack.FindMatchingVersion(stableLine, []string{version})
 	return err == nil
-}
-
-func (s *Supplier) InstallNGINX() error {
-	dep, err := s.findMatchingVersion("nginx", s.Config.Nginx.Version)
-	if err != nil {
-		s.Log.Info(`Available versions: ` + strings.Join(s.availableVersions(), ", "))
-		return fmt.Errorf("Could not determine version: %s", err)
-	}
-	if s.Config.Nginx.Version == "" {
-		s.Log.BeginStep("No nginx version specified - using mainline => %s", dep.Version)
-	} else {
-		s.Log.BeginStep("Requested nginx version: %s => %s", s.Config.Nginx.Version, dep.Version)
-	}
-
-	dir := filepath.Join(s.Stager.DepDir(), "nginx")
-
-	if s.isStableLine(dep.Version) {
-		s.Log.Warning(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`)
-	}
-
-	if err := s.Installer.InstallDependency(dep, dir); err != nil {
-		return err
-	}
-
-	return s.Stager.AddBinDependencyLink(filepath.Join(dir, "nginx", "sbin", "nginx"), "nginx")
 }

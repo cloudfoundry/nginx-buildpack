@@ -145,4 +145,17 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			Eventually(app.Stdout.String).Should(ContainSubstring(warning))
 		})
 	})
+
+	Context("an OpenResty app", func() {
+		BeforeEach(func() {
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "openresty"))
+		})
+
+		It("Deploys successfully", func() {
+			PushAppAndConfirm(app)
+
+			Expect(app.GetBody("/")).To(ContainSubstring("<p>hello, world</p>"))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
+		})
+	})
 })
