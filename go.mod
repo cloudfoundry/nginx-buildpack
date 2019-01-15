@@ -2,7 +2,7 @@ module github.com/cloudfoundry/nginx-buildpack
 
 require (
 	cloud.google.com/go v0.33.1 // indirect
-	github.com/cloudfoundry/libbuildpack v0.0.0-20190110200243-27d5cb5e3702
+	github.com/cloudfoundry/libbuildpack v0.0.0-20190115190946-c10a4cd29881
 	github.com/golang/mock v1.2.0
 	github.com/inconshreveable/go-vhost v0.0.0-20160627193104-06d84117953b // indirect
 	github.com/onsi/ginkgo v1.7.0
