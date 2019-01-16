@@ -2,6 +2,7 @@
 set -euo pipefail
 
 export ROOT="$( dirname "${BASH_SOURCE[0]}" )/.."
+source .envrc
 $ROOT/scripts/install_tools.sh
 
 GINKGO_NODES=${GINKGO_NODES:-3}
