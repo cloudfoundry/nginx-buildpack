@@ -27,12 +27,12 @@ var _ = Describe("varify", func() {
 
 	Describe("Run", func() {
 		It("templates current port using the 'port' func", func() {
-			body := runCli(tmpDir, "Hi the port is {{port}}.", []string{"PORT=8080"}, "", "")
+			body := runCli(tmpDir, "Hi the port is {{port}}.", []string{"PORT=8080"}, "", "", "")
 			Expect(body).To(Equal("Hi the port is 8080."))
 		})
 
 		It("templates environment variables using the 'env' func", func() {
-			body := runCli(tmpDir, `The env var FOO is {{env "FOO"}}`, []string{"FOO=BAR"}, "", "")
+			body := runCli(tmpDir, `The env var FOO is {{env "FOO"}}`, []string{"FOO=BAR"}, "", "", "")
 			Expect(body).To(Equal("The env var FOO is BAR"))
 		})
 
@@ -49,17 +49,49 @@ var _ = Describe("varify", func() {
 
 			Context("when the module is in local modules directory", func() {
 				It("loads the module from the local directory", func() {
-					body := runCli(tmpDir, `{{module "local"}}`, nil, localModulePath, globalModulePath)
+					body := runCli(tmpDir, `{{module "local"}}`, nil, localModulePath, globalModulePath, "")
 					Expect(body).To(Equal(fmt.Sprintf("load_module %s/local.so;", localModulePath)))
 				})
 			})
 
 			Context("when the module is in global modules directory", func() {
 				It("loads the module from the global directory", func() {
-					body := runCli(tmpDir, `{{module "global"}}`, nil, localModulePath, globalModulePath)
+					body := runCli(tmpDir, `{{module "global"}}`, nil, localModulePath, globalModulePath, "")
 					Expect(body).To(Equal(fmt.Sprintf("load_module %s/global.so;", globalModulePath)))
 				})
 			})
 		})
+
+		Context("templating a nameserver directive using the 'nameserver' func", func() {
+			var defaultNameserver = "169.254.0.2"
+			var nameserver = "123.245.67.89"
+
+			It("reads nameserver from the default resolv-conf file", func() {
+				var resolvConfPath = filepath.Join(tmpDir, "resolv.conf")
+				Expect(ioutil.WriteFile(resolvConfPath, []byte("nameserver "+nameserver), 0644)).To(Succeed())
+				body := runCli(tmpDir, "Hi the nameserver is {{nameserver}}.", nil, "", "", resolvConfPath)
+				Expect(body).To(Equal("Hi the nameserver is " + nameserver + "."))
+			})
+
+			It("reads nameserver from the unusual resolv-conf file", func() {
+				var resolvConfPath = filepath.Join(tmpDir, "resolv-unusual.conf")
+				Expect(ioutil.WriteFile(resolvConfPath, []byte("# comment 1\n  \t  nameserver "+nameserver+"  \t  \n# comment 2"), 0644)).To(Succeed())
+				body := runCli(tmpDir, "Hi the nameserver is {{nameserver}}.", nil, "", "", resolvConfPath)
+				Expect(body).To(Equal("Hi the nameserver is " + nameserver + "."))
+			})
+
+			It("set the default nameserver if the resolv-conf file is empty", func() {
+				var resolvConfPath = filepath.Join(tmpDir, "resolv-empty.conf")
+				Expect(ioutil.WriteFile(resolvConfPath, []byte(""), 0644)).To(Succeed())
+				body := runCli(tmpDir, "Hi the nameserver is {{nameserver}}.", nil, "", "", resolvConfPath)
+				Expect(body).To(Equal("Hi the nameserver is " + defaultNameserver + "."))
+			})
+
+			It("set the default nameserver if the resolv-conf file does't exist", func() {
+				body := runCli(tmpDir, "Hi the nameserver is {{nameserver}}.", nil, "", "", "not-existing-file.conf")
+				Expect(body).To(Equal("Hi the nameserver is " + defaultNameserver + "."))
+			})
+		})
+
 	})
 })

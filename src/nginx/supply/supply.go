@@ -263,6 +263,9 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		"module": func(arg string) string {
 			return ""
 		},
+		"nameserver": func(arg string) string {
+			return ""
+		},
 	}
 
 	t, err := template.New("conf").Option("missingkey=zero").Funcs(funcMap).Parse(string(conf))

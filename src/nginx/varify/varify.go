@@ -1,12 +1,15 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 
 	"github.com/cloudfoundry/libbuildpack"
 )
@@ -15,6 +18,11 @@ func main() {
 	filename := os.Args[1]
 	localModulePath := os.Args[2]
 	globalModulePath := os.Args[3]
+	resolvConfPath := "/etc/resolv.conf"
+	if len(os.Args) > 3 {
+		resolvConfPath = os.Args[4]
+	}
+	defaultNameserver := "169.254.0.2" // https://github.com/cloudfoundry/bosh-dns-release/blob/master/jobs/bosh-dns/spec#L36-L38
 
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -42,6 +50,26 @@ func main() {
 				pathToModules = localModulePath
 			}
 			return fmt.Sprintf("load_module %s.so;", filepath.Join(pathToModules, name))
+		},
+		"nameserver": func() string {
+			resolvConfFile, err := os.Open(resolvConfPath)
+			if err != nil {
+				log.Printf("Could not open %s file for reading. "+
+					"The default nameserver %s will be used. Error: %s", resolvConfPath, defaultNameserver, err)
+				return defaultNameserver
+			}
+			defer resolvConfFile.Close()
+			scanner := bufio.NewScanner(resolvConfFile)
+			for scanner.Scan() {
+				var line = strings.TrimSpace(scanner.Text())
+				matches, _ := regexp.MatchString(`nameserver \d+\.\d+\.\d+\.\d+`, line)
+				if matches {
+					return strings.TrimSpace(line[11:])
+				}
+			}
+			log.Printf("Could not find nameserver in %s. "+
+				"The default nameserver %s will be used.", resolvConfPath, defaultNameserver)
+			return defaultNameserver
 		},
 	}
 
