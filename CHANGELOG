@@ -1,3 +1,18 @@
+v1.0.6 Jan 23, 2019
+====================
+
+* Use built version of go 1.11.4 in online unbuilt/URL buildpack
+  (https://www.pivotaltracker.com/story/show/163089977)
+
+* Add support for OpenResty
+  - Set 'dist: openresty' in 'buildpack.yml' to use OpenResty
+  (https://www.pivotaltracker.com/story/show/155191586)
+
+* Setup brats environment
+  Go tools can not be executed without the environment variables from
+  .envrc.
+
+
 v1.0.5 Jan 07, 2019
 ====================
 
