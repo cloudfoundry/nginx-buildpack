@@ -19,7 +19,7 @@ func main() {
 	localModulePath := os.Args[2]
 	globalModulePath := os.Args[3]
 	resolvConfPath := "/etc/resolv.conf"
-	if len(os.Args) > 3 {
+	if len(os.Args) > 4 {
 		resolvConfPath = os.Args[4]
 	}
 	defaultNameserver := "169.254.0.2" // https://github.com/cloudfoundry/bosh-dns-release/blob/master/jobs/bosh-dns/spec#L36-L38
