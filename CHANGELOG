@@ -1,3 +1,10 @@
+v1.0.7 Jan 29, 2019
+====================
+
+* Vendor go dependencies and use for build
+  (https://www.pivotaltracker.com/story/show/163494309)
+
+
 v1.0.6 Jan 23, 2019
 ====================
 
