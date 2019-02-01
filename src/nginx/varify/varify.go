@@ -51,25 +51,33 @@ func main() {
 			}
 			return fmt.Sprintf("load_module %s.so;", filepath.Join(pathToModules, name))
 		},
-		"nameserver": func() string {
+		"nameservers": func() string {
 			resolvConfFile, err := os.Open(resolvConfPath)
 			if err != nil {
 				log.Printf("Could not open %s file for reading. "+
-					"The default nameserver %s will be used. Error: %s", resolvConfPath, defaultNameserver, err)
+					"The default nameservers %s will be used. Error: %s", resolvConfPath, defaultNameserver, err)
 				return defaultNameserver
 			}
 			defer resolvConfFile.Close()
 			scanner := bufio.NewScanner(resolvConfFile)
+			var nameServers strings.Builder
 			for scanner.Scan() {
 				var line = strings.TrimSpace(scanner.Text())
 				matches, _ := regexp.MatchString(`nameserver \d+\.\d+\.\d+\.\d+`, line)
 				if matches {
-					return strings.TrimSpace(line[11:])
+					if nameServers.Len()>0 {
+						nameServers.WriteString(" ")
+					}
+					nameServers.WriteString(strings.TrimSpace(line[11:]))
 				}
 			}
-			log.Printf("Could not find nameserver in %s. "+
-				"The default nameserver %s will be used.", resolvConfPath, defaultNameserver)
-			return defaultNameserver
+			if nameServers.Len()>0 {
+				return nameServers.String();
+			} else {
+				log.Printf("Could not find any nameserver in %s. "+
+					"The default nameserver %s will be used.", resolvConfPath, defaultNameserver)
+				return defaultNameserver
+			}
 		},
 	}
 

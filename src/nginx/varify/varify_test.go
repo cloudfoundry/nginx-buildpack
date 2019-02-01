@@ -62,34 +62,42 @@ var _ = Describe("varify", func() {
 			})
 		})
 
-		Context("templating a nameserver directive using the 'nameserver' func", func() {
+		Context("templating a nameservers directive using the 'nameservers' func", func() {
 			var defaultNameserver = "169.254.0.2"
-			var nameserver = "123.245.67.89"
+			var nameserver1 = "123.245.67.89"
+			var nameserver2 = "89.67.245.123"
 
-			It("reads nameserver from the default resolv-conf file", func() {
+			It("reads nameservers from the default resolv-conf file", func() {
 				var resolvConfPath = filepath.Join(tmpDir, "resolv.conf")
-				Expect(ioutil.WriteFile(resolvConfPath, []byte("nameserver "+nameserver), 0644)).To(Succeed())
-				body := runCli(tmpDir, "Hi the nameserver is {{nameserver}}.", nil, "", "", resolvConfPath)
-				Expect(body).To(Equal("Hi the nameserver is " + nameserver + "."))
+				Expect(ioutil.WriteFile(resolvConfPath, []byte("nameserver "+nameserver1), 0644)).To(Succeed())
+				body := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath)
+				Expect(body).To(Equal("Hi the nameservers are " + nameserver1 + "."))
 			})
 
-			It("reads nameserver from the unusual resolv-conf file", func() {
+			It("reads nameservers from the unusual resolv-conf file", func() {
 				var resolvConfPath = filepath.Join(tmpDir, "resolv-unusual.conf")
-				Expect(ioutil.WriteFile(resolvConfPath, []byte("# comment 1\n  \t  nameserver "+nameserver+"  \t  \n# comment 2"), 0644)).To(Succeed())
-				body := runCli(tmpDir, "Hi the nameserver is {{nameserver}}.", nil, "", "", resolvConfPath)
-				Expect(body).To(Equal("Hi the nameserver is " + nameserver + "."))
+				Expect(ioutil.WriteFile(resolvConfPath, []byte("# comment 1\n  \t  nameserver "+nameserver1+"  \t  \n# comment 2"), 0644)).To(Succeed())
+				body := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath)
+				Expect(body).To(Equal("Hi the nameservers are " + nameserver1 + "."))
 			})
 
-			It("set the default nameserver if the resolv-conf file is empty", func() {
+			It("reads nameservers from the resolv-conf file with multiple entries", func() {
+				var resolvConfPath = filepath.Join(tmpDir, "resolv-multiple.conf")
+				Expect(ioutil.WriteFile(resolvConfPath, []byte("nameserver "+nameserver1+"\nnameserver "+nameserver2), 0644)).To(Succeed())
+				body := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath)
+				Expect(body).To(Equal("Hi the nameservers are " + nameserver1 + " "+nameserver2+"."))
+			})
+
+			It("set the default nameservers if the resolv-conf file is empty", func() {
 				var resolvConfPath = filepath.Join(tmpDir, "resolv-empty.conf")
 				Expect(ioutil.WriteFile(resolvConfPath, []byte(""), 0644)).To(Succeed())
-				body := runCli(tmpDir, "Hi the nameserver is {{nameserver}}.", nil, "", "", resolvConfPath)
-				Expect(body).To(Equal("Hi the nameserver is " + defaultNameserver + "."))
+				body := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath)
+				Expect(body).To(Equal("Hi the nameservers are " + defaultNameserver + "."))
 			})
 
-			It("set the default nameserver if the resolv-conf file does't exist", func() {
-				body := runCli(tmpDir, "Hi the nameserver is {{nameserver}}.", nil, "", "", "not-existing-file.conf")
-				Expect(body).To(Equal("Hi the nameserver is " + defaultNameserver + "."))
+			It("set the default nameservers if the resolv-conf file does't exist", func() {
+				body := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", "not-existing-file.conf")
+				Expect(body).To(Equal("Hi the nameservers are " + defaultNameserver + "."))
 			})
 		})
 
