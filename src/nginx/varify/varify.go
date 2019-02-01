@@ -62,13 +62,19 @@ func main() {
 			scanner := bufio.NewScanner(resolvConfFile)
 			var nameServers strings.Builder
 			for scanner.Scan() {
-				var line = strings.TrimSpace(scanner.Text())
-				matches, _ := regexp.MatchString(`nameserver \d+\.\d+\.\d+\.\d+`, line)
-				if matches {
-					if nameServers.Len()>0 {
-						nameServers.WriteString(" ")
+				var line = scanner.Text()
+				// Lines that contain a semicolon (;) or hash character (#) in the first column are treated as comments.
+				if len(line)>0 && line[0]!='#' && line[0]!=';' {
+					line = strings.TrimSpace(line)
+					matches, _ := regexp.MatchString(`nameserver \d+\.\d+\.\d+\.\d+`, line)
+					if matches {
+						if nameServers.Len() > 0 {
+							nameServers.WriteString(" ")
+						}
+						nameServers.WriteString(strings.TrimSpace(line[11:]))
+					} else if len(line)>0 {
+						log.Printf("nameservers (%s): line '%s' has been ignored", resolvConfPath, line)
 					}
-					nameServers.WriteString(strings.TrimSpace(line[11:]))
 				}
 			}
 			if nameServers.Len()>0 {
