@@ -1,3 +1,9 @@
+v1.0.8 Feb 05, 2019
+====================
+
+* Update go to 1.11.5 for specifying buildpack url
+  (https://www.pivotaltracker.com/story/show/163701450)
+
 v1.0.7 Jan 29, 2019
 ====================
 
