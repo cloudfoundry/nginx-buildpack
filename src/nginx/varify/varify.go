@@ -19,10 +19,19 @@ func main() {
 	localModulePath := os.Args[2]
 	globalModulePath := os.Args[3]
 	resolvConfPath := "/etc/resolv.conf"
-	if len(os.Args) > 4 {
+	if len(os.Args) > 4 && len(os.Args[4]) > 0 {
 		resolvConfPath = os.Args[4]
 	}
-	defaultNameserver := "169.254.0.2" // https://github.com/cloudfoundry/bosh-dns-release/blob/master/jobs/bosh-dns/spec#L36-L38
+	// https://github.com/cloudfoundry/bosh-dns-release/blob/master/jobs/bosh-dns/spec#L36-L38
+	defaultNameServer := "169.254.0.2"
+	if len(os.Args) > 5 && len(os.Args[5]) > 0 {
+		defaultNameServer = os.Args[5]
+	}
+	nameServers, err := readNameServers(resolvConfPath, defaultNameServer)
+	if err != nil {
+		log.Printf("Could not open %s file for reading. "+
+			"The default nameservers %s will be used. Error: %s", resolvConfPath, defaultNameServer, err)
+	}
 
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -52,38 +61,7 @@ func main() {
 			return fmt.Sprintf("load_module %s.so;", filepath.Join(pathToModules, name))
 		},
 		"nameservers": func() string {
-			resolvConfFile, err := os.Open(resolvConfPath)
-			if err != nil {
-				log.Printf("Could not open %s file for reading. "+
-					"The default nameservers %s will be used. Error: %s", resolvConfPath, defaultNameserver, err)
-				return defaultNameserver
-			}
-			defer resolvConfFile.Close()
-			scanner := bufio.NewScanner(resolvConfFile)
-			var nameServers strings.Builder
-			for scanner.Scan() {
-				var line = scanner.Text()
-				// Lines that contain a semicolon (;) or hash character (#) in the first column are treated as comments.
-				if len(line)>0 && line[0]!='#' && line[0]!=';' {
-					line = strings.TrimSpace(line)
-					matches, _ := regexp.MatchString(`nameserver \d+\.\d+\.\d+\.\d+`, line)
-					if matches {
-						if nameServers.Len() > 0 {
-							nameServers.WriteString(" ")
-						}
-						nameServers.WriteString(strings.TrimSpace(line[11:]))
-					} else if len(line)>0 {
-						log.Printf("nameservers (%s): line '%s' has been ignored", resolvConfPath, line)
-					}
-				}
-			}
-			if nameServers.Len()>0 {
-				return nameServers.String();
-			} else {
-				log.Printf("Could not find any nameserver in %s. "+
-					"The default nameserver %s will be used.", resolvConfPath, defaultNameserver)
-				return defaultNameserver
-			}
+			return strings.Join(nameServers, " ")
 		},
 	}
 
@@ -95,4 +73,25 @@ func main() {
 	if err := t.Execute(fileHandle, nil); err != nil {
 		log.Fatalf("Could not write config file: %s", err)
 	}
+}
+
+func readNameServers(resolvConfPath string, defaultNameServer string) ([]string, error) {
+	resolvConfFile, err := os.Open(resolvConfPath)
+	if err != nil {
+		return []string{defaultNameServer}, err
+	}
+	defer resolvConfFile.Close()
+	scanner := bufio.NewScanner(resolvConfFile)
+	var nameServers []string
+	nsRegex := regexp.MustCompile(`^\s*nameserver ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}).*$`)
+	for scanner.Scan() {
+		ips := nsRegex.FindStringSubmatch(scanner.Text())
+		if len(ips) == 2 {
+			nameServers = append(nameServers, ips[1])
+		}
+	}
+	if len(nameServers) == 0 {
+		nameServers = append(nameServers, defaultNameServer)
+	}
+	return nameServers, err
 }
