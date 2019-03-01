@@ -1,3 +1,13 @@
+v1.0.9 Mar 01, 2019
+====================
+
+* Add nginx 1.15.9, remove nginx 1.15.8
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/164249472)
+
+* Add source_sha256 for source code dependencies
+  (https://www.pivotaltracker.com/story/show/163711928)
+
 v1.0.8 Feb 05, 2019
 ====================
 
