@@ -352,7 +352,7 @@ func (s *Supplier) availableVersions() []string {
 	for k, v := range s.VersionLines {
 		if k != "" {
 			allNames = append(allNames, k)
-			allSemver = append(allSemver, strings.Split(v, ", ")...)
+			allSemver = append(allSemver, v)
 		}
 	}
 	sort.Strings(allNames)
@@ -371,8 +371,6 @@ func (s *Supplier) findMatchingVersion(depName string, version string) (libbuild
 	} else if val, ok := s.VersionLines[version]; ok {
 		version = val
 	}
-	// Splits it, in case version or mainline has multiple values
-	version = strings.Split(version, ", ")[0]  // assumes latest listed first
 
 	versions := s.Manifest.AllDependencyVersions(depName)
 	if ver, err := libbuildpack.FindMatchingVersion(version, versions); err != nil {
@@ -386,12 +384,6 @@ func (s *Supplier) findMatchingVersion(depName string, version string) (libbuild
 
 func (s *Supplier) isStableLine(version string) bool {
 	stableLine := s.VersionLines["stable"]
-	versions := strings.Split(stableLine, ",")
-	for _, vers := range versions {
-		_, err := libbuildpack.FindMatchingVersion(strings.TrimSpace(vers), []string{version})
-		if err == nil {
-			return true
-		}
-	}
-	return false
+	_, err := libbuildpack.FindMatchingVersion(stableLine, []string{version})
+	return err == nil
 }

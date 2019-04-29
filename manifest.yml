@@ -5,7 +5,7 @@ default_versions:
   version: 1.15.x
 version_lines:
   mainline: 1.15.x
-  stable: 1.16.x, 1.14.x
+  stable: 1.16.x
 dependency_deprecation_dates: []
 dependencies:
 - name: nginx
