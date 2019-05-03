@@ -1,3 +1,21 @@
+v1.0.12 May 03, 2019
+=====================
+
+* Change stable version line to 1.14.x until notice has been sent out
+  (https://www.pivotaltracker.com/story/show/165611882)
+
+* Keep default_version at 1.15.x
+  - Default Version was changed automatically by a bug in ci
+  - Add 1.14.2 for cflinuxfs2 back in, after removal by bug in ci
+  (https://www.pivotaltracker.com/story/show/165611882)
+
+* Make the mainline version the default as specified in docs
+
+* Add nginx 1.16.0
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/165611882)
+
+
 v1.0.11 Apr 23, 2019
 =====================
 
