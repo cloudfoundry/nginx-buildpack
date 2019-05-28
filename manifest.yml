@@ -2,9 +2,9 @@
 language: nginx
 default_versions:
 - name: nginx
-  version: 1.17.0
+  version: 1.15.x
 version_lines:
-  mainline: 1.17.x
+  mainline: 1.15.x
   stable: 1.14.x
 dependency_deprecation_dates: []
 dependencies:
