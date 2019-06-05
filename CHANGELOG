@@ -1,3 +1,17 @@
+v1.0.13 Jun 05, 2019
+=====================
+
+* Change default nginx version to 1.15.x
+  (https://www.pivotaltracker.com/story/show/166292306)
+
+* Add openresty 1.15.8.1
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/166292623)
+
+* Add nginx 1.17.0
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/166292410)
+
 v1.0.12 May 03, 2019
 =====================
 
