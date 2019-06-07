@@ -1,3 +1,4 @@
 pkg
 .bin
 nginx_buildpack-*.zip
+!vendor/**
