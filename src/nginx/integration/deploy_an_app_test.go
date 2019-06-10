@@ -91,22 +91,6 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		})
 	})
 
-	Context("with an nginx app specifying 1.16.x", func() {
-		BeforeEach(func() {
-			app = cutlass.New(filepath.Join(bpDir, "fixtures", "1_14_x"))
-		})
-
-		It("Logs nginx buildpack version", func() {
-			PushAppAndConfirm(app)
-
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: 1.16.x => 1.16.`))
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`))
-
-			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
-			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
-		})
-	})
-
 	Context("with an nginx app specifying an unknown version", func() {
 		BeforeEach(func() {
 			app = cutlass.New(filepath.Join(bpDir, "fixtures", "unavailable_version"))
