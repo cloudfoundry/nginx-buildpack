@@ -9,7 +9,7 @@ version_lines:
 dependency_deprecation_dates:
 - version_line: nginx
   name: nginx
-  deprecation_date: '2019-05-21'
+  deprecation_date: '2020-04-01'
   deprecation_link: https://nginx.org/
 dependencies:
 - name: nginx
@@ -30,16 +30,16 @@ dependencies:
   source_sha256: 3d5b90aa17de1700709ae4ec6c4d73d87c888b06c510391bf7104b006fdb2abe
 - name: nginx
   version: 1.16.0
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.16.0-linux-x64-cflinuxfs2-6790a41f.tgz
-  sha256: 6790a41f4db1f6b5aa4e22ece2d8b614736ec1796f01b28e987de24884abc9df
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.16.0-linux-x64-cflinuxfs2-cc5c54c8.tgz
+  sha256: cc5c54c89e6025498a93c40573bfb8f8b9ff60728315121e0a99e42fa54d7f86
   cf_stacks:
   - cflinuxfs2
   source: http://nginx.org/download/nginx-1.16.0.tar.gz
   source_sha256: 4fd376bad78797e7f18094a00f0f1088259326436b537eb5af69b01be2ca1345
 - name: nginx
   version: 1.16.0
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.16.0-linux-x64-cflinuxfs3-6268f0bf.tgz
-  sha256: 6268f0bfe30fce1b510bb576e53fdd4885c8b7df3283c8662c403f3635425f84
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.16.0-linux-x64-cflinuxfs3-c3160774.tgz
+  sha256: c31607741b67c52b29bfba2e65de7fa73f6b235b7a1d76c094ff14c7ad57e417
   cf_stacks:
   - cflinuxfs3
   source: http://nginx.org/download/nginx-1.16.0.tar.gz
