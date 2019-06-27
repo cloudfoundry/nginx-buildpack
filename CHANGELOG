@@ -1,3 +1,22 @@
+v1.0.14 Jun 27, 2019
+=====================
+
+* Change default version of nginx to 1.17 and remove 1.15 deprecation date
+  (https://www.pivotaltracker.com/story/show/166900672)
+
+* Add nginx 1.17.1, remove nginx 1.15.12, 1.17.0
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/166900672)
+
+* Rebuild nginx 1.16.0
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/165611882)
+
+* Rebuild nginx 1.17.0
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/166292410)
+
+
 v1.0.13 Jun 05, 2019
 =====================
 
