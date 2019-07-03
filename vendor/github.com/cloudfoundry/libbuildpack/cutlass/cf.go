@@ -1,6 +1,7 @@
 package cutlass
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -50,6 +51,7 @@ type App struct {
 	appGUID      string
 	env          map[string]string
 	logCmd       *exec.Cmd
+	HealthCheck  string
 }
 
 func New(fixture string) *App {
@@ -64,6 +66,7 @@ func New(fixture string) *App {
 		appGUID:      "",
 		env:          map[string]string{},
 		logCmd:       nil,
+		HealthCheck:  "",
 	}
 }
 
@@ -143,7 +146,18 @@ func DeleteBuildpack(language string) error {
 }
 
 func UpdateBuildpack(language, file, stack string) error {
-	command := exec.Command("cf", "update-buildpack", fmt.Sprintf("%s_buildpack", language), "-p", file, "--enable", "-s", stack)
+	updateBuildpackArgs := []string{"update-buildpack", fmt.Sprintf("%s_buildpack", language), "-p", file, "--enable"}
+
+	stackAssociationSupported, err := ApiGreaterThan("2.113.0")
+	if err != nil {
+		return err
+	}
+
+	if stack != "" && stackAssociationSupported {
+		updateBuildpackArgs = append(updateBuildpackArgs, "-s", stack)
+	}
+
+	command := exec.Command("cf", updateBuildpackArgs...)
 	if data, err := command.CombinedOutput(); err != nil {
 		return fmt.Errorf("Failed to update buildpack by running '%s':\n%s\n%v", strings.Join(command.Args, " "), string(data), err)
 	}
@@ -310,6 +324,10 @@ func (a *App) PushNoStart() error {
 	if a.StartCommand != "" {
 		args = append(args, "-c", a.StartCommand)
 	}
+	if a.HealthCheck != "" {
+		args = append(args, "-u", a.HealthCheck)
+	}
+
 	command := exec.Command("cf", args...)
 	command.Stdout = DefaultStdoutStderr
 	command.Stderr = DefaultStdoutStderr
@@ -398,7 +416,12 @@ func (a *App) Get(path string, headers map[string]string) (string, map[string][]
 	if err != nil {
 		return "", map[string][]string{}, err
 	}
-	client := &http.Client{}
+	insecureSkipVerify, _ := os.LookupEnv("CUTLASS_SKIP_TLS_VERIFY")
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify == "true"},
+		},
+	}
 	if headers["NoFollow"] == "true" {
 		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse

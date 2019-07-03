@@ -1,3 +1,108 @@
+v1.0.14 Jun 27, 2019
+=====================
+
+* Change default version of nginx to 1.17 and remove 1.15 deprecation date
+  (https://www.pivotaltracker.com/story/show/166900672)
+
+* Add nginx 1.17.1, remove nginx 1.15.12, 1.17.0
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/166900672)
+
+* Rebuild nginx 1.16.0
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/165611882)
+
+* Rebuild nginx 1.17.0
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/166292410)
+
+
+v1.0.13 Jun 05, 2019
+=====================
+
+* Change default nginx version to 1.15.x
+  (https://www.pivotaltracker.com/story/show/166292306)
+
+* Add openresty 1.15.8.1
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/166292623)
+
+* Add nginx 1.17.0
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/166292410)
+
+v1.0.12 May 03, 2019
+=====================
+
+* Change stable version line to 1.14.x until notice has been sent out
+  (https://www.pivotaltracker.com/story/show/165611882)
+
+* Keep default_version at 1.15.x
+  - Default Version was changed automatically by a bug in ci
+  - Add 1.14.2 for cflinuxfs2 back in, after removal by bug in ci
+  (https://www.pivotaltracker.com/story/show/165611882)
+
+* Make the mainline version the default as specified in docs
+
+* Add nginx 1.16.0
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/165611882)
+
+
+v1.0.11 Apr 23, 2019
+=====================
+
+* Remove warning logs causing bosh cli error
+
+* Add nginx 1.15.12, remove nginx 1.15.10
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/165387666)
+
+v1.0.10 Apr 02, 2019
+=====================
+
+* Add nginx 1.15.10, remove nginx 1.15.9
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/164899137)
+
+v1.0.9 Mar 01, 2019
+====================
+
+* Add nginx 1.15.9, remove nginx 1.15.8
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/164249472)
+
+* Add source_sha256 for source code dependencies
+  (https://www.pivotaltracker.com/story/show/163711928)
+
+v1.0.8 Feb 05, 2019
+====================
+
+* Update go to 1.11.5 for specifying buildpack url
+  (https://www.pivotaltracker.com/story/show/163701450)
+
+v1.0.7 Jan 29, 2019
+====================
+
+* Vendor go dependencies and use for build
+  (https://www.pivotaltracker.com/story/show/163494309)
+
+
+v1.0.6 Jan 23, 2019
+====================
+
+* Use built version of go 1.11.4 in online unbuilt/URL buildpack
+  (https://www.pivotaltracker.com/story/show/163089977)
+
+* Add support for OpenResty
+  - Set 'dist: openresty' in 'buildpack.yml' to use OpenResty
+  (https://www.pivotaltracker.com/story/show/155191586)
+
+* Setup brats environment
+  Go tools can not be executed without the environment variables from
+  .envrc.
+
+
 v1.0.5 Jan 07, 2019
 ====================
 

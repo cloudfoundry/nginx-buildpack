@@ -1,9 +1,4 @@
 pkg
 .bin
 nginx_buildpack-*.zip
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+!vendor/**
