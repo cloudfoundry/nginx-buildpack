@@ -1,15 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
+	"github.com/miekg/dns"
 
 	"github.com/cloudfoundry/libbuildpack"
 )
@@ -29,6 +28,7 @@ func main() {
 	}
 	nameServers, err := readNameServers(resolvConfPath, defaultNameServer)
 	if err != nil {
+		nameServers = []string{defaultNameServer}
 		log.Printf("Could not open %s file for reading. "+
 			"The default nameservers %s will be used. Error: %s", resolvConfPath, defaultNameServer, err)
 	}
@@ -76,22 +76,16 @@ func main() {
 }
 
 func readNameServers(resolvConfPath string, defaultNameServer string) ([]string, error) {
-	resolvConfFile, err := os.Open(resolvConfPath)
+	result := []string{defaultNameServer}
+
+	config, err := dns.ClientConfigFromFile(resolvConfPath)
 	if err != nil {
-		return []string{defaultNameServer}, err
+		return []string{}, err
 	}
-	defer resolvConfFile.Close()
-	scanner := bufio.NewScanner(resolvConfFile)
-	var nameServers []string
-	nsRegex := regexp.MustCompile(`^\s*nameserver ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}).*$`)
-	for scanner.Scan() {
-		ips := nsRegex.FindStringSubmatch(scanner.Text())
-		if len(ips) == 2 {
-			nameServers = append(nameServers, ips[1])
-		}
+
+	if len(config.Servers) > 0 {
+		return config.Servers, nil
 	}
-	if len(nameServers) == 0 {
-		nameServers = append(nameServers, defaultNameServer)
-	}
-	return nameServers, err
+
+	return result, nil
 }

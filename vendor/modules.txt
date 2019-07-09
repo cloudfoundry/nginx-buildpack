@@ -17,6 +17,8 @@ github.com/hpcloud/tail/ratelimiter
 github.com/hpcloud/tail/util
 github.com/hpcloud/tail/watch
 github.com/hpcloud/tail/winfile
+# github.com/miekg/dns v1.1.15
+github.com/miekg/dns
 # github.com/onsi/ginkgo v1.8.0
 github.com/onsi/ginkgo
 github.com/onsi/ginkgo/config
@@ -57,7 +59,15 @@ github.com/pkg/errors
 github.com/tidwall/gjson
 # github.com/tidwall/match v1.0.1
 github.com/tidwall/match
+# golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
+golang.org/x/crypto/ed25519
+golang.org/x/crypto/ed25519/internal/edwards25519
 # golang.org/x/net v0.0.0-20190424112056-4829fb13d2c6
+golang.org/x/net/ipv4
+golang.org/x/net/ipv6
+golang.org/x/net/bpf
+golang.org/x/net/internal/iana
+golang.org/x/net/internal/socket
 golang.org/x/net/html/charset
 golang.org/x/net/html
 golang.org/x/net/html/atom

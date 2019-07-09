@@ -90,7 +90,7 @@ var _ = Describe("varify", func() {
 
 			It("set the default nameservers if the resolv-conf file is empty", func() {
 				var resolvConfPath = filepath.Join(tmpDir, "resolv-empty.conf")
-				Expect(ioutil.WriteFile(resolvConfPath, []byte(""), 0644)).To(Succeed())
+				Expect(ioutil.WriteFile(resolvConfPath, []byte(""), 666)).To(Succeed())
 				body := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath, defaultNameServer)
 				Expect(body).To(Equal("Hi the nameservers are " + defaultNameServer + "."))
 			})
