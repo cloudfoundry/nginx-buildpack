@@ -1,30 +1,47 @@
 package main
 
 import (
+	"bytes"
+	"flag"
 	"fmt"
-	"html/template"
+	htmlTemplate "html/template"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+	textTemplate "text/template"
+
+	"gopkg.in/yaml.v2"
+
 	"github.com/miekg/dns"
 
 	"github.com/cloudfoundry/libbuildpack"
 )
 
+// We wanna keep this interface
+// Add a keyword arg to this...
+
 func main() {
-	filename := os.Args[1]
-	localModulePath := os.Args[2]
-	globalModulePath := os.Args[3]
+
+	buildpackYMLPath := flag.String("buildpack-yml-path", "", "path to buildpack.yml file")
+
+	flag.Parse()
+
+	flag.Args()
+
+	filename := flag.Args()[0]
+	localModulePath := flag.Args()[1]
+	globalModulePath := flag.Args()[2]
 	resolvConfPath := "/etc/resolv.conf"
-	if len(os.Args) > 4 && len(os.Args[4]) > 0 {
-		resolvConfPath = os.Args[4]
+	if len(flag.Args()) > 3 && len(flag.Args()[3]) > 0 {
+		resolvConfPath = flag.Args()[3]
 	}
 	// https://github.com/cloudfoundry/bosh-dns-release/blob/master/jobs/bosh-dns/spec#L36-L38
 	defaultNameServer := "169.254.0.2"
-	if len(os.Args) > 5 && len(os.Args[5]) > 0 {
-		defaultNameServer = os.Args[5]
+	if len(flag.Args()) > 4 && len(flag.Args()[4]) > 0 {
+		defaultNameServer = flag.Args()[4]
 	}
 	nameServers, err := readNameServers(resolvConfPath, defaultNameServer)
 	if err != nil {
@@ -38,13 +55,28 @@ func main() {
 		log.Fatalf("Could not read config file: %s: %s", filename, err)
 	}
 
+	confBuf := bytes.Buffer{}
+	tempConfWriter := io.Writer(&confBuf)
+
 	fileHandle, err := os.Create(filename)
 	if err != nil {
 		log.Fatalf("Could not open config file for writing: %s", err)
 	}
 	defer fileHandle.Close()
 
-	funcMap := template.FuncMap{
+	plainTextEnvVars, err := getPlaintextEnvVars(*buildpackYMLPath)
+	if err != nil {
+		log.Fatalf("Unable to read buildpath.yml path '%s'", *buildpackYMLPath)
+	}
+
+	plainTextFuncMap := textTemplate.FuncMap{
+		"env":         safeEnv(plainTextEnvVars),
+		"port":        noArgIdentity("port"),
+		"module":      singleArgIdentity("module"),
+		"nameservers": noArgIdentity("nameservers"),
+	}
+
+	htmlFuncMap := htmlTemplate.FuncMap{
 		"env": os.Getenv,
 		"port": func() string {
 			return os.Getenv("PORT")
@@ -65,12 +97,22 @@ func main() {
 		},
 	}
 
-	t, err := template.New("conf").Option("missingkey=zero").Funcs(funcMap).Parse(string(body))
+	textT, err := textTemplate.New("tempconf").Option("missingkey=zero").Funcs(plainTextFuncMap).Parse(string(body))
+	if err != nil {
+		log.Fatalf("Could not parse config file: %s", err)
+	}
+	if err := textT.Execute(tempConfWriter, nil); err != nil {
+		log.Fatalf("Could not write temp config to buffer: %s", err)
+	}
+
+	fmt.Printf("plain text tempate: %s", confBuf.String())
+
+	htmlT, err := htmlTemplate.New("tempconf").Option("missingkey=zero").Funcs(htmlFuncMap).Parse(confBuf.String())
 	if err != nil {
 		log.Fatalf("Could not parse config file: %s", err)
 	}
 
-	if err := t.Execute(fileHandle, nil); err != nil {
+	if err := htmlT.Execute(fileHandle, nil); err != nil {
 		log.Fatalf("Could not write config file: %s", err)
 	}
 }
@@ -88,4 +130,54 @@ func readNameServers(resolvConfPath string, defaultNameServer string) ([]string,
 	}
 
 	return result, nil
+}
+
+type BuildpackYML struct {
+	Nginx struct {
+		PlaintextEnvVars []string `yaml:"plaintext_env_vars"`
+	} `yaml:"nginx"`
+}
+
+func getPlaintextEnvVars(bpYMLPath string) ([]string, error) {
+	var bpYML BuildpackYML
+	exists, err := libbuildpack.FileExists(bpYMLPath)
+	if err != nil {
+		return []string{}, err
+	} else if bpYMLPath == "" || !exists {
+		return []string{}, nil
+	}
+
+	bpYMLContents, err := ioutil.ReadFile(bpYMLPath)
+	if err != nil {
+		return []string{}, err
+	}
+
+	if err = yaml.Unmarshal(bpYMLContents, &bpYML); err != nil {
+		return []string{}, err
+	}
+
+	return bpYML.Nginx.PlaintextEnvVars, nil
+}
+
+func safeEnv(keys []string) func(string) string {
+	return func(key string) string {
+		for _, safeKey := range keys {
+			if key == safeKey {
+				return os.Getenv(key)
+			}
+		}
+		return fmt.Sprintf(`{{env "%s"}}`, key)
+	}
+}
+
+func singleArgIdentity(key string) func(string) string {
+	return func(val string) string {
+		return fmt.Sprintf(`{{%s "%s"}}`, key, val)
+	}
+}
+
+func noArgIdentity(key string) func() string {
+	return func() string {
+		return fmt.Sprintf(`{{%s}}`, key)
+	}
 }

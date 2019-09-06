@@ -27,10 +27,14 @@ var _ = AfterSuite(func() {
 	gexec.CleanupBuildArtifacts()
 })
 
-func runCli(tmpDir, body string, env []string, localModulePath, globalModulePath string, resolveConfPath string, defaultNameServer string) string {
+func runCli(tmpDir, body string, env []string, localModulePath, globalModulePath string, resolveConfPath string, defaultNameServer string, bpYMLPath string) string {
 	Expect(ioutil.WriteFile(filepath.Join(tmpDir, "nginx.conf"), []byte(body), 0644)).To(Succeed())
+	args := []string{filepath.Join(tmpDir, "nginx.conf"), localModulePath, globalModulePath, resolveConfPath, defaultNameServer}
+	if bpYMLPath != "" {
+		args = append([]string{"-buildpack-yml-path", bpYMLPath}, args...)
+	}
 
-	command := exec.Command(pathToCli, filepath.Join(tmpDir, "nginx.conf"), localModulePath, globalModulePath, resolveConfPath, defaultNameServer)
+	command := exec.Command(pathToCli, args...)
 	command.Env = env
 	session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
 	Expect(err).ToNot(HaveOccurred())

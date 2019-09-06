@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # bin/release <build-dir>
 
-echo -e "---\ndefault_process_types:\n  web: varify ./nginx.conf \$HOME/modules \$DEP_DIR/nginx/nginx/modules && nginx -p \$PWD -c ./nginx.conf"
+echo -e "---\ndefault_process_types:\n  web: varify -buildpack-yml-path ./buildpack.yml ./nginx.conf \$HOME/modules \$DEP_DIR/nginx/nginx/modules && nginx -p \$PWD -c ./nginx.conf"

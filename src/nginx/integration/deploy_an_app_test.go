@@ -18,6 +18,21 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		app = nil
 	})
 
+	Context("with templated json return value", func() {
+		BeforeEach(func() {
+			app = cutlass.New(filepath.Join(bpDir, "fixtures", "templated_env_vars"))
+		})
+
+		It("Deploys successfully", func() {
+			env := `{ "abcd": 12345 }{ "ef" : "ab" }`
+			app.SetEnv("OVERRIDE", env)
+			PushAppAndConfirm(app)
+
+			Expect(app.GetBody("/test")).To(ContainSubstring(env))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`))
+		})
+	})
+
 	Context("with no specified pid", func() {
 		BeforeEach(func() {
 			app = cutlass.New(filepath.Join(bpDir, "fixtures", "without_pid"))

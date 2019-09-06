@@ -321,8 +321,8 @@ func (s *Supplier) validateNGINXConfSyntax() error {
 	nginxConfPath := filepath.Join(tmpConfDir, "nginx.conf")
 	localModulePath := filepath.Join(s.Stager.BuildDir(), "modules")
 	globalModulePath := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "modules")
-
-	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), nginxConfPath, localModulePath, globalModulePath)
+	buildpackYMLPath := filepath.Join(s.Stager.BuildDir(), "buildpack.yml")
+	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), "-buildpack-yml-path", buildpackYMLPath, nginxConfPath, localModulePath, globalModulePath)
 	cmd.Dir = tmpConfDir
 	cmd.Stdout = ioutil.Discard
 	cmd.Stderr = ioutil.Discard

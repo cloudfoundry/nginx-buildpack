@@ -19,7 +19,7 @@ github.com/hpcloud/tail/watch
 github.com/hpcloud/tail/winfile
 # github.com/miekg/dns v1.1.15
 github.com/miekg/dns
-# github.com/onsi/ginkgo v1.9.0
+# github.com/onsi/ginkgo v1.10.1
 github.com/onsi/ginkgo
 github.com/onsi/ginkgo/config
 github.com/onsi/ginkgo/internal/codelocation
