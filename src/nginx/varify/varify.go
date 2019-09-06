@@ -20,9 +20,6 @@ import (
 	"github.com/cloudfoundry/libbuildpack"
 )
 
-// We wanna keep this interface
-// Add a keyword arg to this...
-
 func main() {
 
 	buildpackYMLPath := flag.String("buildpack-yml-path", "", "path to buildpack.yml file")

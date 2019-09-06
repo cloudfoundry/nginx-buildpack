@@ -24,11 +24,11 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		})
 
 		It("Deploys successfully", func() {
-			env := `{ "abcd": 12345 }{ "ef" : "ab" }`
+			env := `'{ "abcd": 12345 }{ \'ef\' : "ab" }'`
 			app.SetEnv("OVERRIDE", env)
 			PushAppAndConfirm(app)
 
-			Expect(app.GetBody("/test")).To(ContainSubstring(env))
+			Expect(app.GetBody("/test")).To(ContainSubstring(`{ "abcd": 12345 }{ 'ef' : "ab" }`))
 			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`))
 		})
 	})
