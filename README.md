@@ -2,12 +2,17 @@
 
 [![CF Slack](https://www.google.com/s2/favicons?domain=www.slack.com) Join us on Slack](https://cloudfoundry.slack.com/messages/buildpacks/)
 
-A Cloud Foundry [buildpack](http://docs.cloudfoundry.org/buildpacks/) for apps requiring custom nginx.
+A Cloud Foundry [buildpack](http://docs.cloudfoundry.org/buildpacks/) for apps requiring NGINX.
 
 
 ### Buildpack User Documentation
 
-Official buildpack documentation can be found at [Nginx buildpackdocs](https://docs.cloudfoundry.org/buildpacks/nginx/index.html)
+Official buildpack documentation can be found at [here](https://docs.cloudfoundry.org/buildpacks/nginx/index.html).
+
+To use this buildpack, you will need to include an `nginx.conf` file in your
+app. You can see sample apps in the fixtures directory,
+[mainline](https://github.com/cloudfoundry/nginx-buildpack/tree/master/fixtures/mainline),
+including a sample `nginx.conf` file
 
 ### Building the Buildpack
 
