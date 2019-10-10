@@ -1,3 +1,20 @@
+v1.1.0 Oct 10, 2019
+=====================
+
+* Remove cflinuxfs2 dependencies.
+  Fixes #20
+  (https://www.pivotaltracker.com/story/show/166710438)
+
+* Add nginx 1.17.4, remove nginx 1.17.3
+  for stack(s) cflinuxfs2, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/168729879)
+
+* Update nginx conf templating to use two passes
+  - one for plaintext variable defined in buildpack.yml
+  - one for everything else, which will be html escaped
+  (https://www.pivotaltracker.com/story/show/165884664)
+
+
 v1.0.18 Sep 05, 2019
 =====================
 
