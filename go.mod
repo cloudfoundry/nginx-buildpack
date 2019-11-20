@@ -9,3 +9,5 @@ require (
 	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5 // indirect
 	gopkg.in/yaml.v2 v2.2.4
 )
+
+go 1.13
