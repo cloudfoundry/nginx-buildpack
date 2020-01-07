@@ -26,8 +26,8 @@ dependencies:
   source_sha256: f11c2a6dd1d3515736f0324857957db2de98be862461b5a542a3ac6188dbe32b
 - name: nginx
   version: 1.17.7
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.17.7-linux-x64-cflinuxfs3-718363fe.tgz
-  sha256: 718363feab0a88c6f0abfa0cee6549ad80a9af95f46678179c9dc49d36152f58
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.17.7-linux-x64-cflinuxfs3-cb70ed43.tgz
+  sha256: cb70ed43e4919f8bc236f5ec284513189082d537c9b7e8d9775cd95a0ee95461
   cf_stacks:
   - cflinuxfs3
   source: http://nginx.org/download/nginx-1.17.7.tar.gz
