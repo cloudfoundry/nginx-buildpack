@@ -1,4 +1,5 @@
 pkg
 .bin
+/.idea/
 nginx_buildpack-*.zip
 !vendor/**

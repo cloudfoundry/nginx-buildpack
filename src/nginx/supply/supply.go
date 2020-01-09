@@ -212,7 +212,7 @@ func (s *Supplier) InstallNGINX() error {
 		return err
 	}
 
-	return s.Stager.AddBinDependencyLink(filepath.Join(dir, "nginx", "sbin", "nginx"), "nginx")
+	return s.Stager.AddBinDependencyLink(filepath.Join(dir, "sbin", "nginx"), "nginx")
 }
 
 func (s *Supplier) InstallOpenResty() error {
@@ -320,7 +320,7 @@ func (s *Supplier) validateNGINXConfSyntax() error {
 
 	nginxConfPath := filepath.Join(tmpConfDir, "nginx.conf")
 	localModulePath := filepath.Join(s.Stager.BuildDir(), "modules")
-	globalModulePath := filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "modules")
+	globalModulePath := filepath.Join(s.Stager.DepDir(), "nginx", "modules")
 	buildpackYMLPath := filepath.Join(s.Stager.BuildDir(), "buildpack.yml")
 	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), "-buildpack-yml-path", buildpackYMLPath, nginxConfPath, localModulePath, globalModulePath)
 	cmd.Dir = tmpConfDir
@@ -333,7 +333,7 @@ func (s *Supplier) validateNGINXConfSyntax() error {
 
 	nginxErr := &bytes.Buffer{}
 
-	cmd = exec.Command(filepath.Join(s.Stager.DepDir(), "nginx", "nginx", "sbin", "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir)
+	cmd = exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "nginx"), "-t", "-c", nginxConfPath, "-p", tmpConfDir)
 	cmd.Dir = tmpConfDir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = nginxErr
