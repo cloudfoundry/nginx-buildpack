@@ -263,7 +263,7 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		"module": func(arg string) string {
 			return ""
 		},
-		"nameservers": func(arg string) string {
+		"nameservers": func() string {
 			return ""
 		},
 	}
