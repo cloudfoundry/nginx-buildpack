@@ -25,7 +25,7 @@ github.com/hpcloud/tail/watch
 github.com/hpcloud/tail/winfile
 # github.com/miekg/dns v1.1.15
 github.com/miekg/dns
-# github.com/onsi/ginkgo v1.10.3
+# github.com/onsi/ginkgo v1.12.0
 github.com/onsi/ginkgo
 github.com/onsi/ginkgo/config
 github.com/onsi/ginkgo/internal/codelocation
@@ -79,7 +79,7 @@ golang.org/x/net/internal/iana
 golang.org/x/net/internal/socket
 golang.org/x/net/ipv4
 golang.org/x/net/ipv6
-# golang.org/x/sys v0.0.0-20191210023423-ac6580df4449
+# golang.org/x/sys v0.0.0-20200219091948-cb0a6d8edb6c
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # golang.org/x/text v0.3.2
