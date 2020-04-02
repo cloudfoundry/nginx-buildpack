@@ -1,3 +1,11 @@
+v1.1.7 Apr 02, 2020
+====================
+
+* Add openresty 1.15.8.3, remove openresty 1.15.8.2
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/172004504)
+
+
 v1.1.6 Mar 09, 2020
 ====================
 
