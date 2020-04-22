@@ -1,3 +1,10 @@
+v1.1.8 Apr 22, 2020
+====================
+
+* Add nginx 1.17.10, remove nginx 1.17.9
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/172313699)
+
 v1.1.7 Apr 02, 2020
 ====================
 
