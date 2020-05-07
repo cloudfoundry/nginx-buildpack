@@ -22,8 +22,8 @@ dependency_deprecation_dates:
 dependencies:
 - name: nginx
   version: 1.17.10
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.17.10_linux_x64_cflinuxfs3_a35b89e9.tgz
-  sha256: a35b89e953163e7ce85cb9cad1a921ee4385a5aa6f6971288d0a6bff4f23dad5
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.17.10_linux_x64_cflinuxfs3_2fe87dae.tgz
+  sha256: 2fe87dae65967cfbbc570f986aa52fc574d6555c71799f2a781487d96c59d26d
   cf_stacks:
   - cflinuxfs3
   source: http://nginx.org/download/nginx-1.17.10.tar.gz
