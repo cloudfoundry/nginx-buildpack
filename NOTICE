@@ -1,4 +1,4 @@
-apt-buildpack
+nginx-buildpack
 
 Copyright (c) 2017-Present CloudFoundry.org Foundation, Inc. All Rights Reserved.
 
