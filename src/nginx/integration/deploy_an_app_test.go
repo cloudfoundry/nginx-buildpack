@@ -98,7 +98,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		It("Logs nginx buildpack version", func() {
 			PushAppAndConfirm(app)
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: stable => 1.16.`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: stable => 1.18.`))
 			Eventually(app.Stdout.String).Should(ContainSubstring(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`))
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
@@ -114,7 +114,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		It("Logs nginx buildpack versions", func() {
 			Expect(app.Push()).ToNot(Succeed())
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Available versions: mainline, stable, 1.16.x, 1.17.x`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Available versions: mainline, stable, 1.17.x, 1.18.x`))
 		})
 	})
 
