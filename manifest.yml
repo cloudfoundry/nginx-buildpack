@@ -2,15 +2,11 @@
 language: nginx
 default_versions:
 - name: nginx
-  version: 1.17.x
+  version: 1.19.x
 version_lines:
   mainline: 1.19.x
   stable: 1.18.x
 dependency_deprecation_dates:
-- version_line: 1.17.x
-  name: nginx
-  date: 2020-05-01
-  link: https://nginx.org/
 - version_line: 1.18.x
   name: nginx
   date: 2021-05-01

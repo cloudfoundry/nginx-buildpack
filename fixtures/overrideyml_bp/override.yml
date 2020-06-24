@@ -1,8 +1,8 @@
 nginx:
   dependencies:
   - name: nginx
-    version: 1.17.999
-    uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.17.999-linux-x64.tgz
+    version: 1.19.999
+    uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx-1.19.999-linux-x64.tgz
     file: BUILDPACK_DIR/nginx.tgz
     sha256: 062d906c87839d03b243e2821e10653c89b4c92878bfe2bf995dec231e117bfc
     cf_stacks:
