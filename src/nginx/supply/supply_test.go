@@ -2,6 +2,7 @@ package supply_test
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -185,8 +186,12 @@ var _ = Describe("Supply", func() {
 		})
 
 		It("writes openresty script", func() {
-			mockStager.EXPECT().DepsIdx().Return("0").Times(2)
-			mockStager.EXPECT().WriteProfileD("openresty", "export LD_LIBRARY_PATH=$DEPS_DIR/0/nginx/luajit/lib\n")
+			mockStager.EXPECT().DepsIdx().Return("0").Times(3)
+			mockStager.EXPECT().WriteProfileD("openresty", fmt.Sprintf(
+				"%s%s",
+				"export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DEPS_DIR/0/nginx/luajit/lib\n",
+				"export LUA_PATH=$DEPS_DIR/0/nginx/lualib/?.lua\n",
+			))
 			mockStager.EXPECT().WriteProfileD("nginx", "export DEP_DIR=$DEPS_DIR/0\nmkdir -p logs")
 
 			supplier.Config.Dist = "openresty"

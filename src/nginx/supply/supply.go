@@ -115,7 +115,14 @@ func (s *Supplier) Run() error {
 
 func (s *Supplier) WriteProfileD() error {
 	if s.Config.Dist == "openresty" {
-		err := s.Stager.WriteProfileD("openresty", fmt.Sprintf("export LD_LIBRARY_PATH=$DEPS_DIR/%s/nginx/luajit/lib\n", s.Stager.DepsIdx()))
+		err := s.Stager.WriteProfileD(
+			"openresty",
+			fmt.Sprintf(
+				"export LD_LIBRARY_PATH=$LD_LIBRARY_PATH%s$DEPS_DIR/%s/nginx/luajit/lib\nexport LUA_PATH=$DEPS_DIR/%s/nginx/lualib/?.lua\n",
+				string(os.PathListSeparator),
+				s.Stager.DepsIdx(),
+				s.Stager.DepsIdx(),
+			))
 		if err != nil {
 			return err
 		}
