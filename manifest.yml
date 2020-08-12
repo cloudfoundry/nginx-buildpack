@@ -25,13 +25,13 @@ dependencies:
   source: http://nginx.org/download/nginx-1.18.0.tar.gz
   source_sha256: 4c373e7ab5bf91d34a4f11a0c9496561061ba5eee6020db272a17a7228d35f99
 - name: nginx
-  version: 1.19.1
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.19.1_linux_x64_cflinuxfs3_b5af01b0.tgz
-  sha256: b5af01b00ee2fd3da7c3f94de468f8480ba4d324757bc864ab07a04ae6dc990b
+  version: 1.19.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.19.2_linux_x64_cflinuxfs3_5231999f.tgz
+  sha256: 5231999f03ea138a2c166a781f3b062de3d70f2860a9d6b505c24989ebccab6a
   cf_stacks:
   - cflinuxfs3
-  source: http://nginx.org/download/nginx-1.19.1.tar.gz
-  source_sha256: a004776c64ed3c5c7bc9b6116ba99efab3265e6b81d49a57ca4471ff90655492
+  source: http://nginx.org/download/nginx-1.19.2.tar.gz
+  source_sha256: 7c1f7bb13e79433ee930c597d272a64bc6e30c356a48524f38fd34fa88d62473
 - name: openresty
   version: 1.13.6.2
   uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty-1.13.6.2-linux-x64-cflinuxfs3-f1df4777.tgz
