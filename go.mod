@@ -1,7 +1,7 @@
 module github.com/cloudfoundry/nginx-buildpack
 
 require (
-	github.com/cloudfoundry/libbuildpack v0.0.0-20210202182049-39ed3f6a1634
+	github.com/cloudfoundry/libbuildpack v0.0.0-20210203171418-e004e3b143a6
 	github.com/golang/mock v1.4.4
 	github.com/miekg/dns v1.1.15
 	github.com/nxadm/tail v1.4.6 // indirect
