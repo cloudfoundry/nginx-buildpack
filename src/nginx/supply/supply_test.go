@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	exec "os/exec"
 	"path/filepath"
 
 	"github.com/cloudfoundry/libbuildpack"
@@ -211,7 +212,6 @@ var _ = Describe("Supply", func() {
 
 			mockStager.EXPECT().BuildDir().Return(buildDir).AnyTimes()
 
-			mockCommand.EXPECT().Run(gomock.Any()).AnyTimes()
 			mockCommand.EXPECT().Execute(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
 		})
 
@@ -219,17 +219,29 @@ var _ = Describe("Supply", func() {
 			os.RemoveAll(buildDir)
 		})
 
-		It("parses the port", func() {
-			ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("{{port}}"), 0666)
-			Expect(supplier.ValidateNginxConf()).To(Succeed())
-		})
+		It("calls varify to parse the port", func() {
+			nginxConfPath := filepath.Join(buildDir, "nginx.conf")
+			err := ioutil.WriteFile(nginxConfPath, []byte("{{port}}"), 0666)
+			Expect(err).NotTo(HaveOccurred())
 
-		It("parses the port and ignores white spaces", func() {
-			ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("{{  port  }}"), 0666)
-			Expect(supplier.ValidateNginxConf()).To(Succeed())
+			mockCommand.EXPECT().
+				Run(gomock.Any()).
+				MinTimes(1).
+				Return(nil).
+				Do(func(c *exec.Cmd) {
+					Expect(c.Path).To(Equal(filepath.Join(depDir, "bin", "varify")))
+					Expect(filepath.Base(c.Args[3])).To(Equal("nginx.conf"))
+				})
+			// No point checking the ret val of this here since the real work is done
+			// by the varify executable
+			_ = supplier.ValidateNginxConf()
 		})
 
 		Context("CheckAccessLogging", func() {
+			BeforeEach(func() {
+				mockCommand.EXPECT().Run(gomock.Any()).AnyTimes()
+			})
+
 			It("logs a warning when access logging is not set", func() {
 				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("some content"), 0666)
 				Expect(supplier.CheckAccessLogging()).To(Succeed())
@@ -260,6 +272,30 @@ var _ = Describe("Supply", func() {
 				Expect(buffer.String()).ToNot(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
 			})
 		})
+	})
 
+	Describe("GetIncludedConfs", func() {
+		const nginxConfStr = `
+http {
+  include    conf/mime.types;
+  include    /etc/nginx/proxy.conf;
+	include    custom.conf;
+  include    /etc/nginx/fastcgi.conf;
+  index    index.html index.htm index.php;
+
+  server {
+		listen       {{port}};
+    server_name  domain1.com www.domain1.com;
+    access_log   logs/domain1.access.log  main;
+    root         html;
+	}
+`
+		It("extracts included conf files", func() {
+			includeFiles := supply.GetIncludedConfs(nginxConfStr)
+			Expect(includeFiles).To(Equal([]string{"/etc/nginx/proxy.conf",
+				"custom.conf",
+				"/etc/nginx/fastcgi.conf",
+			}))
+		})
 	})
 })

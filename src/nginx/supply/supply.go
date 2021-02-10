@@ -15,8 +15,6 @@ import (
 	"strings"
 	"time"
 
-	"html/template"
-
 	"github.com/cloudfoundry/libbuildpack"
 )
 
@@ -238,11 +236,6 @@ func (s *Supplier) InstallOpenResty() error {
 }
 
 func (s *Supplier) validateNginxConfHasPort() error {
-	conf, err := ioutil.ReadFile(filepath.Join(s.Stager.BuildDir(), "nginx.conf"))
-	if err != nil {
-		return err
-	}
-
 	tmpDir, err := ioutil.TempDir("", "")
 	if err != nil {
 		s.Log.Error("Error creating temp dir: %v", err)
@@ -250,49 +243,47 @@ func (s *Supplier) validateNginxConfHasPort() error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	checkConfFile := filepath.Join(tmpDir, "conf")
-	fileHandle, err := os.Create(checkConfFile)
-	if err != nil {
-		s.Log.Error("Could not open tmp config file for writing: %s", err)
-		return err
+	if err := libbuildpack.CopyDirectory(s.Stager.BuildDir(), tmpDir); err != nil {
+		return fmt.Errorf("Error copying nginx.conf: %s", err.Error())
 	}
-	defer fileHandle.Close()
+	nginxConfPath := filepath.Join(tmpDir, "nginx.conf")
 
 	randString := randomString(16)
-
-	funcMap := template.FuncMap{
-		"env": func(arg string) string {
-			return ""
-		},
-		"port": func() string {
-			return randString
-		},
-		"module": func(arg string) string {
-			return ""
-		},
-		"nameservers": func() string {
-			return ""
-		},
-	}
-
-	t, err := template.New("conf").Option("missingkey=zero").Funcs(funcMap).Parse(string(conf))
-	if err != nil {
-		s.Log.Error("Could not parse tmp config file: %s", err)
+	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), "-buildpack-yml-path", "", nginxConfPath, "", "")
+	cmd.Dir = tmpDir
+	cmd.Stdout = ioutil.Discard
+	cmd.Stderr = ioutil.Discard
+	cmd.Env = append(os.Environ(), fmt.Sprintf("PORT=%s", randString))
+	if err := s.Command.Run(cmd); err != nil {
 		return err
 	}
 
-	if err := t.Execute(fileHandle, nil); err != nil {
-		s.Log.Error("Could not write tmp config file: %s", err)
-		return err
-	}
-
-	contents, err := ioutil.ReadFile(checkConfFile)
+	confContents, err := ioutil.ReadFile(nginxConfPath)
 	if err != nil {
 		s.Log.Error("Could not read temp config file: %v", err)
 		return err
 	}
 
-	if !strings.Contains(string(contents), randString) {
+	configFiles := GetIncludedConfs(string(confContents))
+	configFiles = append(configFiles, nginxConfPath)
+
+	foundPort := false
+	for _, confFile := range configFiles {
+		if !filepath.IsAbs(confFile) {
+			confFile = filepath.Join(tmpDir, confFile)
+		}
+		contents, err := ioutil.ReadFile(confFile)
+		if err != nil {
+			s.Log.Error("Could not read temp config file: %v", err)
+			return err
+		}
+		if strings.Contains(string(contents), randString) {
+			foundPort = true
+			break
+		}
+	}
+
+	if !foundPort {
 		s.Log.Error("nginx.conf file must be configured to respect the value of `{{port}}`")
 		return errors.New("no {{port}} in nginx.conf")
 	}
@@ -396,4 +387,17 @@ func (s *Supplier) isStableLine(version string) bool {
 	stableLine := s.VersionLines["stable"]
 	_, err := libbuildpack.FindMatchingVersion(stableLine, []string{version})
 	return err == nil
+}
+
+func GetIncludedConfs(str string) []string {
+	includeFiles := []string{}
+	includeRe := regexp.MustCompile(`include\s+([-.\w\/]+\.conf);`)
+
+	matches := includeRe.FindAllStringSubmatch(str, -1)
+	for _, v := range matches {
+		if len(v) == 2 {
+			includeFiles = append(includeFiles, v[1])
+		}
+	}
+	return includeFiles
 }

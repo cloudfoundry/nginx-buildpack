@@ -18,6 +18,7 @@ import (
 	"github.com/miekg/dns"
 
 	"github.com/cloudfoundry/libbuildpack"
+	"github.com/cloudfoundry/nginx-buildpack/src/nginx/supply"
 )
 
 func main() {
@@ -94,23 +95,49 @@ func main() {
 		},
 	}
 
-	textT, err := textTemplate.New("tempconf").Option("missingkey=zero").Funcs(plainTextFuncMap).Parse(string(body))
-	if err != nil {
-		log.Fatalf("Could not parse config file: %s", err)
-	}
-	if err := textT.Execute(tempConfWriter, nil); err != nil {
-		log.Fatalf("Could not write temp config to buffer: %s", err)
-	}
+	configFiles := supply.GetIncludedConfs(string(body))
+	configFiles = append(configFiles, filename)
 
-	fmt.Printf("plain text tempate: %s", confBuf.String())
+	var str []byte
+	var configFileHandle *os.File
+	for i, confFile := range configFiles {
+		if i == len(configFiles)-1 {
+			str = body
+			configFileHandle = fileHandle
+		} else {
+			if !filepath.IsAbs(confFile) {
+				confFile = filepath.Join(filepath.Dir(filename), confFile)
+			}
+			str, err = ioutil.ReadFile(confFile)
+			if err != nil {
+				log.Fatalf("Could not read config file: %s: %s", filename, err)
+			}
+			configFileHandle, err = os.Create(confFile)
+			if err != nil {
+				log.Fatalf("Could not open config file for writing: %s", err)
+			}
+			defer fileHandle.Close()
+		}
 
-	htmlT, err := htmlTemplate.New("tempconf").Option("missingkey=zero").Funcs(htmlFuncMap).Parse(confBuf.String())
-	if err != nil {
-		log.Fatalf("Could not parse config file: %s", err)
-	}
+		confBuf.Reset()
+		textT, err := textTemplate.New("tempconf").Option("missingkey=zero").Funcs(plainTextFuncMap).Parse(string(str))
+		if err != nil {
+			log.Fatalf("Could not parse config file: %s", err)
+		}
+		if err := textT.Execute(tempConfWriter, nil); err != nil {
+			log.Fatalf("Could not write temp config to buffer: %s", err)
+		}
 
-	if err := htmlT.Execute(fileHandle, nil); err != nil {
-		log.Fatalf("Could not write config file: %s", err)
+		fmt.Printf("plain text tempate: %s", confBuf.String())
+
+		htmlT, err := htmlTemplate.New("tempconf").Option("missingkey=zero").Funcs(htmlFuncMap).Parse(confBuf.String())
+		if err != nil {
+			log.Fatalf("Could not parse config file: %s", err)
+		}
+
+		if err := htmlT.Execute(configFileHandle, nil); err != nil {
+			log.Fatalf("Could not write config file: %s", err)
+		}
 	}
 }
 

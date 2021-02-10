@@ -37,7 +37,7 @@ var _ = Describe("override yml", func() {
 
 	It("Forces nginx from override buildpack", func() {
 		Expect(app.Push()).ToNot(Succeed())
-		Expect(app.Stdout.String()).To(ContainSubstring("-----> OverrideYML Buildpack"))
+		Eventually(app.Stdout.String).Should(ContainSubstring("-----> OverrideYML Buildpack"))
 		Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
 
 		Eventually(app.Stdout.String).Should(ContainSubstring("-----> Installing nginx"))
