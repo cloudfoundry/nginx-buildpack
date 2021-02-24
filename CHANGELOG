@@ -1,3 +1,16 @@
+v1.1.21 Feb 24, 2021
+=====================
+
+* Add nginx 1.19.7, remove nginx 1.19.6
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/176963857)
+
+* Support templating of inlcude directives in nginx.conf
+
+  - Varify executable follows include directives to parse included config
+  files
+
+
 v1.1.20 Dec 21, 2020
 =====================
 
