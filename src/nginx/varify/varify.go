@@ -95,7 +95,11 @@ func main() {
 		},
 	}
 
-	configFiles := supply.GetIncludedConfs(string(body))
+	configFiles, err := supply.GetIncludedConfs(string(body), filepath.Dir(filename))
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
 	configFiles = append(configFiles, filename)
 
 	var str []byte
