@@ -8,7 +8,6 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/onsi/gomega/gbytes"
 )
 
 var _ = Describe("varify", func() {
@@ -55,18 +54,19 @@ nginx:
 		Describe("templating conf with include files", func() {
 			It("parses include file", func() {
 				const nginxConfStr = `
-	include    custom.conf;
+	include    customdir/*.conf;
 `
 				const customConfStr = `
   server {
 		listen       {{port}};
 	}
 `
-				Expect(ioutil.WriteFile(filepath.Join(tmpDir, "custom.conf"), []byte(customConfStr), os.ModePerm)).To(Succeed())
+				Expect(os.Mkdir(filepath.Join(tmpDir, "customdir"), 0744)).To(Succeed())
+				Expect(ioutil.WriteFile(filepath.Join(tmpDir, "customdir", "custom.conf"), []byte(customConfStr), os.ModePerm)).To(Succeed())
 				body, _ := runCli(tmpDir, nginxConfStr, []string{"PORT=8080"}, "", "", "", "", "", 0)
 				Expect(body).To(Equal(nginxConfStr))
 
-				contents, err := ioutil.ReadFile(filepath.Join(tmpDir, "custom.conf"))
+				contents, err := ioutil.ReadFile(filepath.Join(tmpDir, "customdir", "custom.conf"))
 				Expect(err).NotTo(HaveOccurred())
 				Expect(string(contents)).To(Equal(`
   server {
@@ -141,16 +141,15 @@ nginx:
 			})
 		})
 
-		Context("Failure cases", func() {
-			Describe("templating conf with non-existent include files", func() {
-				It("errors with a message", func() {
-					const nginxConfStr = `
-	include    idontexist.conf;
+		Describe("templating conf with non-existent include files", func() {
+			// This is to leave room for nginx.confs to have optional
+			// include files.
+			It("should be a noop and exit 0", func() {
+				const nginxConfStr = `
+	include    idontexist/*.conf;
 `
-					_, session := runCli(tmpDir, nginxConfStr, []string{"PORT=8080"}, "", "", "", "", "", 1)
-					Expect(session.Err).To(gbytes.Say(fmt.Sprintf(`Could not read config file: %s/nginx.conf`, tmpDir)))
-					Expect(session.Err).To(gbytes.Say(`idontexist.conf: no such file or directory`))
-				})
+				body, _ := runCli(tmpDir, nginxConfStr, []string{"PORT=8080"}, "", "", "", "", "", 0)
+				Expect(body).To(Equal(nginxConfStr))
 			})
 		})
 

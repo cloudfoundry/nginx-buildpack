@@ -264,7 +264,12 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		return err
 	}
 
-	configFiles := GetIncludedConfs(string(confContents))
+	configFiles, err := GetIncludedConfs(string(confContents), filepath.Dir(nginxConfPath))
+	if err != nil {
+		s.Log.Error("Could not parse conf: %v", err)
+		return err
+	}
+
 	configFiles = append(configFiles, nginxConfPath)
 
 	foundPort := false
@@ -389,15 +394,25 @@ func (s *Supplier) isStableLine(version string) bool {
 	return err == nil
 }
 
-func GetIncludedConfs(str string) []string {
+func GetIncludedConfs(str, confDir string) ([]string, error) {
 	includeFiles := []string{}
-	includeRe := regexp.MustCompile(`include\s+([-.\w\/]+\.conf);`)
+	includeRe := regexp.MustCompile(`include\s+(\S*.conf);`)
 
 	matches := includeRe.FindAllStringSubmatch(str, -1)
 	for _, v := range matches {
 		if len(v) == 2 {
-			includeFiles = append(includeFiles, v[1])
+			conf := v[1]
+			if !filepath.IsAbs(conf) {
+				conf = filepath.Join(confDir, conf)
+			}
+
+			matchFiles, err := filepath.Glob(conf)
+			if err != nil {
+				return nil, fmt.Errorf("failed to get 'include' files for %s: %w", conf, err)
+			}
+
+			includeFiles = append(includeFiles, matchFiles...)
 		}
 	}
-	return includeFiles
+	return includeFiles, nil
 }

@@ -275,12 +275,12 @@ var _ = Describe("Supply", func() {
 	})
 
 	Describe("GetIncludedConfs", func() {
+		var confDir string
+		var err error
 		const nginxConfStr = `
 http {
-  include    conf/mime.types;
-  include    /etc/nginx/proxy.conf;
 	include    custom.conf;
-  include    /etc/nginx/fastcgi.conf;
+	include    customdir/*.conf;
   index    index.html index.htm index.php;
 
   server {
@@ -290,11 +290,23 @@ http {
     root         html;
 	}
 `
+		BeforeEach(func() {
+			confDir, err = ioutil.TempDir("", "")
+			Expect(err).NotTo(HaveOccurred())
+			Expect(os.Mkdir(filepath.Join(confDir, "customdir"), 0766)).To(Succeed())
+			err = ioutil.WriteFile(filepath.Join(confDir, "customdir", "custom.conf"), []byte{}, 0666)
+			Expect(err).NotTo(HaveOccurred())
+			err = ioutil.WriteFile(filepath.Join(confDir, "custom.conf"), []byte{}, 0666)
+			Expect(err).NotTo(HaveOccurred())
+			err = ioutil.WriteFile(filepath.Join(confDir, "nginx.conf"), []byte(nginxConfStr), 0666)
+			Expect(err).NotTo(HaveOccurred())
+		})
+
 		It("extracts included conf files", func() {
-			includeFiles := supply.GetIncludedConfs(nginxConfStr)
-			Expect(includeFiles).To(Equal([]string{"/etc/nginx/proxy.conf",
-				"custom.conf",
-				"/etc/nginx/fastcgi.conf",
+			includeFiles, err := supply.GetIncludedConfs(nginxConfStr, confDir)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(includeFiles).To(Equal([]string{filepath.Join(confDir, "custom.conf"),
+				filepath.Join(confDir, "customdir", "custom.conf"),
 			}))
 		})
 	})
