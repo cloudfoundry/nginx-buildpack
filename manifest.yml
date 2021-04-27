@@ -7,10 +7,6 @@ version_lines:
   mainline: 1.19.x
   stable: 1.20.x
 dependency_deprecation_dates:
-- version_line: 1.18.x
-  name: nginx
-  date: 2021-05-01
-  link: https://nginx.org/
 - version_line: 1.19.x
   name: nginx
   date: 2021-05-01
