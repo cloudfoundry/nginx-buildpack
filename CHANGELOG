@@ -1,3 +1,15 @@
+v1.1.27 Jun 03, 2021
+=====================
+
+* Add openresty 1.19.3.2, remove openresty 1.19.3.1
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/178356402)
+
+* Add nginx 1.20.1, remove nginx 1.20.0
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/178286076)
+
+
 v1.1.26 May 05, 2021
 =====================
 
