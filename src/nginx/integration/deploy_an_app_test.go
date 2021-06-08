@@ -98,7 +98,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		It("Logs nginx buildpack version", func() {
 			PushAppAndConfirm(app)
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: mainline => 1.19.`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: mainline => 1.21.`))
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
 			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
