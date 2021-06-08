@@ -4,7 +4,7 @@ default_versions:
 - name: nginx
   version: 1.20.x
 version_lines:
-  mainline: 1.21.x
+  mainline: 1.19.x
   stable: 1.20.x
 dependency_deprecation_dates:
 - version_line: 1.19.x
