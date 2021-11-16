@@ -17,13 +17,13 @@ dependency_deprecation_dates:
   link: https://nginx.org/
 dependencies:
 - name: nginx
-  version: 1.20.1
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.20.1_linux_x64_cflinuxfs3_1758f1a3.tgz
-  sha256: 1758f1a31daad32d5a648739ea72e9190c482ae54ee9502a527a2a7f3ee8a70a
+  version: 1.20.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.20.2_linux_x64_cflinuxfs3_aaeb2127.tgz
+  sha256: aaeb2127116b0efb32046ae56b13cc68dea4ae53d641b35447ef3b3c0eb688f7
   cf_stacks:
   - cflinuxfs3
-  source: http://nginx.org/download/nginx-1.20.1.tar.gz
-  source_sha256: e462e11533d5c30baa05df7652160ff5979591d291736cfa5edb9fd2edb48c49
+  source: http://nginx.org/download/nginx-1.20.2.tar.gz
+  source_sha256: 958876757782190a1653e14dc26dfc7ba263de310e04c113e11e97d1bef45a42
 - name: nginx
   version: 1.21.4
   uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.21.4_linux_x64_cflinuxfs3_ae2a8536.tgz
