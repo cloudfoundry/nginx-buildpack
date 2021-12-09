@@ -1,3 +1,43 @@
+v1.1.33 Dec 09, 2021
+=====================
+
+* Bump github.com/miekg/dns from 1.1.38 to 1.1.43
+  Bumps [github.com/miekg/dns](https://github.com/miekg/dns) from 1.1.38 to 1.1.43.
+  - [Release notes](https://github.com/miekg/dns/releases)
+  - [Changelog](https://github.com/miekg/dns/blob/master/Makefile.release)
+  - [Commits](https://github.com/miekg/dns/compare/v1.1.38...v1.1.43)
+  
+  ---
+  updated-dependencies:
+  - dependency-name: github.com/miekg/dns
+    dependency-type: direct:production
+    update-type: version-update:semver-patch
+  ...
+
+* Bump github.com/onsi/gomega from 1.14.0 to 1.17.0
+  Bumps [github.com/onsi/gomega](https://github.com/onsi/gomega) from 1.14.0 to 1.17.0.
+  - [Release notes](https://github.com/onsi/gomega/releases)
+  - [Changelog](https://github.com/onsi/gomega/blob/master/CHANGELOG.md)
+  - [Commits](https://github.com/onsi/gomega/compare/v1.14.0...v1.17.0)
+  
+  ---
+  updated-dependencies:
+  - dependency-name: github.com/onsi/gomega
+    dependency-type: direct:production
+    update-type: version-update:semver-minor
+  ...
+
+* Update libbuildpackk
+
+* Add nginx 1.20.2, remove nginx 1.20.1
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/180330828)
+
+* Add nginx 1.21.4, remove nginx 1.21.3
+  for stack(s) cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/180168089)
+
+
 v1.1.32 Sep 29, 2021
 =====================
 
