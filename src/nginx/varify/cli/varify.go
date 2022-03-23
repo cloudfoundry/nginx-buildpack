@@ -128,8 +128,6 @@ func main() {
 			log.Fatalf("Could not write temp config to buffer: %s", err)
 		}
 
-		fmt.Printf("plain text tempate: %s", confBuf.String())
-
 		htmlT, err := htmlTemplate.New("tempconf").Option("missingkey=zero").Funcs(htmlFuncMap).Parse(confBuf.String())
 		if err != nil {
 			log.Fatalf("Could not parse config file: %s", err)
