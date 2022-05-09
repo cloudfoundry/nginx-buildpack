@@ -1,7 +1,7 @@
 module github.com/cloudfoundry/nginx-buildpack
 
 require (
-	github.com/cloudfoundry/libbuildpack v0.0.0-20220329193228-2060a8f734b2
+	github.com/cloudfoundry/libbuildpack v0.0.0-20220509111721-05ef1d6ca1f1
 	github.com/elazarl/goproxy v0.0.0-20210110162100-a92cc753f88e // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20210110162100-a92cc753f88e // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
