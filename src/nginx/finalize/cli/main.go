@@ -4,8 +4,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/cloudfoundry/libbuildpack"
 	"github.com/cloudfoundry/nginx-buildpack/src/nginx/finalize"
+	_ "github.com/cloudfoundry/nginx-buildpack/src/nginx/hooks"
+
+	"github.com/cloudfoundry/libbuildpack"
 )
 
 func main() {
