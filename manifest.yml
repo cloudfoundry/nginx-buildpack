@@ -6,7 +6,7 @@ default_versions:
 version_lines:
   mainline: 1.21.x
   stable: 1.20.x
-dependency_deprecation_dates:
+dependency_deprecation_dates: 
 dependencies:
 - name: nginx
   version: 1.20.2
@@ -56,6 +56,14 @@ dependencies:
   - cflinuxfs3
   source: http://openresty.org/download/openresty-1.19.9.1.tar.gz
   source_sha256: 576ff4e546e3301ce474deef9345522b7ef3a9d172600c62057f182f3a68c1f6
+- name: openresty
+  version: 1.21.4.1
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.1_linux_x64_cflinuxfs3_072d9974.tgz
+  sha256: 072d99748068666712be3c13e298a5703954ef25d2431ac484b94af238825e15
+  cf_stacks:
+  - cflinuxfs3
+  source: http://openresty.org/download/openresty-1.21.4.1.tar.gz
+  source_sha256: 0c5093b64f7821e85065c99e5d4e6cc31820cfd7f37b9a0dec84209d87a2af99
 pre_package: scripts/build.sh
 include_files:
 - CHANGELOG
