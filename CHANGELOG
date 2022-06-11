@@ -1,3 +1,15 @@
+v1.1.39 Jun 10, 2022
+=====================
+
+* Deprecate nginx 1.20.2 (End of life)
+
+* Add nginx 1.22.0 for stack(s) cflinuxfs3
+
+* Add openresty 1.21.4.1 for stack(s) cflinuxfs3
+
+* Remove estimated deprecation dates. They were causing confusion to the users
+
+
 v1.1.38 May 10, 2022
 =====================
 
