@@ -170,3 +170,11 @@ func AssertNoInternetTraffic(fixtureName string) {
 		Expect(traffic).To(BeEmpty())
 	})
 }
+
+func Fixtures(names ...string) string {
+	root, err := cutlass.FindRoot()
+	Expect(err).NotTo(HaveOccurred())
+
+	names = append([]string{root, "fixtures"}, names...)
+	return filepath.Join(names...)
+}
