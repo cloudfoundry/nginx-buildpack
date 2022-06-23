@@ -104,7 +104,7 @@ function specs::run() {
   fi
 
   local buildpack_file
-  buildpack_file="$(buildpack::package "1.5.30" "${cached}" "${stack}")"
+  buildpack_file="$(buildpack::package "1.2.3" "${cached}" "${stack}")"
 
   CF_STACK="${stack}" \
   BUILDPACK_FILE="${BUILDPACK_FILE:-"${buildpack_file}"}" \
