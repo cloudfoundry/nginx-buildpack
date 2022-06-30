@@ -1,3 +1,11 @@
+v1.1.40 Jun 30, 2022
+=====================
+
+* Enable debug logging for all currently supported nginx versions
+
+* Add dynatrace integration
+
+
 v1.1.39 Jun 10, 2022
 =====================
 
