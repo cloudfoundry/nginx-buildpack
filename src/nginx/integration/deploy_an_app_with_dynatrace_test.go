@@ -269,7 +269,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		})
 	})
 
-	Context("deploying a NodeJS app with Dynatrace agent with single credentials service", func() {
+	Context("deploying an nginx app with Dynatrace agent with single credentials service", func() {
 		It("checks if agent config update via API was successful", func() {
 			serviceName := "dynatrace-" + cutlass.RandStringRunes(20) + "-service"
 			command := exec.Command("cf", "cups", serviceName, "-p", fmt.Sprintf("'{\"apitoken\":\"secretpaastoken\",\"apiurl\":\"%s\",\"environmentid\":\"envid\"}'", dynatraceAPIURI))
