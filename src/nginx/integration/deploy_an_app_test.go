@@ -82,7 +82,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		It("Uses latest mainline nginx", func() {
 			PushAppAndConfirm(app)
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`No nginx version specified - using mainline => 1.21.`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`No nginx version specified - using mainline => 1.23.`))
 			Eventually(app.Stdout.String).ShouldNot(ContainSubstring(`Requested nginx version:`))
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
@@ -98,7 +98,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 		It("Logs nginx buildpack version", func() {
 			PushAppAndConfirm(app)
 
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: mainline => 1.21.`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Requested nginx version: mainline => 1.23.`))
 
 			Expect(app.GetBody("/")).To(ContainSubstring("Exciting Content"))
 			Eventually(app.Stdout.String).Should(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
@@ -128,7 +128,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 
 		It("Logs nginx buildpack versions", func() {
 			Expect(app.Push()).ToNot(Succeed())
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Available versions: mainline, stable, 1.21.x, 1.22.x`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Available versions: mainline, stable, 1.22.x, 1.23.x`))
 		})
 	})
 
