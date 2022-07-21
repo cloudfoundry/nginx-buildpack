@@ -19,6 +19,12 @@ github.com/elazarl/goproxy
 github.com/fsnotify/fsnotify
 # github.com/golang/mock v1.6.0
 github.com/golang/mock/gomock
+# github.com/google/go-cmp v0.5.8
+github.com/google/go-cmp/cmp
+github.com/google/go-cmp/cmp/internal/diff
+github.com/google/go-cmp/cmp/internal/flags
+github.com/google/go-cmp/cmp/internal/function
+github.com/google/go-cmp/cmp/internal/value
 # github.com/miekg/dns v1.1.50
 github.com/miekg/dns
 # github.com/nxadm/tail v1.4.8
@@ -48,7 +54,7 @@ github.com/onsi/ginkgo/reporters/stenographer
 github.com/onsi/ginkgo/reporters/stenographer/support/go-colorable
 github.com/onsi/ginkgo/reporters/stenographer/support/go-isatty
 github.com/onsi/ginkgo/types
-# github.com/onsi/gomega v1.19.0
+# github.com/onsi/gomega v1.20.0
 github.com/onsi/gomega
 github.com/onsi/gomega/format
 github.com/onsi/gomega/gbytes
@@ -122,3 +128,5 @@ golang.org/x/tools/internal/typesinternal
 gopkg.in/tomb.v1
 # gopkg.in/yaml.v2 v2.4.0
 gopkg.in/yaml.v2
+# gopkg.in/yaml.v3 v3.0.1
+gopkg.in/yaml.v3
