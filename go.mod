@@ -2,7 +2,7 @@ module github.com/cloudfoundry/nginx-buildpack
 
 require (
 	github.com/Dynatrace/libbuildpack-dynatrace v1.5.0
-	github.com/cloudfoundry/libbuildpack v0.0.0-20220804222252-e1c63184ec31
+	github.com/cloudfoundry/libbuildpack v0.0.0-20220829111556-28a205221ec0
 	github.com/elazarl/goproxy v0.0.0-20220529153421-8ea89ba92021 // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20210110162100-a92cc753f88e // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
