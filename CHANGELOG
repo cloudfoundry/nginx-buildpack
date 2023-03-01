@@ -1,3 +1,11 @@
+v1.2.1 Mar 01, 2023
+====================
+
+* Bump github.com/Dynatrace/libbuildpack-dynatrace from 1.5.1 to 1.5.2 (#186)
+
+* Updating github-config
+
+
 v1.2.0 Feb 14, 2023
 =====================
 
