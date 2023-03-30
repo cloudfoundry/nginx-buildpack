@@ -8,7 +8,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/miekg/dns v1.1.53
 	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.27.5
+	github.com/onsi/gomega v1.27.6
 	gopkg.in/yaml.v2 v2.4.0
 )
 
