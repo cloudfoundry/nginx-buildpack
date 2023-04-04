@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/Dynatrace/libbuildpack-dynatrace v1.5.2
-	github.com/cloudfoundry/libbuildpack v0.0.0-20230317183522-0a9b987be6a7
+	github.com/cloudfoundry/libbuildpack v0.0.0-20230331144814-0b11b8e0551a
 	github.com/golang/mock v1.6.0
 	github.com/miekg/dns v1.1.53
 	github.com/onsi/ginkgo v1.16.5
