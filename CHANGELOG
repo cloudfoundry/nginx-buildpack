@@ -1,3 +1,17 @@
+v1.2.2 Apr 06, 2023
+====================
+
+* Add nginx 1.23.4, remove nginx 1.23.3
+  for stack(s) cflinuxfs3, cflinuxfs4
+  (https://www.pivotaltracker.com/story/show/184817118)
+
+* Update libbuildpack
+
+* Bump github.com/miekg/dns from 1.1.52 to 1.1.53
+
+* Bump github.com/onsi/gomega from 1.26.0 to 1.27.5
+
+
 v1.2.1 Mar 01, 2023
 ====================
 
