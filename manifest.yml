@@ -2,7 +2,7 @@
 language: nginx
 default_versions:
 - name: nginx
-  version: 1.23.x
+  version: 1.25.x
 version_lines:
   mainline: 1.25.x
   stable: 1.24.x
