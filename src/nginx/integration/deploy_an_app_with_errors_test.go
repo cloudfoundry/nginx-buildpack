@@ -56,7 +56,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 			Expect(app.Push()).ToNot(Succeed())
 			Expect(app.ConfirmBuildpack(buildpackVersion)).To(Succeed())
 
-			Eventually(app.Stdout.String).Should(ContainSubstring("nginx.conf file must be configured to respect the value of `{{port}}`"))
+			Eventually(app.Stdout.String).Should(ContainSubstring("The listen port value in nginx.conf must be configured to the template `{{port}}`"))
 		})
 	})
 })

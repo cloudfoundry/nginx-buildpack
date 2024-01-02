@@ -22,6 +22,7 @@ type Command interface {
 	Execute(string, io.Writer, io.Writer, string, ...string) error
 	Output(string, string, ...string) (string, error)
 	Run(cmd *exec.Cmd) error
+	RunWithOutput(cmd *exec.Cmd) ([]byte, error)
 }
 
 type Manifest interface {
@@ -167,11 +168,12 @@ func (s *Supplier) Setup() error {
 
 func (s *Supplier) ValidateNginxConf() error {
 	if err := s.validateNginxConfHasPort(); err != nil {
-		return err
+		s.Log.Error("The listen port value in nginx.conf must be configured to the template `{{port}}`")
+		return fmt.Errorf("validation of port `{{port}}` failed: %w", err)
 	}
 
 	if err := s.validateNGINXConfSyntax(); err != nil {
-		return err
+		return fmt.Errorf("validation of nginx conf syntax failed: %w", err)
 	}
 
 	return s.CheckAccessLogging()
@@ -238,8 +240,7 @@ func (s *Supplier) InstallOpenResty() error {
 func (s *Supplier) validateNginxConfHasPort() error {
 	tmpDir, err := ioutil.TempDir("", "")
 	if err != nil {
-		s.Log.Error("Error creating temp dir: %v", err)
-		return err
+		return fmt.Errorf("failed to create temp dir: %w", err)
 	}
 	defer os.RemoveAll(tmpDir)
 
@@ -251,17 +252,14 @@ func (s *Supplier) validateNginxConfHasPort() error {
 	randString := randomString(16)
 	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), "-buildpack-yml-path", "", nginxConfPath, "", "")
 	cmd.Dir = tmpDir
-	cmd.Stdout = ioutil.Discard
-	cmd.Stderr = ioutil.Discard
 	cmd.Env = append(os.Environ(), fmt.Sprintf("PORT=%s", randString))
-	if err := s.Command.Run(cmd); err != nil {
-		return err
+	if output, err := s.Command.RunWithOutput(cmd); err != nil {
+		return fmt.Errorf("varify command failed: %w\noutput: %s", err, string(output))
 	}
 
 	confContents, err := ioutil.ReadFile(nginxConfPath)
 	if err != nil {
-		s.Log.Error("Could not read temp config file: %v", err)
-		return err
+		return fmt.Errorf("error reading temp config file: %w", err)
 	}
 
 	configFiles := GetIncludedConfs(string(confContents))
@@ -274,8 +272,7 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		}
 		contents, err := ioutil.ReadFile(confFile)
 		if err != nil {
-			s.Log.Error("Could not read temp config file: %v", err)
-			return err
+			return fmt.Errorf("error reading temp config file %s: %w", confFile, err)
 		}
 		if strings.Contains(string(contents), randString) {
 			foundPort = true
@@ -284,8 +281,7 @@ func (s *Supplier) validateNginxConfHasPort() error {
 	}
 
 	if !foundPort {
-		s.Log.Error("nginx.conf file must be configured to respect the value of `{{port}}`")
-		return errors.New("no {{port}} in nginx.conf")
+		return errors.New("no `{{port}}` in nginx.conf")
 	}
 
 	return nil

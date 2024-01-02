@@ -89,6 +89,21 @@ func (mr *MockCommandMockRecorder) Run(cmd interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Run", reflect.TypeOf((*MockCommand)(nil).Run), cmd)
 }
 
+// RunWithOutput mocks base method.
+func (m *MockCommand) RunWithOutput(cmd *exec.Cmd) ([]byte, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RunWithOutput", cmd)
+	ret0, _ := ret[0].([]byte)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RunWithOutput indicates an expected call of RunWithOutput.
+func (mr *MockCommandMockRecorder) RunWithOutput(cmd interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RunWithOutput", reflect.TypeOf((*MockCommand)(nil).RunWithOutput), cmd)
+}
+
 // MockManifest is a mock of Manifest interface.
 type MockManifest struct {
 	ctrl     *gomock.Controller

@@ -225,9 +225,9 @@ var _ = Describe("Supply", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			mockCommand.EXPECT().
-				Run(gomock.Any()).
+				RunWithOutput(gomock.Any()).
 				MinTimes(1).
-				Return(nil).
+				Return([]byte{}, nil).
 				Do(func(c *exec.Cmd) {
 					Expect(c.Path).To(Equal(filepath.Join(depDir, "bin", "varify")))
 					Expect(filepath.Base(c.Args[3])).To(Equal("nginx.conf"))
@@ -235,6 +235,19 @@ var _ = Describe("Supply", func() {
 			// No point checking the ret val of this here since the real work is done
 			// by the varify executable
 			_ = supplier.ValidateNginxConf()
+		})
+
+		Context("app's nginx.conf is missing {{port}}", func() {
+			It("logs error stating {{port}} is missing", func() {
+				nginxConfPath := filepath.Join(buildDir, "nginx.conf")
+				err := ioutil.WriteFile(nginxConfPath, []byte("FOOBAR"), 0666)
+				Expect(err).NotTo(HaveOccurred())
+				mockCommand.EXPECT().RunWithOutput(gomock.Any())
+				err = supplier.ValidateNginxConf()
+				Expect(err).To(HaveOccurred())
+				Expect(err).Should(MatchError("validation of port `{{port}}` failed: no `{{port}}` in nginx.conf"))
+				Expect(buffer.String()).To(ContainSubstring("The listen port value in nginx.conf must be configured to the template `{{port}}`"))
+			})
 		})
 
 		Context("CheckAccessLogging", func() {
