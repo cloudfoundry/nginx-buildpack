@@ -1,3 +1,9 @@
+v1.2.10 Jan 04, 2024
+=====================
+
+* Better logging when listen {{port}} validation fails (#258)
+
+
 v1.2.9 Dec 13, 2023
 ====================
 
