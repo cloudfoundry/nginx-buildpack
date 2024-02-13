@@ -1,3 +1,13 @@
+v1.2.11 Feb 13, 2024
+=====================
+
+* Add openresty 1.25.3.1
+  for stack(s) cflinuxfs3, cflinuxfs4
+  (https://www.pivotaltracker.com/story/show/186801133)
+
+* remove older versions of openresty so we keep 2 versions
+
+
 v1.2.10 Jan 04, 2024
 =====================
 
