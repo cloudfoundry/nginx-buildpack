@@ -128,7 +128,7 @@ var _ = Describe("CF Nginx Buildpack", func() {
 
 		It("Logs nginx buildpack versions", func() {
 			Expect(app.Push()).ToNot(Succeed())
-			Eventually(app.Stdout.String).Should(ContainSubstring(`Available versions: mainline, stable, 1.26.x, 1.25.x`))
+			Eventually(app.Stdout.String).Should(ContainSubstring(`Available versions: mainline, stable, 1.25.x, 1.26.x`))
 		})
 	})
 
