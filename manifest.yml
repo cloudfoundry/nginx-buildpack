@@ -4,26 +4,10 @@ default_versions:
 - name: nginx
   version: 1.25.x
 version_lines:
-  mainline: 1.25.x
+  mainline: 1.27.x
   stable: 1.26.x
 dependency_deprecation_dates: 
 dependencies:
-- name: nginx
-  version: 1.25.5
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.25.5_linux_x64_cflinuxfs3_b8d2fa6e.tgz
-  sha256: b8d2fa6ef395494fec8255cc08dd58e4315922a0d0cf20232e648e30a6a3b7c7
-  cf_stacks:
-  - cflinuxfs3
-  source: http://nginx.org/download/nginx-1.25.5.tar.gz
-  source_sha256: 2fe2294f8af4144e7e842eaea884182a84ee7970e11046ba98194400902bbec0
-- name: nginx
-  version: 1.25.5
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.25.5_linux_x64_cflinuxfs4_27c3354a.tgz
-  sha256: 27c3354af3c2d4a87c1c63e3af2e28e477735945b65b9b2cd4c30df1288c9dbb
-  cf_stacks:
-  - cflinuxfs4
-  source: http://nginx.org/download/nginx-1.25.5.tar.gz
-  source_sha256: 2fe2294f8af4144e7e842eaea884182a84ee7970e11046ba98194400902bbec0
 - name: nginx
   version: 1.26.1
   uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.26.1_linux_x64_cflinuxfs3_198feb77.tgz
@@ -40,6 +24,22 @@ dependencies:
   - cflinuxfs4
   source: http://nginx.org/download/nginx-1.26.1.tar.gz
   source_sha256: f9187468ff2eb159260bfd53867c25ff8e334726237acf227b9e870e53d3e36b
+- name: nginx
+  version: 1.27.0
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.27.0_linux_x64_cflinuxfs3_ce79a2ff.tgz
+  sha256: ce79a2ffea458c51dc2ff0b30414b4b648d91fb3618fb34e4cfa57916894ae8b
+  cf_stacks:
+  - cflinuxfs3
+  source: http://nginx.org/download/nginx-1.27.0.tar.gz
+  source_sha256: b7230e3cf87eaa2d4b0bc56aadc920a960c7873b9991a1b66ffcc08fc650129c
+- name: nginx
+  version: 1.27.0
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.27.0_linux_x64_cflinuxfs4_106981c3.tgz
+  sha256: 106981c38c0b66ab335bab9043af9d3146cae624c16ef1e8aa39b32551555003
+  cf_stacks:
+  - cflinuxfs4
+  source: http://nginx.org/download/nginx-1.27.0.tar.gz
+  source_sha256: b7230e3cf87eaa2d4b0bc56aadc920a960c7873b9991a1b66ffcc08fc650129c
 - name: openresty
   version: 1.21.4.2
   uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.2_linux_x64_cflinuxfs3_6c347cdc.tgz
