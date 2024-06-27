@@ -1,3 +1,13 @@
+v1.2.16 Jun 27, 2024
+=====================
+
+* Add nginx 1.27.0, remove nginx 1.25.5
+  for stack(s) cflinuxfs4, cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/187862902)
+
+* Update nginx default version to 1.27
+
+
 v1.2.15 May 30, 2024
 =====================
 
