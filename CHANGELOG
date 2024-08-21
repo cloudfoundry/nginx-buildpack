@@ -1,3 +1,15 @@
+v1.2.18 Aug 21, 2024
+=====================
+
+* Add nginx 1.27.1, remove nginx 1.27.0
+  for stack(s) cflinuxfs3, cflinuxfs4
+
+* Add openresty 1.25.3.2, remove openresty 1.25.3.1
+  for stack(s) cflinuxfs3, cflinuxfs4
+
+* Missing popd (#298)
+
+
 v1.2.17 Jul 16, 2024
 =====================
 
