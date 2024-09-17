@@ -1,3 +1,11 @@
+v1.2.19 Sep 17, 2024
+=====================
+
+* Rebuild openresty 1.21.4.3 and 1.25.3.2
+  with http2 support
+  (github.com/cloudfoundry/buildpacks-ci/pull/414)
+
+
 v1.2.18 Aug 21, 2024
 =====================
 
