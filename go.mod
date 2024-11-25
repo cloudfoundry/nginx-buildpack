@@ -3,7 +3,7 @@ module github.com/cloudfoundry/nginx-buildpack
 go 1.22.5
 
 require (
-	github.com/Dynatrace/libbuildpack-dynatrace v1.5.2
+	github.com/Dynatrace/libbuildpack-dynatrace v1.8.0
 	github.com/cloudfoundry/libbuildpack v0.0.0-20240716203800-e8e9729b7ef9
 	github.com/golang/mock v1.6.0
 	github.com/miekg/dns v1.1.57
