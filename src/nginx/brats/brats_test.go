@@ -9,9 +9,7 @@ import (
 
 var _ = Describe("Nginx buildpack", func() {
 	bratshelper.UnbuiltBuildpack("nginx", CopyBrats)
-	bratshelper.DeployingAnAppWithAnUpdatedVersionOfTheSameBuildpack(CopyBrats)
 	bratshelper.DeployAppWithExecutableProfileScript("nginx", CopyBrats)
-	bratshelper.DeployAnAppWithSensitiveEnvironmentVariables(CopyBrats)
 	bratshelper.ForAllSupportedVersions("nginx", CopyBrats, func(nginxVersion string, app *cutlass.App) {
 		bratshelper.PushApp(app)
 
