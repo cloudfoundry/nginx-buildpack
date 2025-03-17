@@ -3,11 +3,31 @@ set -euo pipefail
 
 BUILD_DIR=$1
 CACHE_DIR=$2
-export BUILDPACK_DIR=`dirname $(readlink -f ${BASH_SOURCE%/*})`
+export BUILDPACK_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
 export DEPS_DIR="$BUILD_DIR/.cloudfoundry"
+OPENRESTY_VERSION=1.19.9.1
+
+# Create necessary directories
 mkdir -p "$DEPS_DIR/0"
 mkdir -p "$BUILD_DIR/.profile.d"
+
+# Set DEPS_DIR environment variable
 echo "export DEPS_DIR=\$HOME/.cloudfoundry" > "$BUILD_DIR/.profile.d/0000_set-deps-dir.sh"
 
+# Download and install OpenResty
+cd $CACHE_DIR
+if [ ! -f openresty-$OPENRESTY_VERSION.tar.gz ]; then
+    wget https://openresty.org/download/openresty-$OPENRESTY_VERSION.tar.gz
+fi
+tar -xzf openresty-$OPENRESTY_VERSION.tar.gz
+cd openresty-$OPENRESTY_VERSION
+./configure --prefix=$DEPS_DIR/0/openresty
+make
+make install
+
+# Add OpenResty to PATH
+echo 'export PATH=$DEPS_DIR/0/openresty/bin:$PATH' >> "$BUILD_DIR/.profile.d/0000_set-deps-dir.sh"
+
+# Run buildpack scripts
 $BUILDPACK_DIR/bin/supply "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
 $BUILDPACK_DIR/bin/finalize "$BUILD_DIR" "$CACHE_DIR" "$DEPS_DIR" 0
