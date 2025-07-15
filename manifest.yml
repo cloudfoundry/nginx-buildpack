@@ -72,6 +72,22 @@ dependencies:
   - cflinuxfs4
   source: http://openresty.org/download/openresty-1.25.3.2.tar.gz
   source_sha256: 2d564022b06e33b45f7e5cfaf1e5dc571d38d61803af9fa2754dfff353c28d9c
+- name: openresty
+  version: 1.27.1.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.27.1.2_linux_x64_cflinuxfs3_aa846ff9.tgz
+  sha256: aa846ff942e06695de203f6ad96ce738288a8369a015db3e01ae467dae0dc70c
+  cf_stacks:
+  - cflinuxfs3
+  source: http://openresty.org/download/openresty-1.27.1.2.tar.gz
+  source_sha256: 74f076f7e364b2a99a6c5f9bb531c27610c78985abe956b442b192a2295f7548
+- name: openresty
+  version: 1.27.1.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.27.1.2_linux_x64_cflinuxfs4_af0b112f.tgz
+  sha256: af0b112f3bcb3cce83f634184d206196e25d354af0f5723ddb0b6d6a9c805d65
+  cf_stacks:
+  - cflinuxfs4
+  source: http://openresty.org/download/openresty-1.27.1.2.tar.gz
+  source_sha256: 74f076f7e364b2a99a6c5f9bb531c27610c78985abe956b442b192a2295f7548
 pre_package: scripts/build.sh
 include_files:
 - CHANGELOG
