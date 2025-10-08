@@ -58,16 +58,16 @@ dependencies:
   source_sha256: 33a84c63cfd9e46b0e5c62eb2ddc7b8068bda2e1686314343b89fc3ffd24cdd3
 - name: openresty
   version: 1.25.3.2
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.25.3.2_linux_x64_cflinuxfs3_a7c85825.tgz
-  sha256: a7c8582531fcf6236d4c38b8263ffb54c3852d76e47962ccbc1c2ae280dcea35
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.25.3.2_linux_x64_cflinuxfs3_2ab7e6b7.tgz
+  sha256: 2ab7e6b757fb3cc5f60e0f85a775e75e7ad8b27e59bf8ab0d6bc80400f1754b9
   cf_stacks:
   - cflinuxfs3
   source: http://openresty.org/download/openresty-1.25.3.2.tar.gz
   source_sha256: 2d564022b06e33b45f7e5cfaf1e5dc571d38d61803af9fa2754dfff353c28d9c
 - name: openresty
   version: 1.25.3.2
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.25.3.2_linux_x64_cflinuxfs4_de1d82a9.tgz
-  sha256: de1d82a9d92507c2fc668845884c72589e4415bbef1e178796ba530905c47d3b
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.25.3.2_linux_x64_cflinuxfs4_587010f2.tgz
+  sha256: 587010f29f19d7331056cd3a40e672d0e360719f999f765f831b579a4d508018
   cf_stacks:
   - cflinuxfs4
   source: http://openresty.org/download/openresty-1.25.3.2.tar.gz
