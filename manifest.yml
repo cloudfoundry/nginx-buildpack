@@ -41,21 +41,21 @@ dependencies:
   source: http://nginx.org/download/nginx-1.27.4.tar.gz
   source_sha256: 294816f879b300e621fa4edd5353dd1ec00badb056399eceb30de7db64b753b2
 - name: openresty
-  version: 1.21.4.3
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.3_linux_x64_cflinuxfs3_58d545e1.tgz
-  sha256: 58d545e1ee43b2c39bca7b1855df019f6d15a8effde1f1a2ede4d617a99961a8
+  version: 1.21.4.4
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.4_linux_x64_cflinuxfs3_9ade85e8.tgz
+  sha256: 9ade85e8b17f7868066f491ca0fe604ec3e4e40830d6b73024433b7a30e014ba
   cf_stacks:
   - cflinuxfs3
-  source: http://openresty.org/download/openresty-1.21.4.3.tar.gz
-  source_sha256: 33a84c63cfd9e46b0e5c62eb2ddc7b8068bda2e1686314343b89fc3ffd24cdd3
+  source: http://openresty.org/download/openresty-1.21.4.4.tar.gz
+  source_sha256: 65891c3d3bf0132d931e5f907d7d997455e8dbf50413d3ee662cde41dd55909c
 - name: openresty
-  version: 1.21.4.3
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.3_linux_x64_cflinuxfs4_03af1e36.tgz
-  sha256: 03af1e36f06a1e14494d7bd1282527d72682d9875f7f5233dee5278812bb3dbc
+  version: 1.21.4.4
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.4_linux_x64_cflinuxfs4_e5fd0e7f.tgz
+  sha256: e5fd0e7fc4eb6904c085f8fc9d331329a14672396c669ed4f4c932ec84f852c5
   cf_stacks:
   - cflinuxfs4
-  source: http://openresty.org/download/openresty-1.21.4.3.tar.gz
-  source_sha256: 33a84c63cfd9e46b0e5c62eb2ddc7b8068bda2e1686314343b89fc3ffd24cdd3
+  source: http://openresty.org/download/openresty-1.21.4.4.tar.gz
+  source_sha256: 65891c3d3bf0132d931e5f907d7d997455e8dbf50413d3ee662cde41dd55909c
 - name: openresty
   version: 1.25.3.2
   uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.25.3.2_linux_x64_cflinuxfs3_a7c85825.tgz
