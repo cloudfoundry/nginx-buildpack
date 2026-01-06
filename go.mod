@@ -60,16 +60,13 @@ require (
 	golang.org/x/tools v0.29.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-)
-
-exclude google.golang.org/genproto v0.0.0-20230403163135-c38d8f061ccd
-
-require (
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20241104194629-dd2ea8efbc28 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241104194629-dd2ea8efbc28 // indirect
 )
+
+exclude google.golang.org/genproto v0.0.0-20230403163135-c38d8f061ccd
 
 replace (
 	github.com/docker/distribution => github.com/docker/distribution v2.8.2+incompatible
