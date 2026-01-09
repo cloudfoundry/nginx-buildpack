@@ -44,12 +44,6 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring(`{ "abcd": 12345 }{ 'ef' : "ab" }`)).WithEndpoint("test"))
 
-				// cmd := exec.Command("docker", "container", "logs", deployment.Name)
-
-				// output, err := cmd.CombinedOutput()
-				// Expect(err).NotTo(HaveOccurred())
-
-				// Expect(string(output)).To(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`))
 
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
