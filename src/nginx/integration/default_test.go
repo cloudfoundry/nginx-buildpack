@@ -1,7 +1,6 @@
 package integration_test
 
 import (
-	"os/exec"
 	"path/filepath"
 	"testing"
 
@@ -25,6 +24,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 			var err error
 			name, err = switchblade.RandomName()
 			Expect(err).NotTo(HaveOccurred())
+			println(name)
 		})
 
 		it.After(func() {
@@ -44,12 +44,18 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring(`{ "abcd": 12345 }{ 'ef' : "ab" }`)).WithEndpoint("test"))
 
-				cmd := exec.Command("docker", "container", "logs", deployment.Name)
+				// cmd := exec.Command("docker", "container", "logs", deployment.Name)
 
-				output, err := cmd.CombinedOutput()
-				Expect(err).NotTo(HaveOccurred())
+				// output, err := cmd.CombinedOutput()
+				// Expect(err).NotTo(HaveOccurred())
 
-				Expect(string(output)).To(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`))
+				// Expect(string(output)).To(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`))
+
+				Eventually(func() string {
+					logs, _ := deployment.RuntimeLogs()
+					return logs 
+					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`),
+				))
 			})
 		})
 
@@ -66,12 +72,11 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring(`{ "abcd": 12345 }{ 'ef' : "ab" }`)).WithEndpoint("test"))
 
-				cmd := exec.Command("docker", "container", "logs", deployment.Name)
-
-				output, err := cmd.CombinedOutput()
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(string(output)).To(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`))
+				Eventually(func() string {
+					logs, _ := deployment.RuntimeLogs()
+					return logs 
+					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`),
+				))
 			})
 		})
 
@@ -83,12 +88,12 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring("Exciting Content")))
 
-				cmd := exec.Command("docker", "container", "logs", deployment.Name)
+				Eventually(func() string {
+					logs, _ := deployment.RuntimeLogs()
+					return logs 
+					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
+				))
 
-				output, err := cmd.CombinedOutput()
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(string(output)).To(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
 			})
 		})
 
@@ -100,12 +105,12 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring("Exciting Content")))
 
-				cmd := exec.Command("docker", "container", "logs", deployment.Name)
+				Eventually(func() string {
+					logs, _ := deployment.RuntimeLogs()
+					return logs 
+					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
+				))
 
-				output, err := cmd.CombinedOutput()
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(string(output)).To(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
 			})
 		})
 
@@ -120,12 +125,11 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring("Exciting Content")))
 
-				cmd := exec.Command("docker", "container", "logs", deployment.Name)
-
-				output, err := cmd.CombinedOutput()
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(string(output)).To(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
+				Eventually(func() string {
+					logs, _ := deployment.RuntimeLogs()
+					return logs 
+					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
+				))
 			})
 		})
 
@@ -139,12 +143,11 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring("Exciting Content")))
 
-				cmd := exec.Command("docker", "container", "logs", deployment.Name)
-
-				output, err := cmd.CombinedOutput()
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(string(output)).To(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
+				Eventually(func() string {
+					logs, _ := deployment.RuntimeLogs()
+					return logs 
+					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
+				))
 			})
 		})
 
@@ -158,13 +161,12 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 				Eventually(logs).Should(ContainSubstring(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`))
 
 				Eventually(deployment).Should(Serve(ContainSubstring("Exciting Content")))
-
-				cmd := exec.Command("docker", "container", "logs", deployment.Name)
-
-				output, err := cmd.CombinedOutput()
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(string(output)).To(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
+				
+				Eventually(func() string {
+					logs, _ := deployment.RuntimeLogs()
+					return logs 
+					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
+				))
 			})
 		})
 
@@ -208,12 +210,11 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring("<p>hello, world</p>")))
 
-				cmd := exec.Command("docker", "container", "logs", deployment.Name)
-
-				output, err := cmd.CombinedOutput()
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(string(output)).To(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`))
+				Eventually(func() string {
+					logs, _ := deployment.RuntimeLogs()
+					return logs 
+					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
+				))
 			})
 		})
 	}
