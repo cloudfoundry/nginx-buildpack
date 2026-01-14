@@ -27,9 +27,9 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 			println(name)
 		})
 
-		// it.After(func() {
-		// 	Expect(platform.Delete.Execute(name)).To(Succeed())
-		// })
+		it.After(func() {
+			Expect(platform.Delete.Execute(name)).To(Succeed())
+		})
 
 		context("templated with env vars", func() {
 			it("builds and runs the app", func() {
