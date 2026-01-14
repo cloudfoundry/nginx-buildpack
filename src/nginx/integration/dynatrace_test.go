@@ -33,6 +33,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("deploying a Go app with Dynatrace agent with configured network zone", func() {
 			it("checks if networkzone setting was successful", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).
@@ -59,6 +60,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("when deploying with Dynatrace agent with single credentials service", func() {
 			it("checks if Dynatrace injection was successful", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).
@@ -83,6 +85,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("when deploying with Dynatrace agent with two credentials services", func() {
 			it("checks if detection of second service with credentials works", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).
@@ -108,6 +111,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("when deploying with Dynatrace agent with failing agent download and ignoring errors", func() {
 			it("checks if skipping download errors works", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).
@@ -130,6 +134,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("deploying a with Dynatrace agent with two dynatrace services", func() {
 			it("check if service detection isn't disturbed by a service with tags", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).
@@ -157,6 +162,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("deploying with Dynatrace agent with single credentials service and without manifest.json", func() {
 			it("checks if Dynatrace injection was successful", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).
@@ -181,6 +187,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("deploying Dynatrace agent with failing agent download and checking retry", func() {
 			it("checks if retrying downloads works", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).
@@ -204,6 +211,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("deploying Dynatrace agent with single credentials service and a redis service", func() {
 			it("checks if Dynatrace injection was successful", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).
@@ -239,6 +247,7 @@ func testDynatrace(platform switchblade.Platform, fixtures, uri string) func(*te
 		context("deploying Dynatrace agent with single credentials service", func() {
 			it("checks if agent config update via API was successful", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"BP_DEBUG": "true",
 					}).

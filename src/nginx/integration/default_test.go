@@ -34,6 +34,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 		context("templated with env vars", func() {
 			it("builds and runs the app", func() {
 				deployment, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"OVERRIDE": `'{ "abcd": 12345 }{ \'ef\' : "ab" }'`,
 					}).
@@ -44,18 +45,17 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(deployment).Should(Serve(ContainSubstring(`{ "abcd": 12345 }{ 'ef' : "ab" }`)).WithEndpoint("test"))
 
-
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
-					return logs 
-					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`),
-				))
+					return logs
+				}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`)))
 			})
 		})
 
 		context("templated with env vars with include", func() {
 			it("builds and runs the app", func() {
 				deployment, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					WithEnv(map[string]string{
 						"OVERRIDE": `'{ "abcd": 12345 }{ \'ef\' : "ab" }'`,
 					}).
@@ -68,15 +68,15 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
-					return logs 
-					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`),
-				))
+					return logs
+				}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET /test HTTP/1.1" 200`)))
 			})
 		})
 
 		context("with no specified pid", func() {
 			it("builds and runs the app", func() {
 				deployment, _, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "without_pid"))
 				Expect(err).NotTo(HaveOccurred())
 
@@ -84,9 +84,8 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
-					return logs 
-					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
-				))
+					return logs
+				}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`)))
 
 			})
 		})
@@ -94,6 +93,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 		context("with a specified pid", func() {
 			it("builds and runs the app", func() {
 				deployment, _, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "with_pid"))
 				Expect(err).NotTo(HaveOccurred())
 
@@ -101,9 +101,8 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
-					return logs 
-					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
-				))
+					return logs
+				}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`)))
 
 			})
 		})
@@ -111,6 +110,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 		context("with no specified version", func() {
 			it("builds and runs the app and uses mainline", func() {
 				deployment, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "unspecified_version"))
 				Expect(err).NotTo(HaveOccurred())
 
@@ -121,15 +121,15 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
-					return logs 
-					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
-				))
+					return logs
+				}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`)))
 			})
 		})
 
 		context("with an app specifying mainline", func() {
 			it("builds and runs the app", func() {
 				deployment, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "mainline"))
 				Expect(err).NotTo(HaveOccurred())
 
@@ -139,15 +139,15 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
-					return logs 
-					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
-				))
+					return logs
+				}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`)))
 			})
 		})
 
 		context("with an app specifying stable", func() {
 			it("builds and runs the app", func() {
 				deployment, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "stable"))
 				Expect(err).NotTo(HaveOccurred())
 
@@ -155,18 +155,18 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 				Eventually(logs).Should(ContainSubstring(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`))
 
 				Eventually(deployment).Should(Serve(ContainSubstring("Exciting Content")))
-				
+
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
-					return logs 
-					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
-				))
+					return logs
+				}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`)))
 			})
 		})
 
 		context("with an app unavailable version", func() {
 			it("the build fails and logs and error", func() {
 				_, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "unavailable_version"))
 				Expect(err).To(HaveOccurred())
 
@@ -177,6 +177,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 		context("with using the stream module", func() {
 			it("builds and runs the app", func() {
 				deployment, _, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "with_stream_module"))
 				Expect(err).NotTo(HaveOccurred())
 
@@ -187,6 +188,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 		context("with an app that has no access to logging", func() {
 			it("logs a warning and builds and runs the app", func() {
 				deployment, logs, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "no_logging"))
 				Expect(err).NotTo(HaveOccurred())
 
@@ -199,6 +201,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 		context("an Openresty app", func() {
 			it("builds and runs the app", func() {
 				deployment, _, err := platform.Deploy.
+					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "openresty"))
 				Expect(err).NotTo(HaveOccurred())
 
@@ -206,9 +209,8 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 
 				Eventually(func() string {
 					logs, _ := deployment.RuntimeLogs()
-					return logs 
-					}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`),
-				))
+					return logs
+				}, "10s", "1s").Should(Or(ContainSubstring(`NginxLog "GET / HTTP/1.1" 200`)))
 			})
 		})
 	}
