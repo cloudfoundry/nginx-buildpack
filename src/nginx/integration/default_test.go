@@ -164,7 +164,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 		})
 
 		context("with an app unavailable version", func() {
-			it.Focus("the build fails and logs and error", func() {
+			it("the build fails and logs and error", func() {
 				_, logs, err := platform.Deploy.
 					WithBuildpacks("nginx_buildpack").
 					Execute(name, filepath.Join(fixtures, "default", "unavailable_version"))
