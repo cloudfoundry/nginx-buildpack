@@ -20,10 +20,7 @@ var _ = Describe("varify", func() {
 		var err error
 		tmpDir, err = ioutil.TempDir("", "nginx.tmpdir")
 		Expect(err).ToNot(HaveOccurred())
-	})
-
-	AfterEach(func() {
-		os.RemoveAll(tmpDir)
+		DeferCleanup(os.RemoveAll, tmpDir)
 	})
 
 	Describe("Run", func() {

@@ -43,13 +43,9 @@ var _ = Describe("Supply", func() {
 		mockCommand = NewMockCommand(mockCtrl)
 		depDir, err = ioutil.TempDir("", "nginx.depdir")
 		Expect(err).ToNot(HaveOccurred())
+		DeferCleanup(os.RemoveAll, depDir)
 		mockStager.EXPECT().DepDir().AnyTimes().Return(depDir)
 		supplier = supply.New(mockStager, mockManifest, mockInstaller, logger, mockCommand)
-	})
-
-	AfterEach(func() {
-		mockCtrl.Finish()
-		os.RemoveAll(depDir)
 	})
 
 	Describe("InstallNGINX", func() {
@@ -209,14 +205,11 @@ var _ = Describe("Supply", func() {
 		BeforeEach(func() {
 			buildDir, err = ioutil.TempDir("", "")
 			Expect(err).NotTo(HaveOccurred())
+			DeferCleanup(os.RemoveAll, buildDir)
 
 			mockStager.EXPECT().BuildDir().Return(buildDir).AnyTimes()
 
 			mockCommand.EXPECT().Execute(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
-		})
-
-		AfterEach(func() {
-			os.RemoveAll(buildDir)
 		})
 
 		It("calls varify to parse the port", func() {
