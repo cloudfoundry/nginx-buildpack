@@ -6,7 +6,6 @@ import (
 	"fmt"
 	htmlTemplate "html/template"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -48,7 +47,7 @@ func main() {
 			"The default nameservers %s will be used. Error: %s", resolvConfPath, defaultNameServer, err)
 	}
 
-	body, err := ioutil.ReadFile(filename)
+	body, err := os.ReadFile(filename)
 	if err != nil {
 		log.Fatalf("Could not read config file: %s: %s", filename, err)
 	}
@@ -108,7 +107,7 @@ func main() {
 			if !filepath.IsAbs(confFile) {
 				confFile = filepath.Join(filepath.Dir(filename), confFile)
 			}
-			str, err = ioutil.ReadFile(confFile)
+			str, err = os.ReadFile(confFile)
 			if err != nil {
 				log.Fatalf("Could not read config file: %s: %s", filename, err)
 			}
@@ -169,7 +168,7 @@ func getPlaintextEnvVars(bpYMLPath string) ([]string, error) {
 		return []string{}, nil
 	}
 
-	bpYMLContents, err := ioutil.ReadFile(bpYMLPath)
+	bpYMLContents, err := os.ReadFile(bpYMLPath)
 	if err != nil {
 		return []string{}, err
 	}

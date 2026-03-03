@@ -1,7 +1,7 @@
 package main_test
 
 import (
-	"io/ioutil"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"testing"
@@ -28,7 +28,7 @@ var _ = AfterSuite(func() {
 })
 
 func runCli(tmpDir, body string, env []string, localModulePath, globalModulePath string, resolveConfPath string, defaultNameServer string, bpYMLPath string, expectedExitcode int) (string, *gexec.Session) {
-	Expect(ioutil.WriteFile(filepath.Join(tmpDir, "nginx.conf"), []byte(body), 0644)).To(Succeed())
+	Expect(os.WriteFile(filepath.Join(tmpDir, "nginx.conf"), []byte(body), 0644)).To(Succeed())
 	args := []string{filepath.Join(tmpDir, "nginx.conf"), localModulePath, globalModulePath, resolveConfPath, defaultNameServer}
 	if bpYMLPath != "" {
 		args = append([]string{"-buildpack-yml-path", bpYMLPath}, args...)
@@ -40,7 +40,7 @@ func runCli(tmpDir, body string, env []string, localModulePath, globalModulePath
 	Expect(err).ToNot(HaveOccurred())
 	Eventually(session).Should(gexec.Exit(expectedExitcode))
 
-	output, err := ioutil.ReadFile(filepath.Join(tmpDir, "nginx.conf"))
+	output, err := os.ReadFile(filepath.Join(tmpDir, "nginx.conf"))
 	Expect(err).ToNot(HaveOccurred())
 
 	return string(output), session
