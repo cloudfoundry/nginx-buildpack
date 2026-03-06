@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/Dynatrace/libbuildpack-dynatrace v1.8.0
-	github.com/cloudfoundry/libbuildpack v0.0.0-20240717165421-f2ae8069fcba
+	github.com/cloudfoundry/libbuildpack v0.0.0-20260306125332-dcaf55eb6f33
 	github.com/cloudfoundry/switchblade v0.9.4
 	github.com/golang/mock v1.6.0
 	github.com/miekg/dns v1.1.62
@@ -38,7 +38,6 @@ require (
 	github.com/google/pprof v0.0.0-20260115054156-294ebfa9ad83 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
-	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/paketo-buildpacks/packit v1.3.1 // indirect
@@ -64,7 +63,6 @@ require (
 	golang.org/x/tools v0.41.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20241104194629-dd2ea8efbc28 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241104194629-dd2ea8efbc28 // indirect
-	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 )
 
 exclude google.golang.org/genproto v0.0.0-20230403163135-c38d8f061ccd
