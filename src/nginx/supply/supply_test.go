@@ -3,7 +3,6 @@ package supply_test
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	exec "os/exec"
 	"path/filepath"
@@ -41,7 +40,7 @@ var _ = Describe("Supply", func() {
 		mockManifest = NewMockManifest(mockCtrl)
 		mockInstaller = NewMockInstaller(mockCtrl)
 		mockCommand = NewMockCommand(mockCtrl)
-		depDir, err = ioutil.TempDir("", "nginx.depdir")
+		depDir, err = os.MkdirTemp("", "nginx.depdir")
 		Expect(err).ToNot(HaveOccurred())
 		DeferCleanup(os.RemoveAll, depDir)
 		mockStager.EXPECT().DepDir().AnyTimes().Return(depDir)
@@ -203,7 +202,7 @@ var _ = Describe("Supply", func() {
 		)
 
 		BeforeEach(func() {
-			buildDir, err = ioutil.TempDir("", "")
+			buildDir, err = os.MkdirTemp("", "")
 			Expect(err).NotTo(HaveOccurred())
 			DeferCleanup(os.RemoveAll, buildDir)
 
@@ -214,7 +213,7 @@ var _ = Describe("Supply", func() {
 
 		It("calls varify to parse the port", func() {
 			nginxConfPath := filepath.Join(buildDir, "nginx.conf")
-			err := ioutil.WriteFile(nginxConfPath, []byte("{{port}}"), 0666)
+			err := os.WriteFile(nginxConfPath, []byte("{{port}}"), 0666)
 			Expect(err).NotTo(HaveOccurred())
 
 			mockCommand.EXPECT().
@@ -233,7 +232,7 @@ var _ = Describe("Supply", func() {
 		Context("app's nginx.conf is missing {{port}}", func() {
 			It("logs error stating {{port}} is missing", func() {
 				nginxConfPath := filepath.Join(buildDir, "nginx.conf")
-				err := ioutil.WriteFile(nginxConfPath, []byte("FOOBAR"), 0666)
+				err := os.WriteFile(nginxConfPath, []byte("FOOBAR"), 0666)
 				Expect(err).NotTo(HaveOccurred())
 				mockCommand.EXPECT().RunWithOutput(gomock.Any())
 				err = supplier.ValidateNginxConf()
@@ -249,31 +248,31 @@ var _ = Describe("Supply", func() {
 			})
 
 			It("logs a warning when access logging is not set", func() {
-				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("some content"), 0666)
+				os.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("some content"), 0666)
 				Expect(supplier.CheckAccessLogging()).To(Succeed())
 				Expect(buffer.String()).To(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
 			})
 
 			It("logs a warning when access logging is set to off", func() {
-				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log off"), 0666)
+				os.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log off"), 0666)
 				Expect(supplier.CheckAccessLogging()).To(Succeed())
 				Expect(buffer.String()).To(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
 			})
 
 			It("logs a warning when access logging is set to off with extra spaces", func() {
-				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log    off"), 0666)
+				os.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log    off"), 0666)
 				Expect(supplier.CheckAccessLogging()).To(Succeed())
 				Expect(buffer.String()).To(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
 			})
 
 			It("logs a warning when access logging is set to OFF", func() {
-				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log OFF"), 0666)
+				os.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log OFF"), 0666)
 				Expect(supplier.CheckAccessLogging()).To(Succeed())
 				Expect(buffer.String()).To(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
 			})
 
 			It("logs a warning when access logging is set to a path", func() {
-				ioutil.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log /some/path"), 0666)
+				os.WriteFile(filepath.Join(buildDir, "nginx.conf"), []byte("access_log /some/path"), 0666)
 				Expect(supplier.CheckAccessLogging()).To(Succeed())
 				Expect(buffer.String()).ToNot(ContainSubstring("Warning: access logging is turned off in your nginx.conf file, this may make your app difficult to debug."))
 			})
