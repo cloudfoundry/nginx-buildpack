@@ -10,3 +10,4 @@ nginx:
     cf_stacks:
     - cflinuxfs3
     - cflinuxfs4
+    - cflinuxfs5
