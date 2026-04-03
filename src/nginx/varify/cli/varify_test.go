@@ -2,11 +2,10 @@ package main_test
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 )
@@ -18,12 +17,9 @@ var _ = Describe("varify", func() {
 
 	BeforeEach(func() {
 		var err error
-		tmpDir, err = ioutil.TempDir("", "nginx.tmpdir")
+		tmpDir, err = os.MkdirTemp("", "nginx.tmpdir")
 		Expect(err).ToNot(HaveOccurred())
-	})
-
-	AfterEach(func() {
-		os.RemoveAll(tmpDir)
+		DeferCleanup(os.RemoveAll, tmpDir)
 	})
 
 	Describe("Run", func() {
@@ -47,7 +43,7 @@ nginx:
     - "FOO"
 `
 			defer os.RemoveAll(bpYMLPath)
-			Expect(ioutil.WriteFile(bpYMLPath, []byte(contents), os.ModePerm)).To(Succeed())
+			Expect(os.WriteFile(bpYMLPath, []byte(contents), os.ModePerm)).To(Succeed())
 			body, _ := runCli(tmpDir, textBody, []string{`FOO={"abcd":1234}`}, "", "", "", "", bpYMLPath, 0)
 			Expect(body).To(Equal(`The env var FOO is {"abcd":1234}`))
 		})
@@ -62,11 +58,11 @@ nginx:
 		listen       {{port}};
 	}
 `
-				Expect(ioutil.WriteFile(filepath.Join(tmpDir, "custom.conf"), []byte(customConfStr), os.ModePerm)).To(Succeed())
+				Expect(os.WriteFile(filepath.Join(tmpDir, "custom.conf"), []byte(customConfStr), os.ModePerm)).To(Succeed())
 				body, _ := runCli(tmpDir, nginxConfStr, []string{"PORT=8080"}, "", "", "", "", "", 0)
 				Expect(body).To(Equal(nginxConfStr))
 
-				contents, err := ioutil.ReadFile(filepath.Join(tmpDir, "custom.conf"))
+				contents, err := os.ReadFile(filepath.Join(tmpDir, "custom.conf"))
 				Expect(err).NotTo(HaveOccurred())
 				Expect(string(contents)).To(Equal(`
   server {
@@ -83,8 +79,8 @@ nginx:
 
 				Expect(os.Mkdir(localModulePath, 0744)).To(Succeed())
 				Expect(os.Mkdir(globalModulePath, 0744)).To(Succeed())
-				Expect(ioutil.WriteFile(filepath.Join(localModulePath, "local.so"), []byte("dummy data"), 0644)).To(Succeed())
-				Expect(ioutil.WriteFile(filepath.Join(globalModulePath, "global.so"), []byte("dummy data"), 0644)).To(Succeed())
+				Expect(os.WriteFile(filepath.Join(localModulePath, "local.so"), []byte("dummy data"), 0644)).To(Succeed())
+				Expect(os.WriteFile(filepath.Join(globalModulePath, "global.so"), []byte("dummy data"), 0644)).To(Succeed())
 			})
 
 			Context("when the module is in local modules directory", func() {
@@ -109,28 +105,28 @@ nginx:
 
 			It("reads nameservers from the simple resolv-conf file", func() {
 				var resolvConfPath = filepath.Join(tmpDir, "resolv-simple.conf")
-				Expect(ioutil.WriteFile(resolvConfPath, []byte("nameserver "+nameserver1), 0644)).To(Succeed())
+				Expect(os.WriteFile(resolvConfPath, []byte("nameserver "+nameserver1), 0644)).To(Succeed())
 				body, _ := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath, defaultNameServer, "", 0)
 				Expect(body).To(Equal("Hi the nameservers are " + nameserver1 + "."))
 			})
 
 			It("reads nameservers from the unusual resolv-conf file", func() {
 				var resolvConfPath = filepath.Join(tmpDir, "resolv-unusual.conf")
-				Expect(ioutil.WriteFile(resolvConfPath, []byte("# comment 1\n  \t  nameserver "+nameserver1+"  \t  \n# comment 2"), 0644)).To(Succeed())
+				Expect(os.WriteFile(resolvConfPath, []byte("# comment 1\n  \t  nameserver "+nameserver1+"  \t  \n# comment 2"), 0644)).To(Succeed())
 				body, _ := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath, defaultNameServer, "", 0)
 				Expect(body).To(Equal("Hi the nameservers are " + nameserver1 + "."))
 			})
 
 			It("reads nameservers from the resolv-conf file with multiple entries", func() {
 				var resolvConfPath = filepath.Join(tmpDir, "resolv-multiple.conf")
-				Expect(ioutil.WriteFile(resolvConfPath, []byte("nameserver "+nameserver1+"\nnameserver "+nameserver2), 0644)).To(Succeed())
+				Expect(os.WriteFile(resolvConfPath, []byte("nameserver "+nameserver1+"\nnameserver "+nameserver2), 0644)).To(Succeed())
 				body, _ := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath, defaultNameServer, "", 0)
 				Expect(body).To(Equal("Hi the nameservers are " + nameserver1 + " " + nameserver2 + "."))
 			})
 
 			It("set the default nameservers if the resolv-conf file is empty", func() {
 				var resolvConfPath = filepath.Join(tmpDir, "resolv-empty.conf")
-				Expect(ioutil.WriteFile(resolvConfPath, []byte(""), 666)).To(Succeed())
+				Expect(os.WriteFile(resolvConfPath, []byte(""), 666)).To(Succeed())
 				body, _ := runCli(tmpDir, "Hi the nameservers are {{nameservers}}.", nil, "", "", resolvConfPath, defaultNameServer, "", 0)
 				Expect(body).To(Equal("Hi the nameservers are " + defaultNameServer + "."))
 			})

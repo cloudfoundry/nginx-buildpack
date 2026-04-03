@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -13,7 +12,6 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"time"
 
 	"github.com/cloudfoundry/libbuildpack"
 )
@@ -180,7 +178,7 @@ func (s *Supplier) ValidateNginxConf() error {
 }
 
 func (s *Supplier) CheckAccessLogging() error {
-	contents, err := ioutil.ReadFile(filepath.Join(s.Stager.BuildDir(), "nginx.conf"))
+	contents, err := os.ReadFile(filepath.Join(s.Stager.BuildDir(), "nginx.conf"))
 	if err != nil {
 		return err
 	}
@@ -200,7 +198,7 @@ func (s *Supplier) CheckAccessLogging() error {
 func (s *Supplier) InstallNGINX() error {
 	dep, err := s.findMatchingVersion("nginx", s.Config.Nginx.Version)
 	if err != nil {
-		s.Log.Info(`Available versions: ` + strings.Join(s.availableVersions(), ", "))
+		s.Log.Info("Available versions: %s", strings.Join(s.availableVersions(), ", "))
 		return fmt.Errorf("Could not determine version: %s", err)
 	}
 	if s.Config.Nginx.Version == "" {
@@ -238,7 +236,7 @@ func (s *Supplier) InstallOpenResty() error {
 }
 
 func (s *Supplier) validateNginxConfHasPort() error {
-	tmpDir, err := ioutil.TempDir("", "")
+	tmpDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		return fmt.Errorf("failed to create temp dir: %w", err)
 	}
@@ -257,7 +255,7 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		return fmt.Errorf("varify command failed: %w\noutput: %s", err, string(output))
 	}
 
-	confContents, err := ioutil.ReadFile(nginxConfPath)
+	confContents, err := os.ReadFile(nginxConfPath)
 	if err != nil {
 		return fmt.Errorf("error reading temp config file: %w", err)
 	}
@@ -270,7 +268,7 @@ func (s *Supplier) validateNginxConfHasPort() error {
 		if !filepath.IsAbs(confFile) {
 			confFile = filepath.Join(tmpDir, confFile)
 		}
-		contents, err := ioutil.ReadFile(confFile)
+		contents, err := os.ReadFile(confFile)
 		if err != nil {
 			return fmt.Errorf("error reading temp config file %s: %w", confFile, err)
 		}
@@ -288,8 +286,6 @@ func (s *Supplier) validateNginxConfHasPort() error {
 }
 
 func randomString(strLength int) string {
-	rand.Seed(time.Now().UnixNano())
-
 	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	const numCharsPossible = len(letters)
 	randString := ""
@@ -302,7 +298,7 @@ func randomString(strLength int) string {
 }
 
 func (s *Supplier) validateNGINXConfSyntax() error {
-	tmpConfDir, err := ioutil.TempDir("/tmp", "conf")
+	tmpConfDir, err := os.MkdirTemp("/tmp", "conf")
 	if err != nil {
 		return fmt.Errorf("Error creating temp nginx conf dir: %s", err.Error())
 	}
@@ -318,8 +314,8 @@ func (s *Supplier) validateNGINXConfSyntax() error {
 	buildpackYMLPath := filepath.Join(s.Stager.BuildDir(), "buildpack.yml")
 	cmd := exec.Command(filepath.Join(s.Stager.DepDir(), "bin", "varify"), "-buildpack-yml-path", buildpackYMLPath, nginxConfPath, localModulePath, globalModulePath)
 	cmd.Dir = tmpConfDir
-	cmd.Stdout = ioutil.Discard
-	cmd.Stderr = ioutil.Discard
+	cmd.Stdout = io.Discard
+	cmd.Stderr = io.Discard
 	cmd.Env = append(os.Environ(), "PORT=8080")
 	if err := s.Command.Run(cmd); err != nil {
 		return err
