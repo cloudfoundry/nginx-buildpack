@@ -25,9 +25,9 @@ dependencies:
   source: http://nginx.org/download/nginx-1.27.5.tar.gz
   source_sha256: e96acebb9c2a6db8a000c3dd1b32ecba1b810f0cd586232d4d921e376674dd0e
 - name: nginx
-  version: 1.28.1
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.28.1_linux_x64_cflinuxfs4_2c1e026e.tgz
-  sha256: 2c1e026eb52f83da4c6aa9447967af83bb227737a09e0ae2068bf1029d92bc87
+  version: 1.28.3
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.28.3_linux_x64_cflinuxfs4_1ccdb1e6.tgz
+  sha256: 1ccdb1e602d823a0517ffa37143f03d6d40f79a22e1b53affc30c195546e8fcd
   cf_stacks:
   - cflinuxfs4
   source: http://nginx.org/download/nginx-1.28.3.tar.gz
