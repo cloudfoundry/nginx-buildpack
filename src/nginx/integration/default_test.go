@@ -170,7 +170,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 					Execute(name, filepath.Join(fixtures, "default", "unavailable_version"))
 				Expect(err).To(HaveOccurred())
 
-				Eventually(logs).Should(ContainSubstring(`Available versions: mainline, stable, 1.29.x, 1.30.x`))
+				Eventually(logs).Should(ContainSubstring(`Available versions: mainline, stable, 1.29.x, 1.30.x, 1.31.x`))
 			})
 		})
 
