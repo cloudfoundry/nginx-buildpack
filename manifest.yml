@@ -4,7 +4,7 @@ default_versions:
 - name: nginx
   version: 1.29.x
 version_lines:
-  mainline: 1.29.x
+  mainline: 1.31.x
   stable: 1.30.x
 dependency_deprecation_dates: 
 dependencies:
@@ -34,14 +34,6 @@ dependencies:
   source_sha256: 2c96a946bfb0882a21744ed429770a2123ae1828c7c48665092993ddee91a918
 - name: nginx
   version: 1.29.7
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.29.7_linux_x64_cflinuxfs4_b35ad5a9.tgz
-  sha256: b35ad5a9b15302e396c3581070c7707ad0534ee99db91d133a6bd100044a2c25
-  cf_stacks:
-  - cflinuxfs4
-  source: http://nginx.org/download/nginx-1.29.7.tar.gz
-  source_sha256: 673f8fb8c0961c44fbd9410d6161831453609b44063d3f2948253fc2b5692139
-- name: nginx
-  version: 1.29.7
   uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.29.7_linux_x64_cflinuxfs5_7fc38247.tgz
   sha256: 7fc382478d16c7001a85ecefdfb454283d7c2ab006a38bf91d8d1280ebdfeea0
   cf_stacks:
@@ -64,6 +56,22 @@ dependencies:
   - cflinuxfs5
   source: http://nginx.org/download/nginx-1.30.2.tar.gz
   source_sha256: 7df3090907fca3cc0e456d6dc00ceb230da74ea88026ceff0affc29dbbd9ac4c
+- name: nginx
+  version: 1.31.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.31.2_linux_x64_cflinuxfs4_b837d5de.tgz
+  sha256: b837d5de6e64178355e42ab6f7a6a5fdd0c61ce146780e3bd0da9ee93c4011fa
+  cf_stacks:
+  - cflinuxfs4
+  source: http://nginx.org/download/nginx-1.31.2.tar.gz
+  source_sha256: af2a957c41da636ddc4f883e4523c6d140b4784dbce42000c364ae5092aa473c
+- name: nginx
+  version: 1.31.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.31.2_linux_x64_cflinuxfs5_9ecc8fa6.tgz
+  sha256: 9ecc8fa62fb89b52b4057e95ad383dd29ced8a188241e71efa2fb295c28f5efd
+  cf_stacks:
+  - cflinuxfs5
+  source: http://nginx.org/download/nginx-1.31.2.tar.gz
+  source_sha256: af2a957c41da636ddc4f883e4523c6d140b4784dbce42000c364ae5092aa473c
 - name: openresty
   version: 1.21.4.4
   uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.4_linux_x64_cflinuxfs3_9ade85e8.tgz
