@@ -2,10 +2,10 @@
 language: nginx
 default_versions:
 - name: nginx
-  version: 1.28.x
+  version: 1.29.x
 version_lines:
   mainline: 1.29.x
-  stable: 1.29.x
+  stable: 1.30.x
 dependency_deprecation_dates: 
 dependencies:
 - name: nginx
@@ -24,14 +24,6 @@ dependencies:
   - cflinuxfs3
   source: http://nginx.org/download/nginx-1.27.5.tar.gz
   source_sha256: e96acebb9c2a6db8a000c3dd1b32ecba1b810f0cd586232d4d921e376674dd0e
-- name: nginx
-  version: 1.28.3
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.28.3_linux_x64_cflinuxfs4_1ccdb1e6.tgz
-  sha256: 1ccdb1e602d823a0517ffa37143f03d6d40f79a22e1b53affc30c195546e8fcd
-  cf_stacks:
-  - cflinuxfs4
-  source: http://nginx.org/download/nginx-1.28.3.tar.gz
-  source_sha256: 2c96a946bfb0882a21744ed429770a2123ae1828c7c48665092993ddee91a918
 - name: nginx
   version: 1.28.3
   uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.28.3_linux_x64_cflinuxfs5_0f9fe251.tgz
@@ -56,6 +48,22 @@ dependencies:
   - cflinuxfs5
   source: http://nginx.org/download/nginx-1.29.7.tar.gz
   source_sha256: 673f8fb8c0961c44fbd9410d6161831453609b44063d3f2948253fc2b5692139
+- name: nginx
+  version: 1.30.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.30.2_linux_x64_cflinuxfs4_c9bb92c4.tgz
+  sha256: c9bb92c4b76cf8030c9291ce0fda48363f4bec0eb3739c4c1d317d916d0fa64a
+  cf_stacks:
+  - cflinuxfs4
+  source: http://nginx.org/download/nginx-1.30.2.tar.gz
+  source_sha256: 7df3090907fca3cc0e456d6dc00ceb230da74ea88026ceff0affc29dbbd9ac4c
+- name: nginx
+  version: 1.30.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.30.2_linux_x64_cflinuxfs5_18b77b82.tgz
+  sha256: 18b77b820b7cfdae29727683eef1bc6a92502caa9a04861bf940906d3421f868
+  cf_stacks:
+  - cflinuxfs5
+  source: http://nginx.org/download/nginx-1.30.2.tar.gz
+  source_sha256: 7df3090907fca3cc0e456d6dc00ceb230da74ea88026ceff0affc29dbbd9ac4c
 - name: openresty
   version: 1.21.4.4
   uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.4_linux_x64_cflinuxfs3_9ade85e8.tgz

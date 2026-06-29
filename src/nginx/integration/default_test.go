@@ -151,7 +151,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 					Execute(name, filepath.Join(fixtures, "default", "stable"))
 				Expect(err).NotTo(HaveOccurred())
 
-				Eventually(logs).Should(ContainSubstring(`Requested nginx version: stable => 1.29.`))
+				Eventually(logs).Should(ContainSubstring(`Requested nginx version: stable => 1.30.`))
 				Eventually(logs).Should(ContainSubstring(`Warning: usage of "stable" versions of NGINX is discouraged in most cases by the NGINX team.`))
 
 				Eventually(deployment).Should(Serve(ContainSubstring("Exciting Content")))
@@ -170,7 +170,7 @@ func testDefault(platform switchblade.Platform, fixtures string) func(*testing.T
 					Execute(name, filepath.Join(fixtures, "default", "unavailable_version"))
 				Expect(err).To(HaveOccurred())
 
-				Eventually(logs).Should(ContainSubstring(`Available versions: mainline, stable, 1.29.x, 1.29.x`))
+				Eventually(logs).Should(ContainSubstring(`Available versions: mainline, stable, 1.29.x, 1.30.x`))
 			})
 		})
 
