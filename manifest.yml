@@ -2,10 +2,10 @@
 language: nginx
 default_versions:
 - name: nginx
-  version: 1.28.x
+  version: 1.29.x
 version_lines:
-  mainline: 1.29.x
-  stable: 1.29.x
+  mainline: 1.31.x
+  stable: 1.30.x
 dependency_deprecation_dates: 
 dependencies:
 - name: nginx
@@ -25,37 +25,53 @@ dependencies:
   source: http://nginx.org/download/nginx-1.27.5.tar.gz
   source_sha256: e96acebb9c2a6db8a000c3dd1b32ecba1b810f0cd586232d4d921e376674dd0e
 - name: nginx
-  version: 1.28.3
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.28.3_linux_x64_cflinuxfs4_1ccdb1e6.tgz
-  sha256: 1ccdb1e602d823a0517ffa37143f03d6d40f79a22e1b53affc30c195546e8fcd
+  version: 1.29.8
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.29.8_linux_x64_cflinuxfs4_a72f3f1e.tgz
+  sha256: a72f3f1e510d0552c932438365dc7c2a2e1f16cb1c2a859adfe3e06921df4aca
   cf_stacks:
   - cflinuxfs4
-  source: http://nginx.org/download/nginx-1.28.3.tar.gz
-  source_sha256: 2c96a946bfb0882a21744ed429770a2123ae1828c7c48665092993ddee91a918
+  source: http://nginx.org/download/nginx-1.29.8.tar.gz
+  source_sha256: 7f1b985dace8fe706dfc288b83927c928f0ae60bcb7507c2d4e0025eca7280c3
 - name: nginx
-  version: 1.28.3
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.28.3_linux_x64_cflinuxfs5_0f9fe251.tgz
-  sha256: 0f9fe251ccd0f3ce84033e9c994d2c089aa7a119777a6c4fb02ad6dd35b9a6cf
+  version: 1.29.8
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.29.8_linux_x64_cflinuxfs5_d540a580.tgz
+  sha256: d540a5806aaddd6207ead7d22739882e43f1f39f32849dcb3f1fa68095b0da7e
   cf_stacks:
   - cflinuxfs5
-  source: http://nginx.org/download/nginx-1.28.3.tar.gz
-  source_sha256: 2c96a946bfb0882a21744ed429770a2123ae1828c7c48665092993ddee91a918
+  source: http://nginx.org/download/nginx-1.29.8.tar.gz
+  source_sha256: 7f1b985dace8fe706dfc288b83927c928f0ae60bcb7507c2d4e0025eca7280c3
 - name: nginx
-  version: 1.29.7
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.29.7_linux_x64_cflinuxfs4_b35ad5a9.tgz
-  sha256: b35ad5a9b15302e396c3581070c7707ad0534ee99db91d133a6bd100044a2c25
+  version: 1.30.3
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.30.3_linux_x64_cflinuxfs4_7930a869.tgz
+  sha256: 7930a869ea8f9f3e38b0ad30cb7e788ec0897bf159f818c63eafb18ce48272a6
   cf_stacks:
   - cflinuxfs4
-  source: http://nginx.org/download/nginx-1.29.7.tar.gz
-  source_sha256: 673f8fb8c0961c44fbd9410d6161831453609b44063d3f2948253fc2b5692139
+  source: http://nginx.org/download/nginx-1.30.3.tar.gz
+  source_sha256: e5823dc6f45610993def93ebf6cfce68264af4958c77e874b7d20f3709001b8f
 - name: nginx
-  version: 1.29.7
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.29.7_linux_x64_cflinuxfs5_7fc38247.tgz
-  sha256: 7fc382478d16c7001a85ecefdfb454283d7c2ab006a38bf91d8d1280ebdfeea0
+  version: 1.30.3
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.30.3_linux_x64_cflinuxfs5_55df32ce.tgz
+  sha256: 55df32cecab01bf2bcf8a7d6d25b35374a70e5c599544cb19047803e782583a5
   cf_stacks:
   - cflinuxfs5
-  source: http://nginx.org/download/nginx-1.29.7.tar.gz
-  source_sha256: 673f8fb8c0961c44fbd9410d6161831453609b44063d3f2948253fc2b5692139
+  source: http://nginx.org/download/nginx-1.30.3.tar.gz
+  source_sha256: e5823dc6f45610993def93ebf6cfce68264af4958c77e874b7d20f3709001b8f
+- name: nginx
+  version: 1.31.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.31.2_linux_x64_cflinuxfs4_b837d5de.tgz
+  sha256: b837d5de6e64178355e42ab6f7a6a5fdd0c61ce146780e3bd0da9ee93c4011fa
+  cf_stacks:
+  - cflinuxfs4
+  source: http://nginx.org/download/nginx-1.31.2.tar.gz
+  source_sha256: af2a957c41da636ddc4f883e4523c6d140b4784dbce42000c364ae5092aa473c
+- name: nginx
+  version: 1.31.2
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.31.2_linux_x64_cflinuxfs5_9ecc8fa6.tgz
+  sha256: 9ecc8fa62fb89b52b4057e95ad383dd29ced8a188241e71efa2fb295c28f5efd
+  cf_stacks:
+  - cflinuxfs5
+  source: http://nginx.org/download/nginx-1.31.2.tar.gz
+  source_sha256: af2a957c41da636ddc4f883e4523c6d140b4784dbce42000c364ae5092aa473c
 - name: openresty
   version: 1.21.4.4
   uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.4_linux_x64_cflinuxfs3_9ade85e8.tgz
@@ -96,16 +112,16 @@ dependencies:
     - cflinuxfs4
 - name: openresty
   version: 1.27.1.2
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.27.1.2_linux_x64_cflinuxfs4_72f9fb44.tgz
-  sha256: 72f9fb4445894c1ce74477f2dcab236cdf4c7d04c56d89448d725ed7bd122d9e
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.27.1.2_linux_x64_cflinuxfs4_a8f1591d.tgz
+  sha256: a8f1591d018a68d9f82198c14581dcfb4630dc99e461f760f460707e2a75624e
   cf_stacks:
   - cflinuxfs4
   source: http://openresty.org/download/openresty-1.27.1.2.tar.gz
   source_sha256: 74f076f7e364b2a99a6c5f9bb531c27610c78985abe956b442b192a2295f7548
 - name: openresty
   version: 1.27.1.2
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.27.1.2_linux_x64_cflinuxfs5_60b5a904.tgz
-  sha256: 60b5a904a66d61d0e4607814a5e6f1c02b5f9bdf4280bb0a14d290cf82b04447
+  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.27.1.2_linux_x64_cflinuxfs5_5d9a9c3b.tgz
+  sha256: 5d9a9c3b4e3adf048250b2e5716910ea23ff18a5344470fc9dff91f5fdbcaf9c
   cf_stacks:
   - cflinuxfs5
   source: http://openresty.org/download/openresty-1.27.1.2.tar.gz
