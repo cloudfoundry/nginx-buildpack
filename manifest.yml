@@ -88,6 +88,13 @@ dependencies:
   - cflinuxfs4
   source: http://openresty.org/download/openresty-1.21.4.4.tar.gz
   source_sha256: 65891c3d3bf0132d931e5f907d7d997455e8dbf50413d3ee662cde41dd55909c
+- name: nginx2sfx
+  version: 1.0.8
+  uri: https://github.com/rabobank/nginx2sfx/releases/download/v1.0.8/nginx2sfx
+  sha256: sha256:da4d7a9bf1ec7278ca37133577b6a93c202039cd062994f6a43673de764f2007
+  cf_stacks:
+    - cflinuxfs4
+    - cflinuxfs5
 - name: openresty
   version: 1.25.3.2
   uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.25.3.2_linux_x64_cflinuxfs3_2ab7e6b7.tgz
