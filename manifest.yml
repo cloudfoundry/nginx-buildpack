@@ -131,7 +131,7 @@ dependencies:
 - name: nginx2sfx
   version: 1.0.8
   uri: https://github.com/rabobank/nginx2sfx/releases/download/v1.0.8/nginx2sfx
-  sha256: sha256:da4d7a9bf1ec7278ca37133577b6a93c202039cd062994f6a43673de764f2007
+  sha256: da4d7a9bf1ec7278ca37133577b6a93c202039cd062994f6a43673de764f2007
   cf_stacks:
     - cflinuxfs4
     - cflinuxfs5
