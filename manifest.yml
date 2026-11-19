@@ -41,38 +41,6 @@ dependencies:
   source: http://nginx.org/download/nginx-1.31.9.tar.gz
   source_sha256: a11c5eeee2e257f4478f0e649f84b0040787d277d2d3e5233952aa6b6dcb80ad
 - name: openresty
-  version: 1.21.4.4
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.4_linux_x64_cflinuxfs3_9ade85e8.tgz
-  sha256: 9ade85e8b17f7868066f491ca0fe604ec3e4e40830d6b73024433b7a30e014ba
-  cf_stacks:
-  - cflinuxfs3
-  source: http://openresty.org/download/openresty-1.21.4.4.tar.gz
-  source_sha256: 65891c3d3bf0132d931e5f907d7d997455e8dbf50413d3ee662cde41dd55909c
-- name: openresty
-  version: 1.21.4.4
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.21.4.4_linux_x64_cflinuxfs4_e5fd0e7f.tgz
-  sha256: e5fd0e7fc4eb6904c085f8fc9d331329a14672396c669ed4f4c932ec84f852c5
-  cf_stacks:
-  - cflinuxfs4
-  source: http://openresty.org/download/openresty-1.21.4.4.tar.gz
-  source_sha256: 65891c3d3bf0132d931e5f907d7d997455e8dbf50413d3ee662cde41dd55909c
-- name: openresty
-  version: 1.25.3.2
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.25.3.2_linux_x64_cflinuxfs3_2ab7e6b7.tgz
-  sha256: 2ab7e6b757fb3cc5f60e0f85a775e75e7ad8b27e59bf8ab0d6bc80400f1754b9
-  cf_stacks:
-  - cflinuxfs3
-  source: http://openresty.org/download/openresty-1.25.3.2.tar.gz
-  source_sha256: 2d564022b06e33b45f7e5cfaf1e5dc571d38d61803af9fa2754dfff353c28d9c
-- name: openresty
-  version: 1.25.3.2
-  uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.25.3.2_linux_x64_cflinuxfs4_587010f2.tgz
-  sha256: 587010f29f19d7331056cd3a40e672d0e360719f999f765f831b579a4d508018
-  cf_stacks:
-  - cflinuxfs4
-  source: http://openresty.org/download/openresty-1.25.3.2.tar.gz
-  source_sha256: 2d564022b06e33b45f7e5cfaf1e5dc571d38d61803af9fa2754dfff353c28d9c
-- name: openresty
   version: 1.27.1.2
   uri: https://buildpacks.cloudfoundry.org/dependencies/openresty/openresty_1.27.1.2_linux_x64_cflinuxfs4_a8f1591d.tgz
   sha256: a8f1591d018a68d9f82198c14581dcfb4630dc99e461f760f460707e2a75624e
