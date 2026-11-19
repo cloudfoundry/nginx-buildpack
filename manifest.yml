@@ -70,8 +70,8 @@ dependencies:
   sha256: aaa9ea2b2fd50f8c709c55aed02f352bb724519907fc5d4960e64bee3c70a381
   cf_stacks:
   - cflinuxfs5
-  source: http://openresty.org/download/openresty-1.29.2.3.tar.gz
-  source_sha256: 315e49fa4568747fec4bdada9614d2ba287e7aed4b3430d7ea25685e24cc43ff
+  source: http://openresty.org/download/openresty-1.29.2.5.tar.gz
+  source_sha256: 3195e665c97023419051dc51d195e9f774a3d00ed6e7cd8a3751c4722ea0a8c1
 - name: nginx2sfx
   version: 1.0.8
   uri: https://github.com/rabobank/nginx2sfx/releases/download/v1.0.8/nginx2sfx
@@ -79,8 +79,6 @@ dependencies:
   cf_stacks:
     - cflinuxfs4
     - cflinuxfs5
-  source: http://openresty.org/download/openresty-1.29.2.5.tar.gz
-  source_sha256: 3195e665c97023419051dc51d195e9f774a3d00ed6e7cd8a3751c4722ea0a8c1
 pre_package: scripts/build.sh
 include_files:
 - CHANGELOG
