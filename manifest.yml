@@ -9,21 +9,21 @@ version_lines:
 dependency_deprecation_dates:
 dependencies:
 - name: nginx
-  version: 1.30.6
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.30.6_linux_x64_cflinuxfs4_e02942ac.tgz
-  sha256: e02942ac4a25250013eace893991bc5befcd24f0204050c31f213260f8f126bb
+  version: 1.30.7
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.30.7_linux_x64_cflinuxfs4_d4043e47.tgz
+  sha256: d4043e476c63f4fe457eec5a1252f638f3220818b9d4777b9396598260263b3b
   cf_stacks:
   - cflinuxfs4
-  source: http://nginx.org/download/nginx-1.30.6.tar.gz
-  source_sha256: 3cf46f5ed7504d460125866b7bea99fb357f31d887e2e63b35503310e9b8b6c8
+  source: http://nginx.org/download/nginx-1.30.7.tar.gz
+  source_sha256: 2565b5c837050e958f70fb0f73c48e2bca4542ad349fd356f46fb0c72610bc6e
 - name: nginx
-  version: 1.30.6
-  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.30.6_linux_x64_cflinuxfs5_6d660b89.tgz
-  sha256: 6d660b891961e6370d3c2c7a44bfe433b08a8325cef540c9a8f1487e8672ce69
+  version: 1.30.7
+  uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.30.7_linux_x64_cflinuxfs5_0124a555.tgz
+  sha256: 0124a55524230601ec7ef174925bad0ae49471dfe900639501354c992be56a30
   cf_stacks:
   - cflinuxfs5
-  source: http://nginx.org/download/nginx-1.30.6.tar.gz
-  source_sha256: 3cf46f5ed7504d460125866b7bea99fb357f31d887e2e63b35503310e9b8b6c8
+  source: http://nginx.org/download/nginx-1.30.7.tar.gz
+  source_sha256: 2565b5c837050e958f70fb0f73c48e2bca4542ad349fd356f46fb0c72610bc6e
 - name: nginx
   version: 1.31.9
   uri: https://buildpacks.cloudfoundry.org/dependencies/nginx/nginx_1.31.9_linux_x64_cflinuxfs4_c61fc191.tgz
