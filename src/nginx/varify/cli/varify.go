@@ -35,7 +35,7 @@ func main() {
 	if len(flag.Args()) > 3 && len(flag.Args()[3]) > 0 {
 		resolvConfPath = flag.Args()[3]
 	}
-	// https://github.com/cloudfoundry/bosh-dns-release/blob/master/jobs/bosh-dns/spec#L36-L38
+	// https://github.com/cloudfoundry/bosh-dns-release/blob/main/jobs/bosh-dns/spec#L36-L38
 	defaultNameServer := "169.254.0.2"
 	if len(flag.Args()) > 4 && len(flag.Args()[4]) > 0 {
 		defaultNameServer = flag.Args()[4]
